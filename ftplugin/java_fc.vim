@@ -1,0 +1,1 @@
+set cfu=javacomplete#Complete
