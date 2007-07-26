@@ -25,7 +25,7 @@ If the file edited is of type 'html' and 'xml_use_xhtml' is defined the
 above tags will autocomplete the xml closing staying xhtml compatable.
 ex. <hr> becomes <hr /> (see |xml-plugin-settings|)
 
-Known Bugs
+Known Bugs {{{1 ~
 
 - < & > marks inside of a CDATA section are interpreted as actual XML tags
   even if unmatched.
@@ -38,7 +38,7 @@ Known Bugs
 
 ------------------------------------------------------------------------------
                                                          *xml-plugin-settings*
-Options
+Options {{{1
 
 (All options must be placed in your |.vimrc| prior to the |ftplugin|
 command.)
@@ -80,7 +80,7 @@ xml_no_html
 ------------------------------------------------------------------------------
                                                         *xml-plugin-mappings*
 
-Mapings and their functions
+Mapings and their functions {{{1
 
 Typing '>' will start the tag closing routine.
 Typing (Where | means cursor position)
@@ -109,7 +109,7 @@ instructions '<?....?>'. Thus typing these result in no expansion.
 plugins to use. By default this is the backslash key `\'. See |mapleader|
 for details.
 
-;;              make element out previous word and close it
+;;              make element out previous word and close it         {{{2
           - when typing a word;; wil create <word>|</word>
 						when word on its own line it will be
 						<word>
@@ -120,7 +120,7 @@ for details.
 						Thanks to Bart van Deenen
 						(http://www.vim.org/scripts/script.php?script_id=632)
 						
-[ and ] mappings
+[ and ] mappings                            {{{2
           <LocalLeader>[        Delete <![CDATA[ ]]> delimiters
           <LocalLeader>{        Delete <![CDATA[ ]]> section
           <LocalLeader>]        Delete <!-- -->      delimiters
@@ -131,37 +131,37 @@ for details.
           ][        Goto to the next  close tag 
           ["        Goto to the next  comment
           ]"        Goto the previous comment
-<LocalLeader>5  Jump to the matching tag.
+<LocalLeader>5  Jump to the matching tag.                           {{{2
 <LocalLeader>%  Jump to the matching tag.   
 
 
-<LocalLeader>c  Rename tag
+<LocalLeader>c  Rename tag                                          {{{2
 
-<LocalLeader>C  Rename tag and remove attributes
+<LocalLeader>C  Rename tag and remove attributes                    {{{2
 		Will ask for attributes
 
-<LocalLeader>d  Deletes the surrounding tags from the cursor.
+<LocalLeader>d  Deletes the surrounding tags from the cursor.       {{{2
             <tag1>outter <tag2>inner text</tag2> text</tag1>
                |
        Turns to: 
             outter <tag2>inner text</tag2> text
             |
 
-<LocalLeader>D  Deletes the tag and it contents
+<LocalLeader>D  Deletes the tag and it contents                     {{{2
         - and put it in register x.
             <tag1>outter <tag2>inner text</tag2> text</tag1>
                            |
        Turns to: 
             <tag1>outter text</tag1>
 
-<LocalLeader>e  provide endtag for open tags.
+<LocalLeader>e  provide endtag for open tags.                       {{{2
         - provide endtag for open tags. Watch where de cursor is
             <para><listitem>list item content
                                             |
         pressing \e twice produces
             <para><listitem>list item content</para></listitem>
 
-<LocalLeader>f  fold the tag under the cursor
+<LocalLeader>f  fold the tag under the cursor                       {{{2
           <para>
             line 1
             line 2
@@ -171,20 +171,20 @@ for details.
         +--  5 lines: <para>--------------------------
 
 
-<LocalLeader>F  all tags of name 'tag' will be fold.
+<LocalLeader>F  all tags of name 'tag' will be fold.                {{{2
       - If there isn't a tag under
         the cursor you will be asked for one.
                   
-<LocalLeader>g  Format (Vim's gq function)
+<LocalLeader>g  Format (Vim's gq function)                          {{{2
 			- will make a visual block of tag under cursor and then format using gq
 
                   
-<LocalLeader>G  Format all tags under cursor (Vim's gq function)
+<LocalLeader>G  Format all tags under cursor (Vim's gq function)    {{{2
       - If there isn't a tag under
         the cursor you will be asked for one.
 
                   
-<LocalLeader>I  Indent all tags
+<LocalLeader>I  Indent all tags     {{{2
       - will create a multiline layout every opening tag will be shifted out
 				and every closing tag will be shifted in. Be aware that the rendering
 				of the XML through XSLT and/or DSSSL, might be changed by this.
@@ -206,7 +206,7 @@ for details.
 				</chapter>
 
                   
-<LocalLeader>j  Joins two the SAME sections together.
+<LocalLeader>j  Joins two the SAME sections together.               {{{2
       -  The sections must be next to each other. 
 			<para> This is line 1
 			 of a paragraph. </para>
@@ -219,7 +219,7 @@ for details.
 			 This is line 2
 			 of a paragraph. </para>
 
-<LocalLeader>l  visual surround the block with listitem and para
+<LocalLeader>l  visual surround the block with listitem and para     {{{2 
 				When marking up docbook tekst you have the issue that listitems
 				consist of 2 item. This key combination inserts them both,
 
@@ -230,7 +230,7 @@ for details.
             <para>blaah</para>
         </listitem>
     
-<LocalLeader>o  Insert a tag inside the current one (like vim o)
+<LocalLeader>o  Insert a tag inside the current one (like vim o)     {{{2
 				You are asked for tag and attributes.
 
         <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
@@ -240,7 +240,7 @@ for details.
             <aftertag><tag2><tag3>blaah</tag3></tag2></aftertag>
         </tag1>
     
-<LocalLeader>O  Insert a tag outside the current one (like vim O)
+<LocalLeader>O  Insert a tag outside the current one (like vim O)     {{{2
 				You are asked for tag and attributes.
         <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
           |
@@ -249,38 +249,38 @@ for details.
           <tag1><tag2><tag3>blaah</tag3></tag2></tag1>
         </beforetag>
 
-<LocalLeader>s  Insert an opening tag for an closing tag.
+<LocalLeader>s  Insert an opening tag for an closing tag.           {{{2
             list item content</para></listitem>
             |
         pressing \s twice produces
             <para><listitem>list item content</para></listitem>
 
-<LocalLeader>[        Delete <![CDATA[ ]]> delimiters
+<LocalLeader>[        Delete <![CDATA[ ]]> delimiters               {{{2
 								Removes Only <CDATA[ and ]]> 
 								handy when you want	to uncomment a section.
 								You need to stand in the tag and not on an other tag
 								<![CDATA[  <tag> ]]>
 								if you  cursor is outside <tag> but inside the
 								CDATA tag the delition works.
-<LocalLeader>{        Delete <![CDATA[ ]]> section
+<LocalLeader>{        Delete <![CDATA[ ]]> section                  {{{2
 								Removes everything tag and Content
-<LocalLeader>]        Delete <!-- -->      delimiters
+<LocalLeader>]        Delete <!-- -->      delimiters               {{{2
 								Uncommnet a block.
-<LocalLeader>}        Delete <!--  -->      section
+<LocalLeader>}        Delete <!--  -->      section                  {{{2
 								Removes everything tag and Content
-<LocalLeader>>  shift right opening tag and closing tag.
+<LocalLeader>>  shift right opening tag and closing tag.           {{{2
                 shift everything between the tags 1 shiftwide right
-<LocalLeader><  shift left opening tag and closing tag.
+<LocalLeader><  shift left opening tag and closing tag.           {{{2
                 shift everything between the tags 1 shiftwide left
-<LocalLeader>c  Visual Place a CDATA section around the selected text.
+<LocalLeader>c  Visual Place a CDATA section around the selected text.  {{{2
 			Place Cdata section around the block
-<LocalLeader><  Visual Place a Comment around the selected text.
+<LocalLeader><  Visual Place a Comment around the selected text.  {{{2
 			Place comment around the block
-<LocalLeader>5  Extend the visual selection to the matching tag.
+<LocalLeader>5  Extend the visual selection to the matching tag.  {{{2
 <LocalLeader>%  
 			Extend the visual selection to the matching tag. Make sure you are at
 			the start of the opening tag or the end of the closing tag.
-<LocalLeader>v  Visual Place a tag around the selected text.
+<LocalLeader>v  Visual Place a tag around the selected text.       {{{2
         - You are asked for tag and attributes. You
         need to have selected text in visual mode before you can use this
         mapping. See |visual-mode| for details.
@@ -292,7 +292,7 @@ for details.
 ------------------------------------------------------------------------------
                                                         *xml-plugin-callbacks*
 
-Callback Functions
+Callback Functions {{{2 ~
 
 A callback function is a function used to customize features on a per tag
 basis. For example say you wish to have a default set of attributs when you
@@ -318,7 +318,7 @@ XmlAttribCallback
 	This is a generic callback for xml tags intended to add attributes.
 
 							     *xml-plugin-html*
-Callback Example
+Callback Example {{{2 ~
 
 The following is an example of using XmlAttribCallback in your .vimrc
 >
@@ -386,4 +386,4 @@ The following is a sample html.vim file type plugin you could use:
   runtime ftplugin/xml.vim
 <
 
- vim:tw=78:ts=8:ft=help:norl:
+ vim:tw=78:ts=8:fen:fdm=marker:ft=help:norl:
