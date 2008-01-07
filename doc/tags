@@ -84,6 +84,7 @@ Tlist_Get_Tag_Prototype_By_Line()	taglist.txt	/*Tlist_Get_Tag_Prototype_By_Line(
 Tlist_Get_Tagname_By_Line()	taglist.txt	/*Tlist_Get_Tagname_By_Line()*
 Tlist_Set_App()	taglist.txt	/*Tlist_Set_App()*
 Tlist_Update_File_Tags()	taglist.txt	/*Tlist_Update_File_Tags()*
+ZoomWin.txt	ZoomWin.txt	/*ZoomWin.txt*
 [%	matchit.txt	/*[%*
 ]%	matchit.txt	/*]%*
 align	Align.txt	/*align*
@@ -481,3 +482,8 @@ xml-plugin-html	xml-plugin.txt	/*xml-plugin-html*
 xml-plugin-mappings	xml-plugin.txt	/*xml-plugin-mappings*
 xml-plugin-settings	xml-plugin.txt	/*xml-plugin-settings*
 xml-plugin.txt	xml-plugin.txt	/*xml-plugin.txt*
+zoomwin	ZoomWin.txt	/*zoomwin*
+zoomwin-copyright	ZoomWin.txt	/*zoomwin-copyright*
+zoomwin-history	ZoomWin.txt	/*zoomwin-history*
+zoomwin-setup	ZoomWin.txt	/*zoomwin-setup*
+zoomwin-usage	ZoomWin.txt	/*zoomwin-usage*

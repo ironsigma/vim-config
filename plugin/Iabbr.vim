@@ -10,7 +10,7 @@ endfunction
 "--------------------------------------------------------------------------
 function! MapNoContext(key, seq) "
   let syn = synIDattr(synID(line('.'),col('.')-1,1),'name')
-  if syn =~? 'comment\|string\|character\|doxygen'
+  if syn =~? 'comment\|string\|character\|doxygen' || substitute(getline('.'), '\s\+', '', '') != ''
     return a:key
   else
     exe 'return "'.substitute(a:seq,'\\<\(.\{-}\)\\>','"."\\<\1>"."','g' ).'"'

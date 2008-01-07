@@ -1,2 +1,2 @@
-set foldmarker=<group\=,</group>
+set foldmarker=@group,@end
 set foldmethod=marker
