@@ -6,11 +6,13 @@ let loaded_svndiff = 1
 command! -nargs=? SVNDiff :call s:Svndiff(<f-args>)
 
 function! s:Svndiff(...)
-    if a:0 > 1
+    if a:0 > 0
         let rev = a:1
     else
         let rev = 'BASE'
     endif
+
+    echom 'diff against revision: ' . rev
 
     let ftype = &filetype
 
