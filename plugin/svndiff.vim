@@ -26,7 +26,7 @@ function! s:Svndiff(...)
     endif
 
     " Begin diff
-    exe "vert diffsplit" . tmpfile
+    exe "vert diffsplit " . tmpfile
     exe "set filetype=" . ftype
     set foldmethod=diff
     wincmd l
