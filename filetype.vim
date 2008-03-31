@@ -39,3 +39,5 @@ augroup filetypedetect
     autocmd! FileType xml  set omnifunc=xmlcomplete#CompleteTags
 
 augroup END
+
+" vim:ff=unix:
