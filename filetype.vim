@@ -21,6 +21,7 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile build.xml    compiler       ant
 
     " extensions
+    autocmd! BufRead,BufNewFile *.jad        setfiletype    java
     autocmd! BufRead,BufNewFile *.java       compiler       ant
     autocmd! BufRead,BufNewFile *.php        compiler       php
     autocmd! BufRead,BufNewFile *.pl         compiler       perl | setlocal complete-=i
