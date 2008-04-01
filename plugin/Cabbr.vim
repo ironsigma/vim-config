@@ -18,6 +18,6 @@ function! MapNoContext(key, seq) "
 endfunction
 " 1}}}
 
-command! -narg=+ Iabbr execute "iabbr " <q-args>."<C-R>=EatChar('\\s')<CR>"
+command! -narg=+ Cabbr execute "iabbr " <q-args>."<C-R>=EatChar('\\s')<CR>"
 
 " vim:fdm=marker:nowrap:
