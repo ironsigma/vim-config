@@ -566,11 +566,11 @@ map <buffer> <localleader>S :call SortChildren(1)<cr>
 
 " invoke the file explorer
 map <buffer> <localleader>f :e .<cr>
-imap <buffer> <localleader>f :e .<cr>
+imap <buffer> <localleader>f <esc>:e .<cr>
 
 " Insert a fence for segemented lists.
 " I also use this divider to create a <hr> when converting to html
-map <buffer> <localleader>- o----------------------------------------0
+map <buffer> <localleader>- o----------------------------------------<esc>0
 imap <buffer> <localleader>- ----------------------------------------<cr>
 
 " switch document between the two types of bodytext styles
@@ -606,9 +606,9 @@ nmap <buffer>   <localleader>e		:call Spawn()<cr>
 
 " Placeholders for already assigned but non-functional commands
 map <buffer> <localleader>h :echo "VimOutliner reserved command: ,,h"<cr>
-imap <buffer> <localleader>h :echo "VimOutliner reserved command: ,,h"<cr>
+imap <buffer> <localleader>h <esc>:echo "VimOutliner reserved command: ,,h"<cr>
 map <buffer> <localleader>H :echo "VimOutliner reserved command: ,,H"<cr>
-imap <buffer> <localleader>H :echo "VimOutliner reserved command: ,,H"<cr>
+imap <buffer> <localleader>H <esc>:echo "VimOutliner reserved command: ,,H"<cr>
 
 " End of Vim Outliner Key Mappings }}}1
 " Menu Entries {{{1
