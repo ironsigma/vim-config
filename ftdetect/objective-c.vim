@@ -11,7 +11,7 @@ fun! ObjeCHeaderDetect()
     sil exec 'normal! '.c.'|'
 endfun
 
-augroup filetypedetect
+augroup objcdetect
     autocmd! BufRead,BufNewFile *.m          setfiletype     objc    | compiler xcode
     autocmd! BufRead,BufNewFile *.mm         setfiletype     objc    | compiler xcode
     autocmd! BufRead,BufNewFile *.h          call ObjeCHeaderDetect()
