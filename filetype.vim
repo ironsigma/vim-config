@@ -12,7 +12,7 @@ augroup filetypedetect
     " extensions
     autocmd! BufRead,BufNewFile *.jad        setfiletype java
     autocmd! BufRead,BufNewFile *.java       compiler    ant
-    autocmd! BufRead,BufNewFile *.php        compiler    php  | setlocal sts=2 sw=2
+    autocmd! BufRead,BufNewFile *.php        runtime     ftplugin/xml.vim | compiler php  | setlocal sts=2 sw=2 foldlevel=1
     autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=i
     autocmd! BufRead,BufNewFile *.ion        setfiletype ion
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
