@@ -16,8 +16,6 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=i
     autocmd! BufRead,BufNewFile *.ion        setfiletype ion
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
-    autocmd! BufRead,BufNewFile *.rb         runtime     ftplugin/xml.vim | setlocal sts=2 sw=2
-    autocmd! BufRead,BufNewFile *.erb        runtime     ftplugin/xml.vim | setfiletype eruby | setlocal sts=2 sw=2
 
     " auto-complete
     autocmd! FileType html set omnifunc=htmlcomplete#CompleteTags

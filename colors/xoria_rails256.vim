@@ -18,6 +18,8 @@ highlight Normal                    ctermfg=254     ctermbg=233
 highlight Number                    ctermfg=107
 highlight PreCondit                 cterm=NONE      ctermfg=173
 highlight PreProc                   ctermfg=254
+highlight Pmenu                     ctermfg=168
+highlight PmenuSel                  ctermfg=168
 highlight Search                    cterm=italic    ctermbg=235
 highlight Special                   ctermfg=167
 highlight SpellBad                  ctermfg=160
