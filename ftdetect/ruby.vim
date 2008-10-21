@@ -1,14 +1,15 @@
+" Ruby file type autodetect
 " Ruby
-au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec	set filetype=ruby sts=2 sw=2
+au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec	setlocal filetype=ruby
 
 " Ruby on Rails
-au BufNewFile,BufRead *.builder,*.rxml,*.rjs		set filetype=ruby sts=2 sw=2
+au BufNewFile,BufRead *.builder,*.rxml,*.rjs		setlocal filetype=ruby
 
 " Rakefile
-au BufNewFile,BufRead [rR]akefile,*.rake		set filetype=ruby sts=2 sw=2
+au BufNewFile,BufRead [rR]akefile,*.rake		setlocal filetype=ruby
 
 " Rantfile
-au BufNewFile,BufRead [rR]antfile,*.rant		set filetype=ruby sts=2 sw=2
+au BufNewFile,BufRead [rR]antfile,*.rant		setlocal filetype=ruby
 
 " eRuby
-au BufNewFile,BufRead *.erb,*.rhtml			set filetype=eruby sts=2 sw=2
+au BufNewFile,BufRead *.erb,*.rhtml			setlocal filetype=eruby
