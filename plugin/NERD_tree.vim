@@ -1321,7 +1321,7 @@ function! s:InstallDocumentation(full_name, revision)
     " Create a new buffer & read in the plugin file (me):
     setl nomodeline
     exe 'enew!'
-    exe 'r ' . l:plugin_file
+    exe 'r "' . l:plugin_file . '"'
 
     setl modeline
     let l:buf = bufnr("%")
