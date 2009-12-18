@@ -236,6 +236,10 @@ function! s:MRU_EditFile(new_window)
         return
     endif
 
+    if has("unix")
+        let fname = substitute(fname, ' ', '\\ ', 'g')
+    endif
+
     if a:new_window
         exe 'leftabove new ' . fname
     else

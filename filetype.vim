@@ -17,9 +17,12 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.ion        setfiletype ion
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
 
+    " types
+    autocmd! FileType python  comp python | setl tw=79
+
     " auto-complete
-    autocmd! FileType html set omnifunc=htmlcomplete#CompleteTags
-    autocmd! FileType xml  set omnifunc=xmlcomplete#CompleteTags
+    autocmd! FileType html setl omnifunc=htmlcomplete#CompleteTags
+    autocmd! FileType xml  setl omnifunc=xmlcomplete#CompleteTags
 
 augroup END
 
