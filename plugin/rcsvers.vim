@@ -5,10 +5,10 @@
 "               whenever a file is saved.
 "
 "       Author: Roger Pilkey (rpilkey at gmail.com)
-"   Maintainer: Juan Frias (whiteravenwolf at gmail.com)
+"   Maintainer: Juan Frias (juandfrias at gmail.com)
 "
-"  Last Change: $Date: 2005/12/24 21:04:02 $
-"      Version: $Revision: 1.25 $
+"  Last Change: $Date: 2009/12/07 11:37:03 $
+"      Version: $Revision: 1.26 $
 "
 "    Copyright: Permission is hereby granted to use and distribute this code,
 "               with or without modifications, provided that this header
@@ -94,6 +94,9 @@
 "
 " History: {{{1
 "------------------------------------------------------------------------------
+" 1.26  Adds syntax highlighting to temporary files retrieved from RCS and
+"       Fix of \rci to work with vim 7. (thanks to Sergey Khorev)
+"
 " 1.25  Fix for Windows if you don't have the TZ variable set, and fix how it
 "       works when saving a file to another name.
 "
@@ -593,9 +596,9 @@ augroup rcsvers
    au!
    let s:types = "*"
    exe "au BufWritePost,FileWritePost,FileAppendPost ".
-               \ s:types." call s:rcsvers(\"post\")"
+               \ s:types." call s:rcsvers(expand('<afile>'),\"post\")"
    exe "au BufWritePre,FileWritePre,FileAppendPre ".
-               \ s:types." call s:rcsvers(\"pre\")"
+               \ s:types." call s:rcsvers(expand('<afile>'),\"pre\")"
 augroup END
 
 augroup rcsvers
@@ -716,41 +719,41 @@ endfunction
 
 " Function: Write the RCS {{{1
 "------------------------------------------------------------------------------
-function! s:rcsvers(type)
+function! s:rcsvers(filename, type)
 
     " If this is a new file that hasn't been saved then we
     " can't create a check in entry.
-    if a:type =="init" && !filereadable( expand("<afile>:p")) && !exists("modified")
+    if a:type =="init" && !filereadable( fnamemodify(a:filename, ":p")) && !exists("modified")
         echo "(rcsvers.vim) You need to save the file first!"
         return
     endif
 
     " If this is a new file that hasn't been saved then we
     " can't create a previous entry so just exit.
-    if a:type == "pre" && !filereadable( expand("<afile>:p")) && !exists("modified")
+    if a:type == "pre" && !filereadable( fnamemodify(a:filename, ":p")) && !exists("modified")
         return
     endif
 
     " Exclude directories from versioning, by putting skip file there.
-    if filereadable( expand("<afile>:p:h").g:rvDirSeparator.g:rvSkipVimRcsFileName )
+    if filereadable( fnamemodify(a:filename, ":p:h").g:rvDirSeparator.g:rvSkipVimRcsFileName )
         return
     endif
 
     " Exclude file from versioning if it matches the exclude expression.
     if 0 != strlen(g:rvExcludeExpression) &&
-            \ -1 != match(expand("<afile>:p"), g:rvExcludeExpression)
+            \ -1 != match(fnamemodify(a:filename, ":p"), g:rvExcludeExpression)
         return
     endif
 
     " Include file for versioning if it matches the include expression.
     if 0 != strlen(g:rvIncludeExpression) &&
-            \ -1 == match(expand("<afile>:p"), g:rvIncludeExpression)
+            \ -1 == match(fnamemodify(a:filename, ":p"), g:rvIncludeExpression)
         return
     endif
 
-    let l:suffix = s:CreateSuffix(expand("<afile>:p"))
+    let l:suffix = s:CreateSuffix(fnamemodify(a:filename, ":p"))
 
-    let l:SaveDirectoryName = s:GetSaveDirectoryName(expand("<afile>:p"))
+    let l:SaveDirectoryName = s:GetSaveDirectoryName(fnamemodify(a:filename, ":p"))
 
     " Should we only save if RCS directory exists?
     if (g:rvSaveIfRCSExists == 1) && (g:rvSaveDirectoryType != 1) &&
@@ -767,7 +770,7 @@ function! s:rcsvers(type)
     endif
 
     " Generate name of RCS file
-    let l:rcsfile = l:SaveDirectoryName.expand("<afile>:t").l:suffix
+    let l:rcsfile = l:SaveDirectoryName.fnamemodify(a:filename, ":t").l:suffix
 
     " Should we only save if RCS file exists?
     if a:type != "init" && (g:rvSaveIfPreviousRCSFileExists == 1) && (getfsize(l:rcsfile) == -1)
@@ -818,7 +821,7 @@ function! s:rcsvers(type)
         let l:cmdopts = " -x".l:suffix
     endif
 
-    let l:editedfilename = expand("<afile>:p")
+    let l:editedfilename = fnamemodify(a:filename, ":p")
     if (g:rvUseCygPathFiltering != 0)
         let l:editedfilename = substitute(system("cygpath \"".l:editedfilename."\""),"\\n","","g")
     endif
@@ -847,7 +850,7 @@ function! s:rcsvers(type)
 
     "check permission changes
     if has("macunix") || has("unix") || has("win32unix")
-        let l:fullpath = expand("<afile>:p")
+        let l:fullpath = fnamemodify(a:filename, ":p")
         " Executable file
         if (executable(l:fullpath) == 1)
             if (executable(l:rcsfile) == 0)
@@ -1098,8 +1101,11 @@ function! s:CompareFiles(revision)
         sil exe "bd!"
     endif
 
+    let l:ft=&l:ft
     "create a new buffer
     sil exe "vnew ".l:tmpfile
+    "make filetype to be the same as the original file
+    let &l:ft=l:ft
 
     "save the buffer number of the revision file
     let l:child_bufnr = bufnr("%")
@@ -1144,7 +1150,7 @@ function! s:CompareFiles(revision)
 
 endfunction
 "}}}
-" Function: set up the common commandline options {{{1
+" Function: set up the common command line options {{{1
 function! s:GetCommonCmdOpts(filename)
     " Build the command options
     let l:suffix = s:CreateSuffix(expand(a:filename))
@@ -1188,11 +1194,10 @@ endfunction
 " versions.
 "------------------------------------------------------------------------------
 nnoremap <silent> <Leader>rlog  :call <SID>DisplayLog()<cr>
-nnoremap <silent> <Leader>rci   :call <SID>rcsvers("init")<cr>
+nnoremap <silent> <Leader>rci   :call <SID>rcsvers(expand("%"), "init")<cr>
 
 nnoremap <silent> <Leader>older :call <SID>NextCompareFiles("older")<cr>
 nnoremap <silent> <Leader>newer :call <SID>NextCompareFiles("newer")<cr>
 
 let &cpo = s:save_cpo
 " vim600:textwidth=78:foldmethod=marker:fileformat=unix:expandtab:tabstop=4:shiftwidth=4
-

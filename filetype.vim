@@ -19,6 +19,7 @@ augroup filetypedetect
 
     " types
     autocmd! FileType python  comp python | setl tw=79
+    autocmd! FileType html    runtime ftplugin/xml.vim
 
     " auto-complete
     autocmd! FileType html setl omnifunc=htmlcomplete#CompleteTags
