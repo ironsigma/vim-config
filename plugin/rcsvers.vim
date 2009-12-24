@@ -7,8 +7,8 @@
 "       Author: Roger Pilkey (rpilkey at gmail.com)
 "   Maintainer: Juan Frias (juandfrias at gmail.com)
 "
-"  Last Change: $Date: 2009/12/07 11:37:03 $
-"      Version: $Revision: 1.26 $
+"  Last Change: $Date: 2009/12/23 17:07:03 $
+"      Version: $Revision: 1.28 $
 "
 "    Copyright: Permission is hereby granted to use and distribute this code,
 "               with or without modifications, provided that this header
@@ -64,6 +64,13 @@
 "
 " User name:
 "        LOGNAME=myusername
+" 
+" Windows note: usually RCS will pick up the USERNAME variable, but usernames with 
+" spaces will cause a weird RCS error, so set LOGNAME to something without
+" spaces to override it  
+" e.g.
+" (in .vimrc)
+" let $LOGNAME = 'MyNameAllStrungTogether'
 "
 " Time zone:  
 "        TZ=EST5EDT
@@ -94,104 +101,117 @@
 "
 " History: {{{1
 "------------------------------------------------------------------------------
-" 1.26  Adds syntax highlighting to temporary files retrieved from RCS and
+" 1.28  (2009-12-23) Adds syntax highlighting to temporary files retrieved from RCS and
 "       Fix of \rci to work with vim 7. (thanks to Sergey Khorev)
+"       Also added Fredrik Eriksson's patch to allow editing of messages. 
+"       (http://thebc.se/patch-for-rcsversvim)
+"       And added the -d option to preserve original modification times. (Roger)
+"       Removed the rvtempdir in favor of more secure tempname() call. (Roger)
+"       We used to skip the pre-checkin, but I think we should do it, if someone
+"       or something else has modified the file since the last RCS version
+"       then we will put their version in the RCS file. (Roger)
 "
-" 1.25  Fix for Windows if you don't have the TZ variable set, and fix how it
+" 1.27  (2007-04-17) Add a new mode for revising (never/ask/always) and fix rlog window width,
+"       both thanks to Callum Gibson.  See g:rvMode
+"
+" 1.26  (2007-01-11) Fix for Windows for usernames with spaces (from Roger), and macosx directory
+"       separator (thanks to Jeff Fox)
+"
+" 1.25  (2006-01-21) Fix for Windows if you don't have the TZ variable set, and fix how it
 "       works when saving a file to another name.
 "
-" 1.24  RCS sets the executable bit on the checked-out file to be the same as 
+" 1.24  (2005-09-22) RCS sets the executable bit on the checked-out file to be the same as 
 "       the rcs archive file.  So if that property changes after you did your 
 "       first checkin, your checked-out file will maintain the original setting.
 "       So now we change the executable mode of the rcs archive file to align
 "       with the current setting of the checked-out copy.
 "       Thanks to Ben Bernard.
 "
-" 1.23  Added an option to fix the path on Cygwin systems.  
+" 1.23  (2005-04-06) Added an option to fix the path on Cygwin systems.  
 "       See g:rvUseCygPathFiltering  
 "       Thanks to Simon Johann-Günter 
 "
-" 1.22  some re-factoring, and add the option to leave RCS files unlocked when
-"       saving, which is handy for multiple users of the same RCS file.
-"       See g:rvLeaveRcsUnlocked. (from Roger Pilkey)
+" 1.22  (2005-03-16) some re-factoring, and add the option to leave RCS files unlocked when
+"       saving, which is handy for multiple users of the same RCS file, or if
+"       your username gets changed on you.  See g:rvLeaveRcsUnlocked. (from Roger Pilkey)
 "
-" 1.21  Remember the last position in the rlog window. Rename
+" 1.21  (2004-07-24) Remember the last position in the rlog window. Rename
 "       RevisionLog window to avoid collisions. (from Roger Pilkey)
 "
-" 1.20  Added a mapping to create an initial RCS file. Useful when the script
+" 1.20  (2004-06-28) Added a mapping to create an initial RCS file. Useful when the script
 "       is set to save only when a previous RCS file exists. see
 "       rvSaveIfPreviousRCSFileExists (thanks to Steven Michalske for the
 "       suggestion) Added <silent> to the default mappings to keep the status
 "       bar clean.
 "
-" 1.19  Added the option to prompt the user for file and check-in message on
+" 1.19  (2004-06-10) Added the option to prompt the user for file and check-in message on
 "       every save. See rvDescMsgPrompt option for details. Thanks to Kevin
 "       Stegemoller for the suggestion. Also \rlog will now display the
 "       check-in message in the pick list for easier identification.
 "
-" 1.18  Added the option to save an RCS version only if the RCS file already
+" 1.18  (2004-02-26) Added the option to save an RCS version only if the RCS file already
 "       exists (No new RCS files will be created). (from Marc Schoechlin)
 "       See rvSaveIfPreviousRCSFileExists option.
 "
-" 1.17  Added the option to save an RCS version only when there is an RCS
+" 1.17  (2004-01-28) Added the option to save an RCS version only when there is an RCS
 "       directory in the files directory. See rvSaveIfRCSExists option.
 "       (from Camillo Särs)
 "
-" 1.16  Save some settings that "set diff" mangles, and different check for
+" 1.16  (2003-12-09) Save some settings that "set diff" mangles, and different check for
 "       &cp
 "
-" 1.15  Add functions to go back and forth between versions (mapped to \older
+" 1.15  (2003-09-16) Add functions to go back and forth between versions (mapped to \older
 "       and \newer). It's kind of jerky, but comes in handy sometimes. Also
 "       fixed a few bugs with quotes.
 "
-" 1.14  Add option to set 'rlog' command-line options.  fix rlog display,
+" 1.14  (2003-06-09) Add option to set 'rlog' command-line options.  fix rlog display,
 "       which would crash once in a while saying stuff like "10,10d invalid
 "       range". When creating a new RCS file on an existing text file, save a
 "       version before adding the new revision.
 "
-" 1.13  A g:rvFileQuote fix, suggested by Wiktor Niesiobedzki.  Add the
+" 1.13  (2003-05-08) A g:rvFileQuote fix, suggested by Wiktor Niesiobedzki.  Add the
 "       ability to use the current instance of vim for the diff, which is now
 "       the default.  Change the name of the diff temp file to include the
 "       version.  Make \rlog a toggle (on/off)
 "
-" 1.12  Script will not load if the 'cp' flag is set. Added the option to
+" 1.12  (2003-03-28) Script will not load if the 'cp' flag is set. Added the option to
 "       use an exclude expression, and include expression. Fixed yet more bugs
 "       thanks to Roger for all the beta testing.
 "
-" 1.11  Minor bug fix, when using spaces in the description. Also added some
-"       error detection code to check and see that RCS and CI where
+" 1.11  (2003-03-10) Minor bug fix, when using spaces in the description. Also added some
+"       error detection code to check and see that RCS and CI were
 "       successful. And removed requirements for SED and GREP, script will no
 "       longer need these to display the log.
 "
-" 1.10  Fixed some major bugs with files with long filenames and spaces
+" 1.10  (2003-03-03) Fixed some major bugs with files with long filenames and spaces
 "       Win/Dos systems. Added a variable to pass additional options to the
 "       initial RCS check in. Fixed some documentation typos.
 "
-" 1.9   Added even more options, the ability to set your own description and
+" 1.9   (2003-02-28) Added even more options, the ability to set your own description and
 "       pass additional options to CI command. Dos/Win Temp directory is taken
 "       from the $TEMP environment variable, and quote file names when using
 "       diff program to prevent errors with long filenames with spaces. Also
 "       removed confirm box from script.
 "
-" 1.8   Fixed minor Prefix bug,
+" 1.8   (2003-02-28) Fixed minor Prefix bug. Required if you are using suffixes.
 "
-" 1.7   Will not alter the $xx$ tags when automatically checking in files.
+" 1.7   (2003-02-27) Will not alter the $xx$ tags when automatically checking in files.
 "       (Thanks to Engelbert Gruber). Added option to save under the current
 "       directory with no RCS sub directory. Also added the option to choose
 "       your own suffixes.
 "
-" 1.6   Complete script re-write. added ability to set user options by vimrc
+" 1.6   (2003-02-24) Complete script re-write. added ability to set user options by vimrc
 "       and will now allow you to compare to older revision if you have grep
 "       and sed installed.
 "
-" 1.5   add l:skipfilename to allow exclusion of directories from versioning.
+" 1.5   (2003-02-20) add l:skipfilename to allow exclusion of directories from versioning.
 "       and FIX for editing in current directory with local RCS directory.
 "
-" 1.4   FIX editing files not in current directory.
+" 1.4   (2003-02-20) FIX editing files not in current directory.
 "
-" 1.3   option to select the rcs directory,
-"       and better comments thanks to Juan Frias
+" 1.2   (2003-02-19) option to select the rcs directory, and better comments thanks to Juan Frias
 "
+" 1.0   (2003-02-12) Initial upload
 " User Options: {{{1
 "------------------------------------------------------------------------------
 "
@@ -237,15 +257,6 @@
 "       Separator to use between paths, the script will try to auto detect
 "       this but to override use:
 "           let g:rvDirSeparator = <separator>
-"       in your vimrc file.
-"
-" g:rvTempDir
-"       This is the temporary directory to create an old revision file to
-"       compare it to the current file. The default is $temp for Dos/win
-"       systems and <g:rvDirSeparator>temp for all other systems. The
-"       script will automatically append the directory separator to the
-"       end, so do not include this. To override defaults use:
-"           let g:rvTempDir = <your directory>
 "       in your vimrc file.
 "
 " g:rvSkipVimRcsFileName
@@ -369,6 +380,14 @@
 "           let g:rvDescription = <description>
 "       in your vimrc file.
 "
+" g:rvMode
+"       This allows you to set the mode in which the plugin operates. If set
+"       to 0, it won't attempt to make any revisions. If set to 1, will
+"       always create a revision, subject to the other relevant settings
+"       such as rvSaveIfRCSExists, etc. If set to 2, it will ask before
+"       creating a backup revision with the default of No, and if set to 3 it
+"       will ask but with a default of Yes.
+"
 " g:rvDescMsgPrompt
 "       This determines if you will be prompted for a description or a checkin
 "       message when you save the file. Default is no prompt. To have the
@@ -441,6 +460,16 @@ if !exists('g:rvCiOptions')
     let g:rvCiOptions = ""
 endif
 
+" RCS tries to use the LOGNAME, then USERNAME environment variables as the 'author' 
+" string, but it doesn't handle it when they have spaces, so strip them out. 
+" You can set LOGNAME to something else in your _vimrc file if you like like
+" this:
+" let $LOGNAME = 'MyFunkyUserName'
+"------------------------------------------------------------------------------
+if $LOGNAME == '' && ( has("win32") || has("win16") || has("dos32") )
+    let $LOGNAME = substitute($USERNAME, " ", "", "g")
+endif
+
 " Set TZ to something if it isn't set. Otherwise the rcs commands error out
 " cryptically. This helps in making a plug and play install on Windows
 "------------------------------------------------------------------------------
@@ -450,6 +479,7 @@ if $TZ == '' && ( has("win32") || has("win16") || has("dos32") )
     "let $TZ = 'EST5EDT'
     let $TZ = 'GMT'
 endif
+
 "
 " Set additional rlog options
 "------------------------------------------------------------------------------
@@ -478,6 +508,12 @@ else
     let g:rvDescription= substitute(g:rvDescription,'"','\\"',"g")
 endif
 
+" Set default for mode
+"------------------------------------------------------------------------------
+if !exists('g:rvMode')
+    let g:rvMode = 1
+endif
+
 " Set default for description/message prompt
 "------------------------------------------------------------------------------
 if !exists('g:rvDescMsgPrompt')
@@ -497,6 +533,9 @@ if !exists('g:rvDirSeparator')
                 \ || has("dos16") || has("os2")
         let g:rvDirSeparator = "\\"
 
+    elseif has("macunix")
+        let g:rvDirSeparator = "\/"
+
     elseif has("mac")
         let g:rvDirSeparator = ":"
 
@@ -509,17 +548,6 @@ endif
 "------------------------------------------------------------------------------
 if !exists('g:rvFileQuote')
     let g:rvFileQuote = '"'
-endif
-
-" Set the temp directory
-"------------------------------------------------------------------------------
-if !exists('g:rvTempDir')
-    if has("win32") || has("win16") || has("dos32")
-                \ || has("dos16") || has("os2")
-        let g:rvTempDir = expand("$temp")
-    else
-        let g:rvTempDir = g:rvDirSeparator."tmp"
-    endif
 endif
 
 " Set the skip vimrcs file name
@@ -596,18 +624,18 @@ augroup rcsvers
    au!
    let s:types = "*"
    exe "au BufWritePost,FileWritePost,FileAppendPost ".
-               \ s:types." call s:rcsvers(expand('<afile>'),\"post\")"
+               \ s:types." call s:Rcsvers(expand('<afile>'),\"post\")"
    exe "au BufWritePre,FileWritePre,FileAppendPre ".
-               \ s:types." call s:rcsvers(expand('<afile>'),\"pre\")"
+               \ s:types." call s:Rcsvers(expand('<afile>'),\"pre\")"
 augroup END
 
 augroup rcsvers
-   au BufUnload * call s:bufunload()
+   au BufUnload * call s:Bufunload()
 augroup END
 
 " Function: Autocommand for buffer unload to clean up after ourselves {{{1
 "------------------------------------------------------------------------------
-function! s:bufunload()
+function! s:Bufunload()
     "turn off the diff settings in the original file when you kill the child
     "buffer
     if exists("s:child_bufnr") && s:child_bufnr ==  expand("<abuf>")
@@ -632,8 +660,8 @@ function! s:bufunload()
     endif
 endfunction
 
-" Function: run a system command, print errors {{{1
-"------------------------------------------------------------------------------
+" Function: Run a system command, print errors {{{1
+"-----------------------------------------------------------------------------
 function! s:RunCmd(cmd)
         let l:output = system(a:cmd)
         if ( v:shell_error != 0 )
@@ -651,8 +679,8 @@ function! s:RunCmd(cmd)
         return l:output
 endfunction
 
-" Function: save settings that get mangled {{{1
-"------------------------------------------------------------------------------
+" Function: Save settings that get mangled {{{1
+"-----------------------------------------------------------------------------
 function! s:RcsVersSaveSettings()
     if (!exists("s:child_bufnr"))
         "save some options that "set diff" mucks with
@@ -719,7 +747,12 @@ endfunction
 
 " Function: Write the RCS {{{1
 "------------------------------------------------------------------------------
-function! s:rcsvers(filename, type)
+function! s:Rcsvers(filename, type)
+
+    " Should we make a revision at all? We may ask the user's opinion below
+    if g:rvMode == 0
+        return
+    endif
 
     " If this is a new file that hasn't been saved then we
     " can't create a check in entry.
@@ -759,6 +792,21 @@ function! s:rcsvers(filename, type)
     if (g:rvSaveIfRCSExists == 1) && (g:rvSaveDirectoryType != 1) &&
      \ (g:rvSaveDirectoryType != 2) && (!isdirectory(l:SaveDirectoryName))
         return
+    endif
+
+    " Ask if we want a revision, only on "post"
+    if a:type == "post"
+        if g:rvMode == 2
+            let l:answer = input("(rcsvers.vim) Make revision? (y/[N]): ")
+            if (l:answer != "y" && l:answer != "Y")
+                return
+            endif
+        elseif g:rvMode == 3
+            let l:answer = input("(rcsvers.vim) Make revision? ([Y]/n): ")
+            if (l:answer == "n" || l:answer == "N")
+                return
+            endif
+        endif
     endif
 
     " Create RCS dir if it doesn't exist
@@ -807,12 +855,14 @@ function! s:rcsvers(filename, type)
         let l:message = g:rvDescription
     endif
 
-    " ci options are as follows:
+    " rcs/ci options are as follows:
     " -i        Initial check in
     " -l        Check out and lock file after check in.
-    " -t-       File description at initial check in.
+    " -t-       File description at initial check in (from a string)
+    " -t        File description at initial check in (from a file)
     " -x        Suffix to use for rcs files.
     " -m        Log message
+    " -d        use the modified date of the file
     "
     " Build the command options manually, s:GetCommonCmdOpts() isn't quite
     " right
@@ -841,10 +891,30 @@ function! s:rcsvers(filename, type)
         let l:cmd = "rcs -i -t-\"".l:description."\" ".g:rvRcsOptions.l:cmdopts
         call s:RunCmd(l:cmd)
     else
-        " We only need to do a pre-save if the RCS file
-        " does not exist.
-        if a:type == "pre"
-            return
+        "we used to skip the pre-checkin here
+        "We should do a pre-checkin, so that if someone
+        "or something else has modified the file since the last RCS version
+        "then we will put their version in the RCS file too
+        "however, checking the file modification time might screw up
+        "if the two files are on different, unsynchronized, network
+        "filesystems.
+        "so it might skip reving the "outside" change, or 
+        "you might get extra revs with this note. 
+        "if so, change the test like the example to alter the time check
+        if ( a:type == "pre" )
+            let l:fullpath = fnamemodify(a:filename, ":p")
+            "check to see if the file modification time of the edited file is
+            "newer than the RCS file
+            "if ( getftime(l:rcsfile) < getftime(l:fullpath) )
+            
+            "if the edited file is newer by e.g. 3 seconds , use this instead
+            "(could be caused by editing a file on a network drive with a
+            "slightly different time than the drive where the RCS file lives)
+            if ( (getftime(l:fullpath) - getftime(l:rcsfile)) > 3 )
+                let l:message = "(rcsvers.vim) modified outside of vim"
+            else
+                return
+            endif
         endif
     endif
 
@@ -864,6 +934,7 @@ function! s:rcsvers(filename, type)
     endif
 
     "lock RCS file if the option is set
+    "If you lost your lock, remove this "if" to lock 
     if (g:rvLeaveRcsUnlocked != 0)
         "-l locks the RCS file
         let l:cmd = "rcs -l ".g:rvRcsOptions.l:cmdopts
@@ -871,7 +942,7 @@ function! s:rcsvers(filename, type)
     endif
 
     "do the checkin
-    let l:cmd = "ci -l -m\"".l:message."\" ".g:rvCiOptions.l:cmdopts
+    let l:cmd = "ci -d -l -m\"".l:message."\" ".g:rvCiOptions.l:cmdopts
     call s:RunCmd(l:cmd)
 
     "leave RCS file unlocked if the option is set
@@ -882,7 +953,6 @@ function! s:rcsvers(filename, type)
     endif
 
 endfunction
-
 " Function: Display the revision log {{{1
 "------------------------------------------------------------------------------
 function! s:DisplayLog()
@@ -927,7 +997,7 @@ function! s:DisplayLog()
     let l:cmd = "rlog ".g:rvRlogOptions.l:cmdopts
 
     " This is the name of the buffer that holds the revision log list.
-    let l:bufferName = g:rvTempDir.g:rvDirSeparator."rcsversRevisionLog"
+    let l:bufferName = tempname()."rcsversRevisionLog"
 
     " If a buffer with the name rcsversRevisionLog exists, delete it.
     if bufexists("l:bufferName")
@@ -936,11 +1006,17 @@ function! s:DisplayLog()
 
     " Create a new buffer (vertical split).
     sil exe 'vnew ' l:bufferName
+    if g:rvShowUser > 0
+        sil exe 'vertical resize 45'
+    else
     sil exe 'vertical resize 35'
+    endif
     let s:child_bufnr =  bufnr("%")
 
     " Map <enter> to compare current file to that version
     nnoremap <buffer> <CR> :call <SID>RlogCompareFiles()<CR>
+    " Map Ctrl-c to add a message to the revision.
+    nnoremap <buffer> <c-c> :call <SID>RlogAddMessage()<CR>
 
     "change dir to the original file dir, in case they auto change dir
     "when opening files
@@ -1019,6 +1095,28 @@ function! s:RlogCompareFiles()
 
 endfunction
 
+" Function: Add a message to the selected revision {{{1
+"-----------------------------------------------------------------------------
+function! s:RlogAddMessage()
+
+"our rlog format:
+"1.99: 2009/05/05 17:02:00
+"or sometimes
+"1.99: 2009-05-05 17:02:00-04
+"
+    " Get just the revision number
+    let l:revision = substitute(getline("."),
+           \"^\\([.0-9]\\+\\).\\+", "\\1", "g")
+
+    "get the current message
+    let l:current_message = substitute(getline("."),
+           \"^[.0-9]\\+: \\d\\d\\d\\d[/-]\\d\\d[/-]\\d\\d \\d\\d:\\d\\d:\\d\\d\\(-\\d\\d\\)\\?\\(.*\\)$", "\\2", "g")
+    silent exe "bd!"
+
+    call s:AddMessage(l:revision,l:current_message)
+
+endfunction
+"}}}
 " Function: Compare the current file to the next revision ("older" or "newer") {{{1
 "------------------------------------------------------------------------------
 function! s:NextCompareFiles(direction)
@@ -1090,7 +1188,7 @@ function! s:CompareFiles(revision)
     let l:cmd = "co -p -r".a:revision.l:cmdopts
 
     " Create a new buffer to place the co output
-    let l:tmpfile = g:rvTempDir.g:rvDirSeparator."_".expand("%:p:t").".".a:revision
+    let l:tmpfile = tempname()."_".expand("%:p:t").".".a:revision
 
     "save the buffer number of the original file
     let l:parent_bufnr = bufnr("%")
@@ -1118,7 +1216,7 @@ function! s:CompareFiles(revision)
     exec "cd ".g:rvFileQuote.l:savedir.g:rvFileQuote
 
     " Run the co command and capture the output
-    sil exe "sil! 0r!".l:cmd
+    sil exe "sil! r!".l:cmd
     setlocal noswapfile
     setlocal nomodified
 
@@ -1150,7 +1248,35 @@ function! s:CompareFiles(revision)
 
 endfunction
 "}}}
-" Function: set up the common command line options {{{1
+" Function: Add a message to this version {{{1 
+"-----------------------------------------------------------------------------
+function! s:AddMessage(revision,current_message)
+
+    let l:message = input("(rcsvers.vim) enter new log message:",a:current_message)
+ 
+    "quote out any quote chars in the message
+    let l:message = substitute(l:message,'"','\\"',"g")
+    let l:message = "\"".l:message."\""
+
+    let l:cmdopts = s:GetCommonCmdOpts(expand("%:p"))
+    if (l:cmdopts == "error")
+        return
+    endif
+
+    " -mrev:msg
+        let l:cmd = "rcs -m".a:revision.":".l:message.l:cmdopts
+    "  RCS doesn't allow you to set an old message to a blank
+    "  you get "rcs: -m option lacks log message"
+    "  I'll let it through, so that the user will see that it's a RCS error
+    call s:RunCmd(l:cmd)
+
+    " Show the log window again 
+    :call <SID>DisplayLog()
+
+endfunction
+"}}}
+" Function: Set up the common commandline options {{{1
+"-----------------------------------------------------------------------------
 function! s:GetCommonCmdOpts(filename)
     " Build the command options
     let l:suffix = s:CreateSuffix(expand(a:filename))
@@ -1194,10 +1320,11 @@ endfunction
 " versions.
 "------------------------------------------------------------------------------
 nnoremap <silent> <Leader>rlog  :call <SID>DisplayLog()<cr>
-nnoremap <silent> <Leader>rci   :call <SID>rcsvers(expand("%"), "init")<cr>
+nnoremap <silent> <Leader>rci   :call <SID>Rcsvers(expand("%"), "init")<cr>
 
 nnoremap <silent> <Leader>older :call <SID>NextCompareFiles("older")<cr>
 nnoremap <silent> <Leader>newer :call <SID>NextCompareFiles("newer")<cr>
 
 let &cpo = s:save_cpo
 " vim600:textwidth=78:foldmethod=marker:fileformat=unix:expandtab:tabstop=4:shiftwidth=4
+

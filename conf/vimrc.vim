@@ -127,18 +127,15 @@ if !&cp
     let MRU_Exclude_Files = '^C:\\Documents and Settings\\juanf\\Local Settings\\Temp\\.*$'
 
     " Settings for RCSVersions plugin
+    let g:rvLeaveRcsUnlocked = 1
+    let g:rvSaveDirectoryType   = 1
     if has("win32")
-        let g:rvSaveDirectoryType   = 1
         let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
         let g:rvExcludeExpression   = '\c\.TMP'
         let g:rvTempDir             = 'W:\\RCSVers\\'
         let g:rvSaveDirectoryName   = 'W:\\RCSVers\\'
     else
-        let g:rvSaveDirectoryType   = 1
-        let g:rvDirSeparator        = "/"
         let g:rvExcludeExpression    = '^/tmp/'
-        let g:rvFileQuote           = '"'
-        let g:rvTempDir             = "$HOME/.rcs/"
         let g:rvSaveDirectoryName   = "$HOME/.rcs/"
     endif
 
