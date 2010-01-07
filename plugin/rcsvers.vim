@@ -7,7 +7,7 @@
 "       Author: Roger Pilkey (rpilkey at gmail.com)
 "   Maintainer: Juan Frias (juandfrias at gmail.com)
 "
-"  Last Change: $Date: 2009/12/23 17:07:03 $
+"  Last Change: $Date: 2009/12/24 17:07:03 $
 "      Version: $Revision: 1.28 $
 "
 "    Copyright: Permission is hereby granted to use and distribute this code,
@@ -101,7 +101,7 @@
 "
 " History: {{{1
 "------------------------------------------------------------------------------
-" 1.28  (2009-12-23) Adds syntax highlighting to temporary files retrieved from RCS and
+" 1.28  (2009-12-24) Adds syntax highlighting to temporary files retrieved from RCS and
 "       Fix of \rci to work with vim 7. (thanks to Sergey Khorev)
 "       Also added Fredrik Eriksson's patch to allow editing of messages. 
 "       (http://thebc.se/patch-for-rcsversvim)
@@ -911,7 +911,7 @@ function! s:Rcsvers(filename, type)
             "(could be caused by editing a file on a network drive with a
             "slightly different time than the drive where the RCS file lives)
             if ( (getftime(l:fullpath) - getftime(l:rcsfile)) > 3 )
-                let l:message = "(rcsvers.vim) modified outside of vim"
+                let l:message = "(rcsvers.vim) modified outside of vim."
             else
                 return
             endif
@@ -1216,7 +1216,8 @@ function! s:CompareFiles(revision)
     exec "cd ".g:rvFileQuote.l:savedir.g:rvFileQuote
 
     " Run the co command and capture the output
-    sil exe "sil! r!".l:cmd
+    sil exe "sil! 0r!".l:cmd
+    :$delete
     setlocal noswapfile
     setlocal nomodified
 
