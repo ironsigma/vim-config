@@ -127,6 +127,7 @@ if !&cp
     let MRU_Exclude_Files = '^C:\\Documents and Settings\\juanf\\Local Settings\\Temp\\.*$'
 
     " Settings for RCSVersions plugin
+    let $TZ = 'PST8PDT'
     let g:rvLeaveRcsUnlocked = 1
     let g:rvSaveDirectoryType   = 1
     if has("win32")
@@ -153,6 +154,9 @@ if !&cp
     let ruby_space_errors = 1
     let ruby_fold = 1
 
+    " Python highlighting
+    let python_highlight_all = 1
+    let python_print_as_function = 1
 endif
 "--------------------------------------------------------------------------
 " Auto commands

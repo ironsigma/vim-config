@@ -19,7 +19,7 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
 
     " types
-    autocmd! FileType python  comp python | setl tw=79
+    autocmd! FileType python  comp python
     autocmd! FileType html    runtime ftplugin/xml.vim
 
     " auto-complete
