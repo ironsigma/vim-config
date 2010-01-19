@@ -6,7 +6,7 @@
 " Font
 "--------------------------------------------------------------------------
 if has("win32")
-    set guifont=ProgCleanCo:h8:cOEM
+    set guifont=ProggyCleanTT:h12:cANSI
 elseif has("mac")
     set nomacatsui
     set antialias
@@ -47,7 +47,7 @@ endif
 "--------------------------------------------------------------------------
 " Color scheme
 "--------------------------------------------------------------------------
-colorscheme oceanblack
+colorscheme eclipse
 
 "--- EOF ------------------------------------------------------------------
 " vim:ff=unix:
