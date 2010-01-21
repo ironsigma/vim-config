@@ -96,12 +96,13 @@ nnoremap <silent> <f1> :NERDTreeToggle<cr>
 " F2  - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
-" F3  -
+" F3 - Toggle Project
+nmap <silent> <f3> <Plug>ToggleProject
 
 " F4  - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 -
+" F5  -
 
 " F6 -
 
@@ -157,6 +158,10 @@ if !&cp
     " Python highlighting
     let python_highlight_all = 1
     let python_print_as_function = 1
+
+    " Project
+    let g:proj_flags = 'cist'
+
 endif
 "--------------------------------------------------------------------------
 " Auto commands

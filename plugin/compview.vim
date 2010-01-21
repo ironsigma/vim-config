@@ -4,10 +4,10 @@
 "  Description: Vim plugin to search for a word and display a window with
 "               matches.
 "
-"       Author: Juan Frias (juandfrias at gmail.com)
+"       Author: Juan Frias (jfrias at boxfi.com)
 "
-"  Last Change: 2009 Apr 10
-"      Version: 1.05
+"  Last Change: 2010 Jan 21
+"      Version: 1.06
 "
 "    Copyright: Permission is hereby granted to use and distribute this code,
 "               with or without modifications, provided that this header
@@ -61,6 +61,9 @@
 " History: {{{1
 "------------------------------------------------------------------------------
 " GetLatestVimScripts: 1803 1 :AutoInstall: compview.vim
+"
+" 1.05  Fixed bug mapping <Plug>CompView would not work.
+"       Thanks to Andy Walker
 "
 " 1.05  Fixed bug where use in different tabs/buffers would not work.
 "
@@ -322,12 +325,12 @@ endfunction
 " Command
 command! CompView call s:CSearch()
 
+" Key map to Command
+nnoremap <script> <Plug>CompView :call <SID>CSearch()<CR>
+
 " Default key map
 if !hasmapto('<Plug>CompView')
-    map <unique> <Leader>v <Plug>CompView
+    nmap <silent> <Leader>v <Plug>CompView
 endif
-
-" Key map to Command
-nnoremap <unique> <script> <Plug>CompView :CompView<CR>
 
 " vim:fdm=marker:tw=75:
