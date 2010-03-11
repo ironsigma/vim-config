@@ -129,8 +129,9 @@ if !&cp
 
     " Settings for RCSVersions plugin
     let $TZ = 'PST8PDT'
+    let g:rvRcsOptions = "-kb"
     let g:rvLeaveRcsUnlocked = 1
-    let g:rvSaveDirectoryType   = 1
+    let g:rvSaveDirectoryType = 1
     if has("win32")
         let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
         let g:rvExcludeExpression   = '\c\.TMP'
