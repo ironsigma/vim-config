@@ -135,7 +135,7 @@ if !&cp
         let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
         let g:rvExcludeExpression   = '\c\.TMP'
         let g:rvTempDir             = 'C:\\Temp\\'
-        let g:rvSaveDirectoryName   = 'W:\\RCSVers\\'
+        let g:rvSaveDirectoryName   = 'C:\\RCSVers\\'
     else
         let g:rvExcludeExpression    = '^/tmp/'
         let g:rvSaveDirectoryName   = "$HOME/.rcs/"

@@ -17,6 +17,7 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=i
     autocmd! BufRead,BufNewFile *.ion        setfiletype ion
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
+    autocmd! BufRead,BufNewFile *.bi,*.bix   setlocal    ts=4 noet ft=php
 
     " types
     autocmd! FileType python  comp python
