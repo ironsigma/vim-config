@@ -36,6 +36,8 @@ set pastetoggle=<F10>               " Toggle paste
 set fileformats=unix,dos            " File formats
 set modelines=5                     " Set the number of lines to look at
 set keywordprg=                     " Set K to internal help
+set report=0                        " Report all line changes
+set shortmess=aO                    " Short messages
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -129,7 +131,7 @@ if !&cp
 
     " Settings for RCSVersions plugin
     let $TZ = 'PST8PDT'
-    let g:rvRcsOptions = "-kb"
+    let g:rvRcsOptions = ""
     let g:rvLeaveRcsUnlocked = 1
     let g:rvSaveDirectoryType = 1
     if has("win32")
