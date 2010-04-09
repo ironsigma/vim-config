@@ -3,7 +3,7 @@
 " Version: 1.6
 " Last Modified: July 19, 2003
 "
-" Overview
+" Overview {{{
 " --------
 " The Most Recently Used (MRU) plugin provides an easy access to a list of
 " recently opened/used files in Vim. This plugin automatically stores the file
@@ -25,7 +25,7 @@
 " list from other instances of Vim. This is similar to how Vim handles the
 " buffer list across Vim sessions.
 "
-" Installation
+" Installation {{{1
 " ------------
 " 1. Copy the mru.vim script to the $HOME/.vim/plugin directory.  Refer to
 "    ':help add-plugin', ':help add-global-plugin' and ':help runtimepath' for
@@ -33,7 +33,7 @@
 " 2. Restart Vim.
 " 3. You can use the ":MRU" command to list and edit the recently used files.
 "
-" Usage
+" Usage {{{1
 " -----
 " You can use the ":MRU" command to list all the most recently used file
 " names. The file names will be listed in a temporary Vim window. If the MRU
@@ -56,7 +56,7 @@
 " You can close the MRU window by pressing the 'q' key or using one of the Vim
 " window commands.
 "
-" Configuration
+" Configuration {{{1
 " -------------
 " By changing the following variables you can configure the behavior of this
 " plugin. Set the following variables in your .vimrc file using the 'let'
@@ -101,7 +101,7 @@
 " window open.
 "
 "       let MRU_Auto_Close = 0
-"
+" }}}
 " ****************** Do not modify after this line ************************
 if exists('loaded_mru') || &cp || !has('viminfo')
     finish
@@ -147,9 +147,43 @@ if !exists('MRU_LIST')
     let MRU_LIST = ''
 endif
 
+function! s:MRU_DeleteFile() " {{{
+    let fname = getline('.')
+
+    if fname == ''
+        return
+    endif
+
+    " If the filename is already present in the MRU list, then move
+    " it to the beginning of the list
+    let idx = stridx(g:MRU_LIST, fname . "\n")
+    let start = strridx(g:MRU_LIST, "\n", idx)
+
+    if start == -1
+        let start = 0
+    else
+        let start = start + 1
+    endif
+
+    if idx != -1
+        " Remove the entry from the list by extracting the text before it
+        " and then the text after it and then concatenate them
+        let text_before = strpart(g:MRU_LIST, 0, start)
+        let rem_text = strpart(g:MRU_LIST, idx)
+        let next_idx = stridx(rem_text, "\n")
+        let text_after = strpart(rem_text, next_idx + 1)
+        let g:MRU_LIST = text_before . text_after
+
+        " remove it from MRU window.
+        setlocal modifiable
+        normal! dd
+        setlocal nomodifiable
+    endif
+endfunction "}}}
+
 " MRU_AddFile
 " Add a file to the MRU file list
-function! s:MRU_AddFile()
+function! s:MRU_AddFile() "{{{
     " Get the full path to the filename
     let fname = fnamemodify(expand('<afile>'), ':p')
     if fname == ''
@@ -174,12 +208,20 @@ function! s:MRU_AddFile()
     " If the filename is already present in the MRU list, then move
     " it to the beginning of the list
     let idx = stridx(g:MRU_LIST, fname . "\n")
+    let start = strridx(g:MRU_LIST, "\n", idx)
+
+    if start == -1
+        let start = 0
+    else
+        let start = start + 1
+    endif
+
     if idx != -1
         let already_present = 1
 
         " Remove the entry from the list by extracting the text before it
         " and then the text after it and then concatenate them
-        let text_before = strpart(g:MRU_LIST, 0, idx)
+        let text_before = strpart(g:MRU_LIST, 0, start)
         let rem_text = strpart(g:MRU_LIST, idx)
         let next_idx = stridx(rem_text, "\n")
         let text_after = strpart(rem_text, next_idx + 1)
@@ -213,7 +255,7 @@ function! s:MRU_AddFile()
     endwhile
 
     " Add the new filename to the beginning of the MRU list
-    let g:MRU_LIST = fname . "\n" . g:MRU_LIST
+    let g:MRU_LIST = "[" . strftime("%d %b %Y %I:%M %p")  . "] " . fname . "\n" . g:MRU_LIST
 
     " If the MRU window is open, update the displayed MRU list
     let bname = '__MRU_Files__'
@@ -225,15 +267,20 @@ function! s:MRU_AddFile()
             exe cur_winnr . 'wincmd w'
         endif
     endif
-endfunction
+endfunction "}}}
 
 " MRU_EditFile
 " Open a file selected from the MRU window
-function! s:MRU_EditFile(new_window)
+function! s:MRU_EditFile(new_window) "{{{
     let fname = getline('.')
 
     if fname == ''
         return
+    endif
+
+    let idx = stridx(fname, '] ')
+    if idx != -1
+        let fname = strpart(fname, idx+2)
     endif
 
     if has("unix")
@@ -290,11 +337,11 @@ function! s:MRU_EditFile(new_window)
             endif
         endif
     endif
-endfunction
+endfunction "}}}
 
 " MRU_Display
 " Display the Most Recently Used file list in a temporary window.
-function! s:MRU_Display()
+function! s:MRU_Display() "{{{
     " Empty MRU list
     if g:MRU_LIST == ''
         echohl WarningMsg | echo 'MRU List is empty' | echohl None
@@ -361,9 +408,11 @@ function! s:MRU_Display()
 
     " Syntax Highlight
     syn clear
-    syn match MRU_Path      %^.\+\\%
+    syn match MRU_DateTime  %^\[[^\]]\+\]% contained
+    syn match MRU_Path      %^.\+\\% contains=MRU_DateTime
     syn match MRU_Files     %[^\\]\+$%
 
+    hi MRU_DateTime guifg=#707070
     hi MRU_Path     guifg=#a0a0a0
 
     " Create a mapping to jump to the file
@@ -372,13 +421,14 @@ function! s:MRU_Display()
     nnoremap <buffer> <silent> u :MRU<CR>
     nnoremap <buffer> <silent> <2-LeftMouse> :call <SID>MRU_EditFile(0)<CR>
     nnoremap <buffer> <silent> q :close<CR>
+    nnoremap <buffer> <silent> d :call <SID>MRU_DeleteFile()<CR>
 
     " Display the MRU list
     silent! 0put =g:MRU_LIST
-    normal! gg
+    normal! Gddgg
 
     setlocal nomodifiable
-endfunction
+endfunction "}}}
 
 " Autocommands to detect the most recently used files
 autocmd BufRead * call s:MRU_AddFile()
@@ -388,3 +438,4 @@ autocmd BufWritePost * call s:MRU_AddFile()
 " Command to open the MRU window
 command! -nargs=0 MRU call s:MRU_Display()
 
+" vim:fdm=marker:

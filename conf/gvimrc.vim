@@ -19,9 +19,9 @@ endif
 " Window position and size
 "--------------------------------------------------------------------------
 if has("win32")
-    winpos 230 130
-    set lines=58
-    set columns=130
+    winpos 368 39
+    set lines=70
+    set columns=180
 elseif has("mac")
     winpos 109 46 " 22+24 for window bar
     set lines=50
@@ -50,4 +50,3 @@ endif
 colorscheme eclipse
 
 "--- EOF ------------------------------------------------------------------
-" vim:ff=unix:

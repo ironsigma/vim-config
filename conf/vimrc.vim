@@ -34,6 +34,7 @@ set nostartofline                   " Keep cursor column when moving
 set scrolloff=0                     " Keep context lines
 set pastetoggle=<F10>               " Toggle paste
 set fileformats=unix,dos            " File formats
+set fileformat=unix                 " Default to new unix format files
 set modelines=5                     " Set the number of lines to look at
 set keywordprg=                     " Set K to internal help
 set report=0                        " Report all line changes
@@ -75,6 +76,11 @@ if !has("gui_running")
     set t_vb=
 endif
 
+" Swap file location
+if has("win32")
+    set dir=C:\\RCSVers\\\\
+endif
+
 "--------------------------------------------------------------------------
 " Keyboard Mappings
 "--------------------------------------------------------------------------
@@ -105,6 +111,7 @@ nmap <silent> <f3> <Plug>ToggleProject
 nnoremap <silent> <f4> :nohlsearch<cr>
 
 " F5  -
+nnoremap <silent> <f5> :WinZoomToggle<cr>
 
 " F6 -
 
@@ -127,7 +134,7 @@ if !&cp
     " Settings for MRU plugin
     let MRU_Max_Entries = 50
     let MRU_Window_Height = 25
-    let MRU_Exclude_Files = '^C:\\Documents and Settings\\juanf\\Local Settings\\Temp\\.*$'
+    let MRU_Exclude_Files = '^C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*$'
 
     " Settings for RCSVersions plugin
     let $TZ = 'PST8PDT'
@@ -163,7 +170,7 @@ if !&cp
     let python_print_as_function = 1
 
     " Project
-    let g:proj_flags = 'cist'
+    let g:proj_flags = 'ist'
 
 endif
 "--------------------------------------------------------------------------
@@ -175,12 +182,6 @@ if !&cp
 
     " switch to current dir
     autocmd BufEnter * :sil! lcd %:p:h
-
-    " No swap file for network files
-    if has("win32")
-        autocmd BufReadPre * if strpart(tolower(expand("%:p")),0,2)!="c:" |
-        \ setlocal noswapfile | endif
-    endif
 
     " When editing a file, always jump to the last known cursor position.
     " Don't do it when the position is invalid or when inside an event handler
