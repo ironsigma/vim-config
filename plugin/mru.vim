@@ -207,17 +207,17 @@ function! s:MRU_AddFile() "{{{
 
     " If the filename is already present in the MRU list, then move
     " it to the beginning of the list
-    let idx = stridx(g:MRU_LIST, fname . "\n")
-    let start = strridx(g:MRU_LIST, "\n", idx)
-
-    if start == -1
-        let start = 0
-    else
-        let start = start + 1
-    endif
+    let idx = stridx(tolower(g:MRU_LIST), tolower(fname) . "\n")
 
     if idx != -1
         let already_present = 1
+        let start = strridx(g:MRU_LIST, "\n", idx)
+
+        if start == -1
+            let start = 0
+        else
+            let start = start + 1
+        endif
 
         " Remove the entry from the list by extracting the text before it
         " and then the text after it and then concatenate them

@@ -134,7 +134,7 @@ if !&cp
     " Settings for MRU plugin
     let MRU_Max_Entries = 50
     let MRU_Window_Height = 25
-    let MRU_Exclude_Files = '^C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*$'
+    let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
 
     " Settings for RCSVersions plugin
     let $TZ = 'PST8PDT'

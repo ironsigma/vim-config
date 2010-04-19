@@ -6,5 +6,5 @@ if exists("current_compiler")
 endif
 let current_compiler = "php"
 
-setlocal makeprg=php\ -l\ %
+setlocal makeprg=php\ -lnf\ %
 set errorformat=%m\ in\ %f\ on\ line\ %l
