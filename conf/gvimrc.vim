@@ -40,9 +40,6 @@ set guicursor=a:blinkon0    " No blinking cursor
 set guioptions-=L           " No left hand scrollbars
 set guioptions-=m           " No menu bar
 set t_vb=                   " Turn off bell flashes
-if !has("win32")
-    set noshowcmd
-endif
 
 "--------------------------------------------------------------------------
 " Color scheme
