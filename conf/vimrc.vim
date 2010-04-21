@@ -50,7 +50,7 @@ if !&cp
 endif
 
 " set status line
-set statusline=%<%F\ %w%r%y[%{&ff}]%m\%=\ %l,%v\ \ %p%%\ %L
+set statusline=%<%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=\ %l,%v\ \ %p%%\ %L
 
 " Set invisible chars and display them
 set list
