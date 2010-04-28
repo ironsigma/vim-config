@@ -98,26 +98,27 @@ imap <MiddleMouse> <Nop>
 vnoremap <silent> < <gv
 vnoremap <silent> > >gv
 
-" F1  - NERDTree plugin
-nnoremap <silent> <f1> :NERDTreeToggle<cr>
+" F1 - Filter File Explorer
+nmap <silent> <f1> <Plug>FilterFileExplorer
 
-" F2  - MRU plugin
+" F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
 " F3 - Toggle Project
 nmap <silent> <f3> <Plug>ToggleProject
 
-" F4  - Toggle highlight search
+" F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5  -
+" F5 - Toggle zoom window
 nnoremap <silent> <f5> :WinZoomToggle<cr>
 
-" F6 -
+" F6 - NERDTree
+nnoremap <silent> <f6> :NERDTreeToggle<cr>
 
 " F7 -
 
-" F8  - Toggle linewrapping
+" F8 - Toggle linewrapping
 nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 
 " F9  - Run external make command

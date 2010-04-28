@@ -19,8 +19,8 @@ endif
 " Window position and size
 "--------------------------------------------------------------------------
 if has("win32")
-    winpos 368 39
-    set lines=70
+    winpos 300 5
+    set lines=68
     set columns=180
 elseif has("mac")
     winpos 109 46 " 22+24 for window bar
