@@ -47,16 +47,16 @@
 "               <esc>
 "                   Close the explorer window.
 "
-"               <enter>, <c-enter>
+"               <cr>, <ctrl-o>
 "                   Open the selected file in the current window. Or new
-"                   window if the current file is moddifed. When <c-enter> is
+"                   window if the current file is moddifed. When <ctrl-o> is
 "                   used it will keep the explorer window open.
 "
-"               <s-enter>, <c-o>
-"                   Open the selected file in a new window. When <c-o> is used
+"               <shift-cr>, <ctrl-w>
+"                   Open the selected file in a new window. When <ctrl-w> is used
 "                   it will keep the explorer window open
 "
-"               <tab>, <s-tab>
+"               <tab>, <shift-tab>
 "                   Select the next/previous file in the list.
 "
 "               <ctrl-h>
@@ -75,7 +75,7 @@
 "               <ctrl-u>
 "                   Go up one directory.
 "
-"               <ctrl-c>
+"               <ctrl-l>
 "                   Clear pattern.
 "
 "               <ctrl-f>
@@ -84,7 +84,7 @@
 "               <ctrl-a>
 "                   Open all files in directory
 "
-"               <ctrl-w>
+"               <ctrl-v>
 "                   Open all files in directory in different windows
 "
 "               <ctrl-e>
@@ -443,7 +443,7 @@ function! s:FilterFileExplorer(path) "{{{2
             call s:CloseExplorerWindow()
             return
 
-        elseif c == "\<s-cr>" "{{{3
+        elseif c == "\<s-o>" "{{{3
             if selected == -1
                 continue
             endif
@@ -458,7 +458,7 @@ function! s:FilterFileExplorer(path) "{{{2
             call s:EditFile(path.item, 1, orig_win, 0)
             return
 
-        elseif c == "\<c-cr>" "{{{3
+        elseif c == "\<c-w>" "{{{3
             if selected == -1
                 continue
             endif
@@ -468,7 +468,7 @@ function! s:FilterFileExplorer(path) "{{{2
             if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
                 continue
             endif
-            let orig_win = s:EditFile(path.item, 0, orig_win, 1)
+            let orig_win = s:EditFile(path.item, 1, orig_win, 1)
 
         elseif c == char2nr("\<c-o>") "{{{3
             if selected == -1
@@ -480,7 +480,7 @@ function! s:FilterFileExplorer(path) "{{{2
             if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
                 continue
             endif
-            let orig_win = s:EditFile(path.item, 1, orig_win, 1)
+            let orig_win = s:EditFile(path.item, 0, orig_win, 1)
 
         elseif c == char2nr("\<cr>") "{{{3
             if selected == -1
@@ -558,7 +558,7 @@ function! s:FilterFileExplorer(path) "{{{2
                 let show_pattern = 0
             endif
 
-        elseif c == char2nr("\<c-c>") "{{{3
+        elseif c == char2nr("\<c-l>") "{{{3
             let filter = ''
 
         elseif c == char2nr("\<c-f>") "{{{3
@@ -577,7 +577,7 @@ function! s:FilterFileExplorer(path) "{{{2
             endfor
             return
 
-        elseif c == char2nr("\<c-w>") "{{{3
+        elseif c == char2nr("\<c-v>") "{{{3
             call s:CloseExplorerWindow()
             for item in item_list
                 " if directory
