@@ -41,8 +41,8 @@
 "
 "               [printable characters], <bs>
 "                   When you start typing the files will be filtered according
-"                   to the pattern you are building. You can use regular
-"                   expressions to build your pattern.
+"                   to the filter pattern you are building. You can use
+"                   regular expressions to build your filter.
 "
 "               <esc>
 "                   Close the explorer window.
@@ -70,13 +70,13 @@
 "                   Toggle displaying current path.
 "
 "               <ctrl-n>
-"                   Toggle displaying current pattern.
+"                   Toggle displaying current filter.
 "
 "               <ctrl-u>
 "                   Go up one directory.
 "
 "               <ctrl-l>
-"                   Clear pattern.
+"                   Clear the filter.
 "
 "               <ctrl-f>
 "                   Refresh directory listing
@@ -96,6 +96,7 @@
 "------------------------------------------------------------------------------
 "
 "" GetLatestVimScripts: XXX 1 rcsvers.vim TODO: change
+
 " History: {{{1
 "------------------------------------------------------------------------------
 " 1.0   (2010-XX-XX) Initial upload. TODO: change date
@@ -117,9 +118,9 @@
 "       To override use:
 "           let g:ffeCaseSensitive = <option>
 "       in your vimrc file. Where <option> is one fo the following:
-"           0 = use ignorecase setting (default)
-"           1 = use case-sensitive searching
-"           2 = use case-insensitive searching
+"           'system'      = use ignorecase system setting (default)
+"           'sensitive'   = use case-sensitive searching
+"           'insensitive' = use case-insensitive searching
 "
 " g:ffeShowDotFiles
 "       Explorer does not show dot files.
@@ -173,14 +174,14 @@
 "           let g:ffeIgnoreFileRexExPattern = '\.obj\|\.o$\|\~$'
 "       see :help regexp for details.
 "
-" g:ffeShowPattern
-"       Explorer shows a line with the pattern when it is not empty.
+" g:ffeShowFilter
+"       Explorer shows a line with the filter when it is not empty.
 "       To override use:
-"           let g:ShowPattern = <option>
+"           let g:ShowFilter = <option>
 "       in your vimrc file. Where <option> is one of:
-"           0 = always hide
-"           1 = display only when the pattern is not empty (default)
-"           2 = always display
+"           'never'  = never show
+"           'auto'   = display only when the filter is not empty (default)
+"           'always' = always display
 
 " Load script once {{{1
 "------------------------------------------------------------------------------
@@ -189,21 +190,22 @@ if exists("loaded_filter_file_explorer") || &cp
 endif
 "...let loaded_filter_file_explorer = 1 TODO: remove
 
-" Functions {{{1
-"------------------------------------------------------------------------------
-function! s:SetDefault(var, value) "{{{2
+"}}}
+
+function! s:SetDefault(var, value) "{{{1
     if !exists(a:var)
         exec 'let '.a:var.'='.a:value
     endif
 endfunction
-function! s:CloseExplorerWindow() "{{{2
+function! s:CloseExplorerWindow() "{{{1
     let nr = bufnr('%')
     close!
     exec nr.' bwipeout!'
+    let s:explorer_open = 0
 endfunction
-function! s:EditFile(fname, open_window, orig_win, explorer_open) "{{{2
-    if a:explorer_open || g:ffeKeepExplorerWindowOpen
-        exec a:orig_win.' wincmd w'
+function! s:EditFile(fname, open_window) "{{{1
+    if s:explorer_open || g:ffeKeepExplorerWindowOpen
+        exec s:orig_win.' wincmd w'
     endif
 
     let fname = a:fname
@@ -238,26 +240,26 @@ function! s:EditFile(fname, open_window, orig_win, explorer_open) "{{{2
     endif
 
     let new_win = winnr()
-    if a:explorer_open || g:ffeKeepExplorerWindowOpen
+    if s:explorer_open || g:ffeKeepExplorerWindowOpen
         let exp_win = bufwinnr('-- Filter File Explorer --')
         exec exp_win .' wincmd w'
     endif
     return new_win
 endfunction
-function! s:DisplayItems(list, filter, selected, path, show_path, show_pattern) "{{{2
-    exec 'normal gg"_dG'
+function! s:DisplayList(list) "{{{1
+    exec 'normal! gg"_dG'
 
     let num_items = len(a:list)
 
-    if a:show_path
-        exec 'normal Alisting of '.a:path."\<cr>"
+    if s:show_path
+        exec 'normal! Alisting of '.s:path."\<cr>"
     endif
 
-    let show_pattern = 0
-    if a:show_pattern != 0 
-        if a:show_pattern == 2 || strlen(a:filter) != 0
-            exec 'normal A'.num_items.' items matching "'.a:filter."\"\<cr>"
-            let show_pattern = 1
+    let showing_filter = 0
+    if s:show_filter != 'never'
+        if s:show_filter == 'always' || strlen(s:filter) != 0
+            exec 'normal! A'.num_items.' items matching "'.s:filter."\"\<cr>"
+            let showing_filter = 1
         endif
     endif
 
@@ -279,10 +281,10 @@ function! s:DisplayItems(list, filter, selected, path, show_path, show_pattern) 
     if num_items % num_cols != 0
         let height += 1
     endif
-    if show_pattern
+    if showing_filter
         let height += 1
     endif
-    if a:show_path
+    if s:show_path
         let height += 1
     endif
 
@@ -297,14 +299,14 @@ function! s:DisplayItems(list, filter, selected, path, show_path, show_pattern) 
     let selected_line = -1
     for item in a:list
         let entry = ''
-        if a:selected == current
+        if s:selected == current
             let selected_line = line('.')
             let entry .= '['
         else
             let entry .= ' '
         endif
         let entry .= item
-        if a:selected == current
+        if s:selected == current
             let entry .= ']'
         else
             if col != num_cols && current != last_item
@@ -329,39 +331,45 @@ function! s:DisplayItems(list, filter, selected, path, show_path, show_pattern) 
     if selected_line == -1
         normal! gg
     else
-        exec 'normal! '.selected_line.'Gz-'
+        exec 'normal! '.selected_line.'G0z-'
     endif
     setl nomod
 endfunction
-function! s:FilterItems(list, filter) "{{{2
-    if a:filter == ''
-        return a:list
+function! s:FilterList() "{{{1
+    let s:selected = -1
+    if s:filter == ''
+        let s:filter_list = s:file_list
+        return
     endif
 
-    if g:ffeCaseSensitive == 1
+    if g:ffeCaseSensitive == 'sensitive'
         let case = '\C'
-    elseif g:ffeCaseSensitive == 2
+    elseif g:ffeCaseSensitive == 'insensitive'
         let case = '\c'
     else
         let case = ''
     endif
 
-    let filter_list = []
-    for item in a:list
-        if match(item, case.a:filter) != -1
-            call add(filter_list, item)
+    let s:filter_list = []
+    for item in s:file_list
+        if match(item, case.s:filter) != -1
+            call add(s:filter_list, item)
         endif
     endfor
-    return filter_list
+    if len(s:filter_list) == 1
+        let s:selected = 0
+    endif
 endfunction
-function! s:GetFileList(path, show_hidden, recursive) "{{{2
+function! s:UpdateFileList() "{{{1
+    let s:filter = ''
+    let s:selected = -1
     let dir_list = []
     let file_list = []
-    let start = strlen(a:path)
-    let pattern = '*'
+    let start = strlen(s:path)
+    let glob_pattern = '*'
 
-    if a:recursive
-        let pattern .= '*'
+    if s:recursive
+        let glob_pattern .= '*'
     else
         call add(dir_list, '..'.g:ffeDirSeparator)
     endif
@@ -369,15 +377,15 @@ function! s:GetFileList(path, show_hidden, recursive) "{{{2
     let old_wild = &wildignore
     exec 'set wildignore='.g:ffeWildIgnoreFile
 
-    if a:show_hidden || g:ffeShowDotFiles
-        let item_list = split(glob(a:path.'.'.pattern), "\n")
+    if s:show_hidden || g:ffeShowDotFiles
+        let item_list = split(glob(s:path.'.'.glob_pattern), "\n")
         for full_path in item_list
             let file_name = strpart(full_path, start)
             if file_name == '.' || file_name == '..'
                 continue
             endif
             if isdirectory(full_path)
-                if !a:recursive
+                if !s:recursive
                     call add(dir_list, file_name.g:ffeDirSeparator)
                 endif
             else
@@ -389,11 +397,11 @@ function! s:GetFileList(path, show_hidden, recursive) "{{{2
         endfor
     endif
 
-    let item_list = split(glob(a:path.pattern), "\n")
+    let item_list = split(glob(s:path.glob_pattern), "\n")
     for full_path in item_list
         let file_name = strpart(full_path, start)
         if isdirectory(full_path)
-            if !a:recursive
+            if !s:recursive
                 call add(dir_list, file_name.g:ffeDirSeparator)
             endif
         else
@@ -406,221 +414,233 @@ function! s:GetFileList(path, show_hidden, recursive) "{{{2
 
     exec 'set wildignore='.old_wild
 
-    return dir_list + file_list
+    let s:file_list = dir_list + file_list
+    let s:filter_list = s:file_list
 endfunction
-function! s:FilterFileExplorer(path) "{{{2
-    let path = resolve(a:path.g:ffeDirSeparator)
-    let show_hidden = 0
-    let recursive = 0
-    let orig_win = winnr()
-    let show_path = g:ffeDisplayPath
-    let show_pattern = g:ffeShowPattern
-    let file_list = s:GetFileList(path, show_hidden, recursive)
-    let item_list = file_list
+function! s:UpdateHighlighting() "{{{1
+    syntax clear
+    syntax match fileFindSelected /\[[^\]]\+\]/
+    if len(s:filter) != 0
+        exec 'syntax match fileFindMatch /'.escape(s:filter, '\/').'/'
+    endif
+endfunction
+function! s:UpdateFilter(ch) "{{{1
+    let s:filter .= nr2char(a:ch)
+    call s:FilterList()
+    call s:DisplayList(s:filter_list)
+    call s:UpdateHighlighting()
+endfunction
+function! s:ExecuteCommand(op) "{{{1
+    if a:op == 'exit' "{{{2
+        call s:CloseExplorerWindow()
+        return
 
-    " open window
+    elseif a:op == 'open' "{{{2
+        if s:selected == -1
+            return
+        endif
+        let item = s:filter_list[s:selected]
+        if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+            let s:path = resolve(s:path.item)
+            call s:UpdateFileList()
+        else
+            call s:CloseExplorerWindow()
+            call s:EditFile(s:path.item, 0)
+            return
+        endif
+    elseif a:op == 'open_noexit' "{{{2
+        if s:selected == -1
+            return
+        endif
+        let item = s:filter_list[s:selected]
+        if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+            return
+        endif
+        let s:orig_win = s:EditFile(s:path.item, 0)
+
+    elseif a:op == 'open_win' "{{{2
+        if s:selected == -1
+            return
+        endif
+        let item = s:filter_list[s:selected]
+        if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+            return
+        endif
+        call s:CloseExplorerWindow()
+        call s:EditFile(s:path.item, 1)
+        return
+    elseif a:op == 'open_win_noexit' "{{{2
+        if s:selected == -1
+            return
+        endif
+        let item = s:filter_list[s:selected]
+        if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+            return
+        endif
+        let s:orig_win = s:EditFile(s:path.item, 1)
+    elseif a:op == 'open_all' "{{{2
+        call s:CloseExplorerWindow()
+        for item in s:filter_list
+            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+                continue
+            endif
+            call s:EditFile(s:path.item, 0)
+        endfor
+        return
+    elseif a:op == 'open_all_win' "{{{2
+        call s:CloseExplorerWindow()
+        for item in s:filter_list
+            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
+                continue
+            endif
+            call s:EditFile(s:path.item, 1)
+        endfor
+        return
+    elseif a:op == 'delchar' "{{{2
+        let len = strlen(s:filter)
+        if len == 0
+            return
+        endif
+        let s:filter = strpart(s:filter, 0, len - 1)
+        call s:FilterList()
+    elseif a:op == 'clear_filter' "{{{2
+        let s:filter = ''
+        call s:FilterList()
+    elseif a:op == 'refresh' "{{{2
+        call s:UpdateFileList()
+        call s:FilterList()
+    elseif a:op == 'select_next' "{{{2
+        if len(s:filter_list) == 0
+            return
+        endif
+        let s:selected += 1
+        if s:selected >= len(s:filter_list)
+            let s:selected = 0
+        endif
+    elseif a:op == 'select_prev' "{{{2
+        if len(s:filter_list) == 0
+            return
+        endif
+        let s:selected -= 1
+        if s:selected < 0
+            let s:selected = len(s:filter_list) - 1
+        endif
+    elseif a:op == 'show_hidden' "{{{2
+        let s:show_hidden = !s:show_hidden
+        call s:UpdateFileList()
+    elseif a:op == 'recursive' "{{{2
+        let s:recursive = !s:recursive
+        call s:UpdateFileList()
+    elseif a:op == 'show_path' "{{{2
+        let s:show_path = !s:show_path
+    elseif a:op == 'show_filter' "{{{2
+        if s:show_filter == 'never'
+            let s:show_filter = 'always'
+        elseif s:show_filter == 'auto'
+            if strlen(s:filter) == 0
+                let s:show_filter = 'always'
+            else
+                let s:show_filter = 'never'
+            endif
+        elseif s:show_filter == 'always'
+            let s:show_filter = 'never'
+        endif
+    elseif a:op == 'up_dir' "{{{2
+        let s:path = resolve(s:path.'..'.g:ffeDirSeparator)
+        call s:UpdateFileList()
+    elseif a:op == 'edit_file_list' "{{{2
+        call s:CloseExplorerWindow()
+        if g:ffeExplorerOnTop
+            topleft new
+        else
+            botright new
+        endif
+        call s:DisplayList(s:file_list)
+        return
+    endif "}}}
+
+    call s:DisplayList(s:filter_list)
+    call s:UpdateHighlighting()
+endfunction
+function! s:AddControlMappings() "{{{1
+    let chars = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',
+                \ 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                \ 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                \ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                \ 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                \ 'Y', 'Z', '`', '-', '=', '~', '!', '@', '#', '$', '%', '^',
+                \ '&', '*', '(', ')', '_', '+', '[', ']', '{', '}', ',', '.',
+                \ '/', '<', '>', '?', '"', ';', ':', '\', '|', '"', ' ' ]
+
+    " remove all mappings
+    mapclear <buffer>
+
+    " map characters
+    for ch in chars
+        exec "noremap <silent> <buffer> <char-". char2nr(ch)."> :call <sid>UpdateFilter(".char2nr(ch).")<cr>"
+    endfor
+
+    " map commands
+    noremap <silent> <buffer> <esc>   :call <sid>ExecuteCommand('exit')<cr>
+    noremap <silent> <buffer> <bs>    :call <sid>ExecuteCommand('delchar')<cr>
+    noremap <silent> <buffer> <cr>    :call <sid>ExecuteCommand('open')<cr>
+    noremap <silent> <buffer> <s-cr>  :call <sid>ExecuteCommand('open_win')<cr>
+    noremap <silent> <buffer> <c-w>   :call <sid>ExecuteCommand('open_win_noexit')<cr>
+    noremap <silent> <buffer> <tab>   :call <sid>ExecuteCommand('select_next')<cr>
+    noremap <silent> <buffer> <s-tab> :call <sid>ExecuteCommand('select_prev')<cr>
+    noremap <silent> <buffer> <c-o>   :call <sid>ExecuteCommand('open_noexit')<cr>
+    noremap <silent> <buffer> <c-h>   :call <sid>ExecuteCommand('show_hidden')<cr>
+    noremap <silent> <buffer> <c-r>   :call <sid>ExecuteCommand('recursive')<cr>
+    noremap <silent> <buffer> <c-p>   :call <sid>ExecuteCommand('show_path')<cr>
+    noremap <silent> <buffer> <c-n>   :call <sid>ExecuteCommand('show_filter')<cr>
+    noremap <silent> <buffer> <c-u>   :call <sid>ExecuteCommand('up_dir')<cr>
+    noremap <silent> <buffer> <c-l>   :call <sid>ExecuteCommand('clear_filter')<cr>
+    noremap <silent> <buffer> <c-f>   :call <sid>ExecuteCommand('refresh')<cr>
+    noremap <silent> <buffer> <c-a>   :call <sid>ExecuteCommand('open_all')<cr>
+    noremap <silent> <buffer> <c-v>   :call <sid>ExecuteCommand('open_all_win')<cr>
+    noremap <silent> <buffer> <c-e>   :call <sid>ExecuteCommand('edit_file_list')<cr>
+endfunction
+function! s:FilterFileExplorer(path) "{{{1
+    " init vars
+    let s:path          = resolve(a:path.g:ffeDirSeparator)
+    let s:filter        = ''
+    let s:selected      = -1
+    let s:show_hidden   = 0
+    let s:recursive     = 0
+    let s:file_list     = []
+    let s:filter_list   = []
+    let s:orig_win      = winnr()
+    let s:show_path     = g:ffeDisplayPath
+    let s:show_filter   = g:ffeShowFilter
+    let s:explorer_open = 1
+
+    " create window
     if g:ffeExplorerOnTop
         topleft new '-- Filter File Explorer --'
     else
         botright new '-- Filter File Explorer --'
     endif
-
     setl nobuflisted
-    call s:DisplayItems(file_list, '', -1, path, show_path, show_pattern)
 
+    " highlighting
     syntax match fileFindSelected /\[[^\]]\+\]/
     highlight def link fileFindSelected Search
     highlight def link fileFindMatch IncSearch
 
-    " Process keystrokes
-    let filter = ''
-    let selected = -1
-    while 1
-        redraw
-        let c = getchar()
-
-        if c == char2nr("\<esc>") "{{{3
-            call s:CloseExplorerWindow()
-            return
-
-        elseif c == "\<s-o>" "{{{3
-            if selected == -1
-                continue
-            endif
-            let item = item_list[selected]
-
-            " if directory
-            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                continue
-            endif
-
-            call s:CloseExplorerWindow()
-            call s:EditFile(path.item, 1, orig_win, 0)
-            return
-
-        elseif c == "\<c-w>" "{{{3
-            if selected == -1
-                continue
-            endif
-            let item = item_list[selected]
-
-            " if directory
-            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                continue
-            endif
-            let orig_win = s:EditFile(path.item, 1, orig_win, 1)
-
-        elseif c == char2nr("\<c-o>") "{{{3
-            if selected == -1
-                continue
-            endif
-            let item = item_list[selected]
-
-            " if directory
-            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                continue
-            endif
-            let orig_win = s:EditFile(path.item, 0, orig_win, 1)
-
-        elseif c == char2nr("\<cr>") "{{{3
-            if selected == -1
-                continue
-            endif
-            let item = item_list[selected]
-
-            " if directory
-            if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                let path = resolve(path.item)
-                let file_list = s:GetFileList(path, show_hidden, recursive)
-                let selected = -1
-                let filter = ''
-            else
-                call s:CloseExplorerWindow()
-                call s:EditFile(path.item, 0, orig_win, 0)
-                return
-            endif
-
-        elseif c == "\<bs>" "{{{3
-            let filter = strpart(filter, 0, strlen(filter)-1)
-            let selected = -1
-
-        elseif c == char2nr("\<tab>") "{{{3
-            if len(item_list) == 0
-                continue
-            endif
-            let selected += 1
-            if selected >= len(item_list)
-                let selected = 0
-            endif
-
-        elseif c == "\<s-tab>" "{{{3
-            if len(item_list) == 0
-                continue
-            endif
-            let selected -= 1
-            if selected < 0
-                let selected = len(item_list) - 1
-            endif
-
-        elseif c == char2nr("\<c-r>") "{{{3
-            let recursive = !recursive
-            let file_list = s:GetFileList(path, show_hidden, recursive)
-            let selected = -1
-            let filter = ''
-
-        elseif c == char2nr("\<c-h>") "{{{3
-            let show_hidden = !show_hidden
-            let file_list = s:GetFileList(path, show_hidden, recursive)
-            let selected = -1
-            let filter = ''
-
-        elseif c == char2nr("\<c-u>") "{{{3
-            let path = resolve(path.'..'.g:ffeDirSeparator)
-            let file_list = s:GetFileList(path, show_hidden, recursive)
-            let selected = -1
-            let filter = ''
-
-        elseif c == char2nr("\<c-p>") "{{{3
-            let show_path = !show_path
-
-        elseif c == char2nr("\<c-n>") "{{{3
-            if show_pattern == 0 " never
-                let show_pattern = 2 " always
-
-            elseif show_pattern == 1 " auto
-                if strlen(filter) == 0
-                    let show_pattern = 2 " always
-                else
-                    let show_pattern = 0 " never
-                endif
-
-            elseif show_pattern == 2 " always
-                let show_pattern = 0
-            endif
-
-        elseif c == char2nr("\<c-l>") "{{{3
-            let filter = ''
-
-        elseif c == char2nr("\<c-f>") "{{{3
-            let file_list = s:GetFileList(path, show_hidden, recursive)
-            let selected = -1
-            let filter = ''
-
-        elseif c == char2nr("\<c-a>") "{{{3
-            call s:CloseExplorerWindow()
-            for item in item_list
-                " if directory
-                if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                    continue
-                endif
-                call s:EditFile(path.item, 0, orig_win, 0)
-            endfor
-            return
-
-        elseif c == char2nr("\<c-v>") "{{{3
-            call s:CloseExplorerWindow()
-            for item in item_list
-                " if directory
-                if strpart(item, strlen(item) - 1) == g:ffeDirSeparator
-                    continue
-                endif
-                call s:EditFile(path.item, 1, orig_win, 0)
-            endfor
-            return
-
-        elseif c == char2nr("\<c-e>") "{{{3
-            return
-
-        else "{{{3
-            let selected = -1
-            let filter .= nr2char(c)
-        endif "}}}
-
-        let item_list = s:FilterItems(file_list, filter)
-        if len(item_list) == 1
-            let selected = 0
-        endif
-
-        call s:DisplayItems(item_list, filter, selected, path, show_path, show_pattern)
-
-        syn clear
-        syntax match fileFindSelected /\[[^\]]\+\]/
-        if len(filter) != 0
-            exec 'syntax match fileFindMatch /'.escape(filter, '\/').'/'
-        endif
-    endwhile
-    " end Process keystrokes
+    call s:AddControlMappings()
+    call s:UpdateFileList()
+    call s:DisplayList(s:file_list)
 endfunction
+"}}}
 
 " Set Defaults {{{1
 "------------------------------------------------------------------------------
 call s:SetDefault('g:ffeAlwaysOpenNewWindow', 0)
-call s:SetDefault('g:ffeCaseSensitive', 0)
-call s:SetDefault('g:ffeCaseSensitive', 0)
+call s:SetDefault('g:ffeCaseSensitive', "'system'")
 call s:SetDefault('g:ffeShowDotFiles', 0)
 call s:SetDefault('g:ffeExplorerOnTop', 0)
 call s:SetDefault('g:ffeDisplayPath', 0)
-call s:SetDefault('g:ffeShowPattern', 1)
+call s:SetDefault('g:ffeShowFilter', "'auto'")
 call s:SetDefault('g:ffeKeepExplorerWindowOpen', 0)
 call s:SetDefault('g:ffeIgnoreFileRexExPattern', "''")
 call s:SetDefault('g:ffeWildIgnoreFile', "''")
