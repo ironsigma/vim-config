@@ -5,7 +5,7 @@
 "
 "       Author: Juan D Frias (juandfrias at gmail.com)
 "
-"  Last Change: 2010 Apr 28 TODO: update
+"  Last Change: 2010 Apr 29 TODO: update
 "      Version: 1.0
 "
 "    Copyright: Permission is hereby granted to use and distribute this code,
@@ -190,18 +190,32 @@ if exists("loaded_filter_file_explorer") || &cp
 endif
 "...let loaded_filter_file_explorer = 1 TODO: remove
 
+" Check for functionality {{{1
+"------------------------------------------------------------------------------
+if version < 700
+    echohl ErrorMsg
+    echon "WARNING: FilterFileExplorer requires Vim version 7+, plugin not loaded."
+    echohl none
+    finish
+endif
 "}}}
 
 function! s:SetDefault(var, value) "{{{1
     if !exists(a:var)
-        exec 'let '.a:var.'='.a:value
+        let value = a:value
+        if type(a:value) == type("")
+            let value = "'".value."'"
+        endif
+        exec 'let '.a:var.'='.value
     endif
 endfunction
 function! s:CloseExplorerWindow() "{{{1
-    let nr = bufnr('%')
+    call s:RestoreVimOptions()
     close!
-    exec nr.' bwipeout!'
     let s:explorer_open = 0
+    syntax clear FilterFileExplorerMatch
+    syntax clear FilterFileExplorerDirectory
+    syntax clear FilterFileExplorerSelected
 endfunction
 function! s:EditFile(fname, open_window) "{{{1
     if s:explorer_open || g:ffeKeepExplorerWindowOpen
@@ -241,12 +255,25 @@ function! s:EditFile(fname, open_window) "{{{1
 
     let new_win = winnr()
     if s:explorer_open || g:ffeKeepExplorerWindowOpen
-        let exp_win = bufwinnr('-- Filter File Explorer --')
+        let exp_win = bufwinnr(s:explorer_buffnr)
         exec exp_win .' wincmd w'
     endif
     return new_win
 endfunction
+function! s:LockExplorerBuffer() "{{{1
+    let line = ''
+    let len = strlen(getline('.'))
+    while len < winwidth(0)
+        let line .= ' '
+        let len += 1
+    endwhile
+    exec 'normal! A'.line
+    normal! g$ze
+    setl nomodified
+    setl nomodifiable
+endfunction
 function! s:DisplayList(list) "{{{1
+    setl modifiable
     exec 'normal! gg"_dG'
 
     let num_items = len(a:list)
@@ -264,7 +291,8 @@ function! s:DisplayList(list) "{{{1
     endif
 
     if num_items == 0
-        setl nomod
+        normal! gg0
+        call s:LockExplorerBuffer()
         return
     endif
 
@@ -328,12 +356,13 @@ function! s:DisplayList(list) "{{{1
             normal! o
         endif
     endfor
+
     if selected_line == -1
-        normal! gg
+        normal! ggL
     else
-        exec 'normal! '.selected_line.'G0z-'
+        exec 'normal! '.selected_line.'Gz-L'
     endif
-    setl nomod
+    call s:LockExplorerBuffer()
 endfunction
 function! s:FilterList() "{{{1
     let s:selected = -1
@@ -418,10 +447,9 @@ function! s:UpdateFileList() "{{{1
     let s:filter_list = s:file_list
 endfunction
 function! s:UpdateHighlighting() "{{{1
-    syntax clear
-    syntax match fileFindSelected /\[[^\]]\+\]/
+    syntax clear FilterFileExplorerMatch
     if len(s:filter) != 0
-        exec 'syntax match fileFindMatch /'.escape(s:filter, '\/').'/'
+        exec 'syntax match FilterFileExplorerMatch /'.escape(s:filter, '\/').'/'
     endif
 endfunction
 function! s:UpdateFilter(ch) "{{{1
@@ -563,22 +591,23 @@ function! s:ExecuteCommand(op) "{{{1
     call s:UpdateHighlighting()
 endfunction
 function! s:AddControlMappings() "{{{1
-    let chars = [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b',
-                \ 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                \ 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                \ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-                \ 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                \ 'Y', 'Z', '`', '-', '=', '~', '!', '@', '#', '$', '%', '^',
-                \ '&', '*', '(', ')', '_', '+', '[', ']', '{', '}', ',', '.',
-                \ '/', '<', '>', '?', '"', ';', ':', '\', '|', '"', ' ' ]
-
     " remove all mappings
     mapclear <buffer>
 
-    " map characters
-    for ch in chars
+    let chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.
+              \ '`-=~!@#$%^&*()_+[]{},./<>?";:|" , '."\\'"
+
+    " map printable characters
+    for ch in split(chars, '.\@=')
         exec "noremap <silent> <buffer> <char-". char2nr(ch)."> :call <sid>UpdateFilter(".char2nr(ch).")<cr>"
     endfor
+
+    " extended ascii
+    let ch = 128
+    while ch <= 255
+        exec "noremap <silent> <buffer> <char-".ch."> :call <sid>UpdateFilter(".ch.")<cr>"
+        let ch += 1
+    endwhile
 
     " map commands
     noremap <silent> <buffer> <esc>   :call <sid>ExecuteCommand('exit')<cr>
@@ -600,32 +629,105 @@ function! s:AddControlMappings() "{{{1
     noremap <silent> <buffer> <c-v>   :call <sid>ExecuteCommand('open_all_win')<cr>
     noremap <silent> <buffer> <c-e>   :call <sid>ExecuteCommand('edit_file_list')<cr>
 endfunction
-function! s:FilterFileExplorer(path) "{{{1
+function! s:SetVimOption(option, value) "{{{1
+    if type(a:value) == type("") && a:value == 'no'
+        exec 'let s:vim_options["&'.a:option.'"]=&'.a:option
+        exec 'set no'.a:option
+    elseif type(a:value) == type("") && a:value == 'yes'
+        exec 'let s:vim_options["&'.a:option.'"]=&'.a:option
+        exec 'set '.a:option
+    else
+        exec 'let s:vim_options["'.a:option.'"]=&'.a:option
+        exec 'set '.a:option.'='.a:value
+    endif
+endfunction
+function! s:RestoreVimOptions() "{{{1
+    for [option, value] in items(s:vim_options)
+        if strpart(option, 0, 1) == '&'
+            let option = strpart(option, 1)
+            if value
+                exec 'set '.option
+            else
+                exec 'set no'.option
+            endif
+        else
+            exec 'set '.option.'='.value
+        endif
+    endfor
+endfunction
+function! s:FilterFileExplorer(...) "{{{1
+
+    if a:0 == 0
+        let path = getcwd()
+    else
+        let path = a:1
+    endif
+
+    if exists('s:explorer_open') && s:explorer_open
+        let winnr = bufwinnr(s:explorer_buffnr)
+        if winnr != -1
+            exec winnr. ' wincmd w'
+            return
+        endif
+    endif
+
     " init vars
-    let s:path          = resolve(a:path.g:ffeDirSeparator)
+    let s:path          = resolve(path.g:ffeDirSeparator)
     let s:filter        = ''
     let s:selected      = -1
     let s:show_hidden   = 0
     let s:recursive     = 0
     let s:file_list     = []
     let s:filter_list   = []
+    let s:vim_options   = {}
     let s:orig_win      = winnr()
     let s:show_path     = g:ffeDisplayPath
     let s:show_filter   = g:ffeShowFilter
-    let s:explorer_open = 1
 
     " create window
+    let win_title = '-- Filter File Explorer --'
     if g:ffeExplorerOnTop
-        topleft new '-- Filter File Explorer --'
+        topleft new win_title
     else
-        botright new '-- Filter File Explorer --'
+        botright new win_title
     endif
+
+    setl buftype=nofile
+    setl noswapfile
     setl nobuflisted
+    setl bufhidden=wipe
+    setl nowrap
+    setl foldcolumn=0
+    setl nocursorline
+    setl nospell
+    setl textwidth=0
+    setl noreadonly
+    setl nomodifiable
+
+    call s:SetVimOption('timeoutlen', 0)
+    call s:SetVimOption('insertmode', 'no')
+    call s:SetVimOption('showcmd', 'no')
+    call s:SetVimOption('list', 'no')
+    call s:SetVimOption('report', 9999)
+    call s:SetVimOption('sidescroll', 0)
+    call s:SetVimOption('sidescrolloff', 0)
+    call s:SetVimOption('hlsearch', 'no')
+    call s:SetVimOption('insertmode', 'no')
+
+    let s:explorer_open = 1
+    let s:explorer_buffnr = bufnr('%')
 
     " highlighting
-    syntax match fileFindSelected /\[[^\]]\+\]/
-    highlight def link fileFindSelected Search
-    highlight def link fileFindMatch IncSearch
+    exec 'syntax match FilterFileExplorerDirectory #^[ \[][^'.escape(g:ffeDirSeparator, '\').']\+'.
+        \ escape(g:ffeDirSeparator, '\').']\?# contains=FilterFileExplorerSelected,FilterFileExplorerMatch'
+
+    exec 'syntax match FilterFileExplorerDirectory # [ \[][^'.escape(g:ffeDirSeparator, '\').']\+'.
+        \escape(g:ffeDirSeparator, '\').']\?# contains=FilterFileExplorerSelected,FilterFileExplorerMatch'
+
+    syntax match FilterFileExplorerSelected /\[[^\]]\+\]/ contains=FilterFileExplorerMatch
+    highlight def link FilterFileExplorerSelected Search
+    highlight def link FilterFileExplorerMatch IncSearch
+    highlight def link FilterFileExplorerDirectory Directory
 
     call s:AddControlMappings()
     call s:UpdateFileList()
@@ -636,14 +738,14 @@ endfunction
 " Set Defaults {{{1
 "------------------------------------------------------------------------------
 call s:SetDefault('g:ffeAlwaysOpenNewWindow', 0)
-call s:SetDefault('g:ffeCaseSensitive', "'system'")
+call s:SetDefault('g:ffeCaseSensitive', 'system')
 call s:SetDefault('g:ffeShowDotFiles', 0)
 call s:SetDefault('g:ffeExplorerOnTop', 0)
 call s:SetDefault('g:ffeDisplayPath', 0)
-call s:SetDefault('g:ffeShowFilter', "'auto'")
+call s:SetDefault('g:ffeShowFilter', 'auto')
 call s:SetDefault('g:ffeKeepExplorerWindowOpen', 0)
-call s:SetDefault('g:ffeIgnoreFileRexExPattern', "''")
-call s:SetDefault('g:ffeWildIgnoreFile', "''")
+call s:SetDefault('g:ffeIgnoreFileRexExPattern', '')
+call s:SetDefault('g:ffeWildIgnoreFile', '')
 
 " Set the directory separator {{{1
 "------------------------------------------------------------------------------
@@ -664,7 +766,7 @@ endif
 
 " Create Command {{{1
 "------------------------------------------------------------------------------
-command! -nargs=1 -complete=dir FilterFileExplorer call s:FilterFileExplorer('<args>')
+command! -nargs=? -complete=dir FilterFileExplorer call s:FilterFileExplorer('<args>')
 
 " Plug map to Command {{{1
 "------------------------------------------------------------------------------

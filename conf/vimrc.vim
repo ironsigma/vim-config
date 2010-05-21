@@ -173,6 +173,9 @@ if !&cp
     " Project
     let g:proj_flags = 'ist'
 
+    " Surround
+    xmap  <Leader>s    <Plug>Vsurround
+
 endif
 "--------------------------------------------------------------------------
 " Auto commands
