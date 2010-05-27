@@ -85,10 +85,13 @@ endif
 " Keyboard Mappings
 "--------------------------------------------------------------------------
 " Easier on the shift.
-noremap <space> :
+nnoremap <space> :
 
 " Next buffer
-noremap <tab> :bn!<cr>
+nnoremap <tab> :bn!<cr>
+
+" Open files in new window
+nnoremap <silent> gf <c-w><c-f>
 
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
@@ -105,7 +108,7 @@ nmap <silent> <f1> <Plug>FilterFileExplorer
 nnoremap <silent> <f2> :MRU<cr>
 
 " F3 - Toggle Project
-nmap <silent> <f3> <Plug>ToggleProject
+nnoremap <silent> <f3> <Plug>ToggleProject
 
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
