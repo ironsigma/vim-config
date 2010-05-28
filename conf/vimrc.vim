@@ -6,39 +6,39 @@
 "--------------------------------------------------------------------------
 " Common Settings
 "--------------------------------------------------------------------------
-set nocompatible                    " Use vim addvance settings
-set autoindent                      " Auto-indent on
-set tabstop=8                       " Use 8 spaces for tabs
-set shiftwidth=4                    " 4 spaces for autoindent
-set softtabstop=4                   " Use soft tabs
-set expandtab                       " Use spaces instead of tabs
-set incsearch                       " Incremental search
-set hlsearch                        " Highlight search hits
-set showcmd                         " Show panding commands
-set cmdheight=1                     " lines for command window
-set laststatus=2                    " Always show status line
-set backspace=indent,eol,start      " Backspace over everyting
-set history=100                     " Save at most XX commands
-set ruler                           " show ruler
-set showmatch                       " Display matching paren
-set matchtime=2                     " Be breif when displaying the match
-set nobackup                        " No backups
-set visualbell                      " Use visual bell
-set viminfo=@200,'100,f1,rb:,:100,/100   " Vim info options
-set lazyredraw                      " Don't redraw on macro execute
-set noerrorbells                    " Don't make noise
-set autoread                        " Re-read if modified
-set backupcopy=yes                  " Save resources
-set diffopt=filler,context:3        " Diff options
-set nostartofline                   " Keep cursor column when moving
-set scrolloff=0                     " Keep context lines
-set pastetoggle=<F10>               " Toggle paste
-set fileformats=unix,dos            " File formats
-set fileformat=unix                 " Default to new unix format files
-set modelines=5                     " Set the number of lines to look at
-set keywordprg=                     " Set K to internal help
-set report=0                        " Report all line changes
-set shortmess=aO                    " Short messages
+set nocompatible                        " Use vim addvance settings
+set autoindent                          " Auto-indent on
+set tabstop=8                           " Use 8 spaces for tabs
+set shiftwidth=4                        " 4 spaces for autoindent
+set softtabstop=4                       " Use soft tabs
+set expandtab                           " Use spaces instead of tabs
+set incsearch                           " Incremental search
+set hlsearch                            " Highlight search hits
+set showcmd                             " Show panding commands
+set cmdheight=1                         " lines for command window
+set laststatus=2                        " Always show status line
+set backspace=indent,eol,start          " Backspace over everyting
+set history=100                         " Save at most XX commands
+set ruler                               " show ruler
+set showmatch                           " Display matching paren
+set matchtime=2                         " Be breif when displaying the match
+set nobackup                            " No backups
+set visualbell                          " Use visual bell
+set viminfo=@200,'100,f1,rb:,:100,/100  " Vim info options
+set lazyredraw                          " Don't redraw on macro execute
+set noerrorbells                        " Don't make noise
+set autoread                            " Re-read if modified
+set backupcopy=yes                      " Save resources
+set diffopt=filler,context:3            " Diff options
+set nostartofline                       " Keep cursor column when moving
+set scrolloff=0                         " Keep context lines
+set pastetoggle=<F10>                   " Toggle paste
+set fileformats=unix,dos                " File formats
+set fileformat=unix                     " Default to new unix format files
+set modelines=5                         " Set the number of lines to look at
+set keywordprg=                         " Set K to internal help
+set report=0                            " Report all line changes
+set shortmess=aO                        " Short messages
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -107,8 +107,7 @@ nmap <silent> <f1> <Plug>FilterFileExplorer
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
-" F3 - Toggle Project
-nnoremap <silent> <f3> <Plug>ToggleProject
+" F3 -
 
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
@@ -155,26 +154,15 @@ if !&cp
         let g:rvSaveDirectoryName   = "$HOME/.rcs/"
     endif
 
-    " html edit
-    let g:xml_use_xhtml = 1
-
     " PHP highlighting
     let php_sql_query = 1
     let php_htmlInString = 1
     let php_noShortTags = 1
     let php_folding = 1
 
-    " Ruby
-    let ruby_operators = 1
-    let ruby_space_errors = 1
-    let ruby_fold = 1
-
     " Python highlighting
     let python_highlight_all = 1
     let python_print_as_function = 1
-
-    " Project
-    let g:proj_flags = 'ist'
 
     " Surround
     xmap  <Leader>s    <Plug>Vsurround
