@@ -15,7 +15,7 @@ highlight Normal gui=none guifg=#000000 guibg=#ffffff ctermfg=Gray
 
 " Search
 highlight IncSearch gui=underline guifg=#404040 guibg=#e0e040
-highlight Search    gui=none      guifg=#544060 guibg=#f0c0ff ctermbg=1
+highlight Search    gui=none      guifg=#404040 guibg=#f8edc7 ctermbg=1
 
 " Messages
 highlight ErrorMsg   gui=none guifg=#f8f8f8 guibg=#4040ff

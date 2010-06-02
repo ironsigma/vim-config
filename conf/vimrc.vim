@@ -85,7 +85,7 @@ endif
 " Keyboard Mappings
 "--------------------------------------------------------------------------
 " Easier on the shift.
-nnoremap <space> :
+noremap <space> :
 
 " Next buffer
 nnoremap <tab> :bn!<cr>
@@ -127,7 +127,7 @@ nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<cr>:echo "Make complete."<cr>
 
 "--------------------------------------------------------------------------
-" External Macro options
+" Plugin options
 "--------------------------------------------------------------------------
 if !&cp
 
@@ -166,6 +166,9 @@ if !&cp
 
     " Surround
     xmap  <Leader>s    <Plug>Vsurround
+
+    " SnippetsEMU
+    let g:snippetsEmu_key = "<c-space>"
 
 endif
 "--------------------------------------------------------------------------
