@@ -8,6 +8,12 @@ let tag = g:snip_start_tag.g:snip_end_tag
 
 exec "Snippet /** /**<CR>* ".tag."<CR>**/"
 
+exec "Snippet <> <".st."tag".et.tag.">".tag."</".st."tag".et.">"
+
+exec "Snippet </ <".st."tag".et.tag." />"
+
+exec "Snippet <>> <".st."tag".et.tag."><cr>".tag."<cr></".st."tag".et.">"
+
 exec "Snippet get $".tag." = (isset($_GET['".st."var".et."'])?$_GET['".st."var".et."']:'');<cr>".tag
 
 exec "Snippet post $".tag." = (isset($_POST['".st."var".et."'])?$_POST['".st."var".et."']:'');<cr>".tag
