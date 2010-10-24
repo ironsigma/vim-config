@@ -100,8 +100,8 @@ imap <MiddleMouse> <Nop>
 vnoremap <silent> < <gv
 vnoremap <silent> > >gv
 
-" F1 - Filter File Explorer
-nmap <silent> <f1> <Plug>FilterFileExplorer
+" F1 - NERDTree
+nnoremap <silent> <f1> :NERDTreeToggle<cr>
 
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
@@ -114,10 +114,10 @@ nnoremap <silent> <f4> :nohlsearch<cr>
 " F5 - Toggle zoom window
 nnoremap <silent> <f5> :WinZoomToggle<cr>
 
-" F6 - NERDTree
-nnoremap <silent> <f6> :NERDTreeToggle<cr>
+" F6 -
 
 " F7 -
+nnoremap <silent> <f7> :let &number = !&number<cr>
 
 " F8 - Toggle linewrapping
 nnoremap <silent> <f8> :let &wrap = !&wrap<cr>

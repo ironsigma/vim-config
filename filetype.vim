@@ -26,6 +26,9 @@ augroup filetypedetect
     " auto-complete
     autocmd! FileType html setl omnifunc=htmlcomplete#CompleteTags
     autocmd! FileType xml  setl omnifunc=xmlcomplete#CompleteTags
+    autocmd! FileType php  setl omnifunc=phpcomplete#CompletePHP
+    autocmd! FileType css  setl omnifunc=csscomplete#CompleteCSS
+    autocmd! FileType javascript  setl omnifunc=javascriptcomplete#CompleteJS
 
 augroup END
 
