@@ -77,9 +77,7 @@ if !has("gui_running")
 endif
 
 " Swap file location
-if has("win32")
-    set dir=C:\\RCSVers\\\\
-endif
+set dir^=$HOME/tmp,C:\\RCSVers\\
 
 "--------------------------------------------------------------------------
 " Keyboard Mappings

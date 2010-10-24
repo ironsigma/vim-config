@@ -10,7 +10,7 @@ if has("win32")
 elseif has("mac")
     set nomacatsui
     set antialias
-    set guifont=Monaco:h12
+    set guifont=Anonymous:h10
 else
     set guifont=Droid\ Sans\ Mono\ 8
 endif
