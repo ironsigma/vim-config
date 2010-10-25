@@ -112,11 +112,12 @@ endfunction " }}}1
 " Repeated calls with the same arguments are ignored.
 function! pathogen#runtime_append_all_bundles(...) " {{{1
   let sep = pathogen#separator()
+  let esc_sep = escape(pathogen#separator(), '\')
   let name = a:0 ? a:1 : 'bundle'
   let list = []
   for dir in pathogen#split(&rtp)
     if dir =~# '\<after$'
-      let list +=  pathogen#glob_directories(substitute(dir,'after$',name.sep.'*[^~]'.sep.'after','')) + [dir]
+      let list +=  pathogen#glob_directories(substitute(dir,'after$',name.esc_sep.'*[^~]'.esc_sep.'after','')) + [dir]
     else
       let list +=  [dir] + pathogen#glob_directories(dir.sep.name.sep.'*[^~]')
     endif
