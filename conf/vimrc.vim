@@ -89,10 +89,6 @@ noremap <space> :
 " Next buffer
 nnoremap <tab> :bn!<cr>
 
-" Open files in new window
-nnoremap <silent> gf <c-w><c-f>
-vnoremap <silent> gf <c-w><c-f>
-
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>

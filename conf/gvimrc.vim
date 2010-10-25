@@ -6,7 +6,7 @@
 " Font
 "--------------------------------------------------------------------------
 if has("win32")
-    set guifont=ProggyCleanTT:h12:cANSI
+    set guifont=Consolas:h9:cANSI
 elseif has("mac")
     set nomacatsui
     set antialias
@@ -19,8 +19,8 @@ endif
 " Window position and size
 "--------------------------------------------------------------------------
 if has("win32")
-    winpos 300 5
-    set lines=68
+    winpos 300 0
+    set lines=64
     set columns=180
 elseif has("mac")
     winpos 109 46 " 22+24 for window bar
