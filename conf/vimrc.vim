@@ -124,11 +124,17 @@ nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 " F9  - Run external make command
 nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<cr>:echo "Make complete."<cr>
 
+" Remap arrows to change windows
+nnoremap <right> <c-w>l
+nnoremap <left>  <c-w>h
+nnoremap <up>    <c-w>k
+nnoremap <down>  <c-w>j
 "--------------------------------------------------------------------------
 " Plugin options
 "--------------------------------------------------------------------------
 " Load bundles
-call pathogen#runtime_append_all_bundles() 
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 
 " Don't load matchparen
 let g:loaded_matchparen = 1

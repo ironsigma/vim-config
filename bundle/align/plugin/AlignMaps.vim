@@ -143,117 +143,117 @@ endfun
 
 " ---------------------------------------------------------------------
 " Complex C-code alignment maps: {{{1
-map <silent> <Leader>a?    <SID>WS:AlignCtrl mIp1P1lC ? : : : : <CR>:'a,.Align<CR>:'a,'z-1s/\(\s\+\)? /?\1/e<CR><SID>WE
-map <silent> <Leader>a,    <SID>WS:'y,'zs/\(\S\)\s\+/\1 /ge<CR>'yjma'zk<Leader>jnr,<CR>:silent 'y,'zg/,/call <SID>FixMultiDec()<CR>'z<Leader>adec<SID>WE
-map <silent> <Leader>a<    <SID>WS:AlignCtrl mIp1P1=l << >><CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>a=    <SID>WS:AlignCtrl mIp1P1=l<CR>:AlignCtrl g :=<CR>:'a,'zAlign :\==<CR><SID>WE
-map <silent> <Leader>abox  <SID>WS:let g:alignmaps_iws=substitute(getline("'a"),'^\(\s*\).*$','\1','e')<CR>:'a,'z-1s/^\s\+//e<CR>:'a,'z-1s/^.*$/@&@/<CR>:AlignCtrl m=p01P0w @<CR>:'a,.Align<CR>:'a,'z-1s/@/ * /<CR>:'a,'z-1s/@$/*/<CR>'aYP:s/./*/g<CR>0r/'zkYp:s/./*/g<CR>0r A/<Esc>:exe "'a-1,'z-1s/^/".g:alignmaps_iws."/e"<CR><SID>WE
-map <silent> <Leader>acom  <SID>WS:'a,.s/\/[*/]\*\=/@&@/e<CR>:'a,.s/\*\//@&/e<CR>:'y,'zs/^\( *\) @/\1@/e<CR>'zk<Leader>tW@:'y,'zs/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
-map <silent> <Leader>adcom <SID>WS:'a,.v/^\s*\/[/*]/s/\/[*/]\*\=/@&@/e<CR>:'a,.v/^\s*\/[/*]/s/\*\//@&/e<CR>:'y,'zv/^\s*\/[/*]/s/^\( *\) @/\1@/e<CR>'zk<Leader>tdW@:'y,'zv/^\s*\/[/*]/s/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
-map <silent> <Leader>aocom :AlignPush<CR>:AlignCtrl g /[*/]<CR><Leader>acom:AlignPop<CR>
-map <silent> <Leader>ascom <SID>WS:'a,.s/\/[*/]/@&@/e<CR>:'a,.s/\*\//@&/e<CR>:silent! 'a,.g/^\s*@\/[*/]/s/@//ge<CR>:AlignCtrl v ^\s*\/[*/]<CR>:AlignCtrl g \/[*/]<CR>'zk<Leader>tW@:'y,'zs/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
-map <silent> <Leader>adec  <SID>WS:'a,'zs/\([^ \t/(]\)\([*&]\)/\1 \2/e<CR>:'y,'zv/^\//s/\([^ \t]\)\s\+/\1 /ge<CR>:'y,'zv/^\s*[*/]/s/\([^/][*&]\)\s\+/\1/ge<CR>:'y,'zv/^\s*[*/]/s/^\(\s*\%(\K\k*\s\+\%([a-zA-Z_*(&]\)\@=\)\+\)\([*(&]*\)\s*\([a-zA-Z0-9_()]\+\)\s*\(\(\[.\{-}]\)*\)\s*\(=\)\=\s*\(.\{-}\)\=\s*;/\1@\2#@\3\4@\6@\7;@/e<CR>:'y,'zv/^\s*[*/]/s/\*\/\s*$/@*\//e<CR>:'y,'zv/^\s*[*/]/s/^\s\+\*/@@@@@* /e<CR>:'y,'zv/^\s*[*/]/s/^@@@@@\*\(.*[^*/]\)$/&@*/e<CR>'yjma'zk:AlignCtrl v ^\s*[*/#]<CR><Leader>t@:'y,'zv/^\s*[*/]/s/@ //ge<CR>:'y,'zv/^\s*[*/]/s/\(\s*\);/;\1/e<CR>:'y,'zv/^#/s/# //e<CR>:'y,'zv/^\s\+[*/#]/s/\([^/*]\)\(\*\+\)\( \+\)/\1\3\2/e<CR>:'y,'zv/^\s\+[*/#]/s/\((\+\)\( \+\)\*/\2\1*/e<CR>:'y,'zv/^\s\+[*/#]/s/^\(\s\+\) \*/\1*/e<CR>:'y,'zv/^\s\+[*/#]/s/[ \t@]*$//e<CR>:'y,'zs/^[*]/ */e<CR><SID>WE
-map <silent> <Leader>adef  <SID>WS:AlignPush<CR>:AlignCtrl v ^\s*\(\/\*\<bar>\/\/\)<CR>:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/^\(\s*\)#\(\s\)*define\s*\(\I[a-zA-Z_0-9(),]*\)\s*\(.\{-}\)\($\<Bar>\/\*\)/#\1\2define @\3@\4@\5/e<CR>:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/\($\<Bar>\*\/\)/@&/e<CR>'zk<Leader>t@'yjma'zk:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/ @//g<CR><SID>WE
-map <silent> <Leader>afnc  :set lz<CR>:silent call <SID>Afnc()<CR>:set nolz<CR>
-if exists("g:alignmaps_usanumber")
- map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [.@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(\.\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
-elseif exists("g:alignmaps_euronumber")
- map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [,@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(,\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
-else
- map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=[.,]\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0<CR>:'a,'zAlign [.,@]<CR>:'a,'zs/\([-0-9.,]*\)\(\s*\)\([.,]\)/\2\1\3/g<CR>:'a,'zs/@/ /ge<CR><SID>WE
-endif
-map <silent> <Leader>aunum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [.@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(\.\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
-map <silent> <Leader>aenum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [,@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(,\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
+"...map <silent> <Leader>a?    <SID>WS:AlignCtrl mIp1P1lC ? : : : : <CR>:'a,.Align<CR>:'a,'z-1s/\(\s\+\)? /?\1/e<CR><SID>WE
+"...map <silent> <Leader>a,    <SID>WS:'y,'zs/\(\S\)\s\+/\1 /ge<CR>'yjma'zk<Leader>jnr,<CR>:silent 'y,'zg/,/call <SID>FixMultiDec()<CR>'z<Leader>adec<SID>WE
+"...map <silent> <Leader>a<    <SID>WS:AlignCtrl mIp1P1=l << >><CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>a=    <SID>WS:AlignCtrl mIp1P1=l<CR>:AlignCtrl g :=<CR>:'a,'zAlign :\==<CR><SID>WE
+"...map <silent> <Leader>abox  <SID>WS:let g:alignmaps_iws=substitute(getline("'a"),'^\(\s*\).*$','\1','e')<CR>:'a,'z-1s/^\s\+//e<CR>:'a,'z-1s/^.*$/@&@/<CR>:AlignCtrl m=p01P0w @<CR>:'a,.Align<CR>:'a,'z-1s/@/ * /<CR>:'a,'z-1s/@$/*/<CR>'aYP:s/./*/g<CR>0r/'zkYp:s/./*/g<CR>0r A/<Esc>:exe "'a-1,'z-1s/^/".g:alignmaps_iws."/e"<CR><SID>WE
+"...map <silent> <Leader>acom  <SID>WS:'a,.s/\/[*/]\*\=/@&@/e<CR>:'a,.s/\*\//@&/e<CR>:'y,'zs/^\( *\) @/\1@/e<CR>'zk<Leader>tW@:'y,'zs/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
+"...map <silent> <Leader>adcom <SID>WS:'a,.v/^\s*\/[/*]/s/\/[*/]\*\=/@&@/e<CR>:'a,.v/^\s*\/[/*]/s/\*\//@&/e<CR>:'y,'zv/^\s*\/[/*]/s/^\( *\) @/\1@/e<CR>'zk<Leader>tdW@:'y,'zv/^\s*\/[/*]/s/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
+"...map <silent> <Leader>aocom :AlignPush<CR>:AlignCtrl g /[*/]<CR><Leader>acom:AlignPop<CR>
+"...map <silent> <Leader>ascom <SID>WS:'a,.s/\/[*/]/@&@/e<CR>:'a,.s/\*\//@&/e<CR>:silent! 'a,.g/^\s*@\/[*/]/s/@//ge<CR>:AlignCtrl v ^\s*\/[*/]<CR>:AlignCtrl g \/[*/]<CR>'zk<Leader>tW@:'y,'zs/^\(\s*\) @/\1/e<CR>:'y,'zs/ @//eg<CR><SID>WE
+"...map <silent> <Leader>adec  <SID>WS:'a,'zs/\([^ \t/(]\)\([*&]\)/\1 \2/e<CR>:'y,'zv/^\//s/\([^ \t]\)\s\+/\1 /ge<CR>:'y,'zv/^\s*[*/]/s/\([^/][*&]\)\s\+/\1/ge<CR>:'y,'zv/^\s*[*/]/s/^\(\s*\%(\K\k*\s\+\%([a-zA-Z_*(&]\)\@=\)\+\)\([*(&]*\)\s*\([a-zA-Z0-9_()]\+\)\s*\(\(\[.\{-}]\)*\)\s*\(=\)\=\s*\(.\{-}\)\=\s*;/\1@\2#@\3\4@\6@\7;@/e<CR>:'y,'zv/^\s*[*/]/s/\*\/\s*$/@*\//e<CR>:'y,'zv/^\s*[*/]/s/^\s\+\*/@@@@@* /e<CR>:'y,'zv/^\s*[*/]/s/^@@@@@\*\(.*[^*/]\)$/&@*/e<CR>'yjma'zk:AlignCtrl v ^\s*[*/#]<CR><Leader>t@:'y,'zv/^\s*[*/]/s/@ //ge<CR>:'y,'zv/^\s*[*/]/s/\(\s*\);/;\1/e<CR>:'y,'zv/^#/s/# //e<CR>:'y,'zv/^\s\+[*/#]/s/\([^/*]\)\(\*\+\)\( \+\)/\1\3\2/e<CR>:'y,'zv/^\s\+[*/#]/s/\((\+\)\( \+\)\*/\2\1*/e<CR>:'y,'zv/^\s\+[*/#]/s/^\(\s\+\) \*/\1*/e<CR>:'y,'zv/^\s\+[*/#]/s/[ \t@]*$//e<CR>:'y,'zs/^[*]/ */e<CR><SID>WE
+"...map <silent> <Leader>adef  <SID>WS:AlignPush<CR>:AlignCtrl v ^\s*\(\/\*\<bar>\/\/\)<CR>:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/^\(\s*\)#\(\s\)*define\s*\(\I[a-zA-Z_0-9(),]*\)\s*\(.\{-}\)\($\<Bar>\/\*\)/#\1\2define @\3@\4@\5/e<CR>:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/\($\<Bar>\*\/\)/@&/e<CR>'zk<Leader>t@'yjma'zk:'a,.v/^\s*\(\/\*\<bar>\/\/\)/s/ @//g<CR><SID>WE
+"...map <silent> <Leader>afnc  :set lz<CR>:silent call <SID>Afnc()<CR>:set nolz<CR>
+"...if exists("g:alignmaps_usanumber")
+"... map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [.@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(\.\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
+"...elseif exists("g:alignmaps_euronumber")
+"... map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [,@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(,\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
+"...else
+"... map <silent> <Leader>anum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=[.,]\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0<CR>:'a,'zAlign [.,@]<CR>:'a,'zs/\([-0-9.,]*\)\(\s*\)\([.,]\)/\2\1\3/g<CR>:'a,'zs/@/ /ge<CR><SID>WE
+"...endif
+"...map <silent> <Leader>aunum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [.@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(\.\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
+"...map <silent> <Leader>aenum  <SID>WS:'a,'zs/\(\d\)\s\+\(-\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0r<CR>:'a,'zAlign [,@]<CR>:'a,'zs/@/ /ge<CR>:'a,'zs/\(,\)\(\s\+\)\([-0-9.,e]\+\)/\1\3\2/ge<CR><SID>WE
 
 " ---------------------------------------------------------------------
 " html table alignment	{{{1
-map <silent> <Leader>Htd <SID>WS:'y,'zs%<[tT][rR]><[tT][dD][^>]\{-}>\<Bar></[tT][dD]><[tT][dD][^>]\{-}>\<Bar></[tT][dD]></[tT][rR]>%@&@%g<CR>'yjma'zk:AlignCtrl m=Ilp1P0 @<CR>:'a,.Align<CR>:'y,'zs/ @/@/<CR>:'y,'zs/@ <[tT][rR]>/<[tT][rR]>/ge<CR>:'y,'zs/@//ge<CR><SID>WE
+"...map <silent> <Leader>Htd <SID>WS:'y,'zs%<[tT][rR]><[tT][dD][^>]\{-}>\<Bar></[tT][dD]><[tT][dD][^>]\{-}>\<Bar></[tT][dD]></[tT][rR]>%@&@%g<CR>'yjma'zk:AlignCtrl m=Ilp1P0 @<CR>:'a,.Align<CR>:'y,'zs/ @/@/<CR>:'y,'zs/@ <[tT][rR]>/<[tT][rR]>/ge<CR>:'y,'zs/@//ge<CR><SID>WE
 
 " ---------------------------------------------------------------------
 " character-based right-justified alignment maps {{{1
-map <silent> <Leader>T| <SID>WS:AlignCtrl mIp0P0=r <Bar><CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>T#   <SID>WS:AlignCtrl mIp0P0=r #<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>T,   <SID>WS:AlignCtrl mIp0P1=r ,<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>Ts,  <SID>WS:AlignCtrl mIp0P1=r ,<CR>:'a,.Align<CR>:'a,.s/\(\s*\),/,\1/ge<CR><SID>WE
-map <silent> <Leader>T:   <SID>WS:AlignCtrl mIp1P1=r :<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>T;   <SID>WS:AlignCtrl mIp0P0=r ;<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>T<   <SID>WS:AlignCtrl mIp0P0=r <<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>T=   <SID>WS:'a,'z-1s/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'z-1s@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'z-1s/; */;@/e<CR>:'a,'z-1s/==/``/ge<CR>:'a,'z-1s/!=/!`/ge<CR>:AlignCtrl mIp1P1=r = @<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s/; *@/;/e<CR>:'a,'z-1s/; *$/;/e<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-1s/`/=/ge<CR><SID>WE<Leader>acom
-map <silent> <Leader>T?   <SID>WS:AlignCtrl mIp0P0=r ?<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
-map <silent> <Leader>T@   <SID>WS:AlignCtrl mIp0P0=r @<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>Tab  <SID>WS:'a,.s/^\(\t*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\t','@','g'),'\')/<CR>:AlignCtrl mI=r @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
-map <silent> <Leader>Tsp  <SID>WS:'a,.s/^\(\s*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\s\+','@','g'),'\')/<CR>:AlignCtrl mI=r @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
-map <silent> <Leader>T~   <SID>WS:AlignCtrl mIp0P0=r ~<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
+"...map <silent> <Leader>T| <SID>WS:AlignCtrl mIp0P0=r <Bar><CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>T#   <SID>WS:AlignCtrl mIp0P0=r #<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>T,   <SID>WS:AlignCtrl mIp0P1=r ,<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>Ts,  <SID>WS:AlignCtrl mIp0P1=r ,<CR>:'a,.Align<CR>:'a,.s/\(\s*\),/,\1/ge<CR><SID>WE
+"...map <silent> <Leader>T:   <SID>WS:AlignCtrl mIp1P1=r :<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>T;   <SID>WS:AlignCtrl mIp0P0=r ;<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>T<   <SID>WS:AlignCtrl mIp0P0=r <<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>T=   <SID>WS:'a,'z-1s/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'z-1s@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'z-1s/; */;@/e<CR>:'a,'z-1s/==/``/ge<CR>:'a,'z-1s/!=/!`/ge<CR>:AlignCtrl mIp1P1=r = @<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s/; *@/;/e<CR>:'a,'z-1s/; *$/;/e<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-1s/`/=/ge<CR><SID>WE<Leader>acom
+"...map <silent> <Leader>T?   <SID>WS:AlignCtrl mIp0P0=r ?<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
+"...map <silent> <Leader>T@   <SID>WS:AlignCtrl mIp0P0=r @<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>Tab  <SID>WS:'a,.s/^\(\t*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\t','@','g'),'\')/<CR>:AlignCtrl mI=r @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
+"...map <silent> <Leader>Tsp  <SID>WS:'a,.s/^\(\s*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\s\+','@','g'),'\')/<CR>:AlignCtrl mI=r @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
+"...map <silent> <Leader>T~   <SID>WS:AlignCtrl mIp0P0=r ~<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
 
 " ---------------------------------------------------------------------
 " character-based left-justified alignment maps {{{1
-map <silent> <Leader>t| <SID>WS:AlignCtrl mIp0P0=l <Bar><CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>t#   <SID>WS:AlignCtrl mIp0P0=l #<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>t,   <SID>WS:AlignCtrl mIp0P1=l ,<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>ts,  <SID>WS:AlignCtrl mIp0P1=l ,<CR>:'a,.Align<CR>:'a,.s/\(\s*\),/,\1/ge<CR><SID>WE
-map <silent> <Leader>t:   <SID>WS:AlignCtrl mIp1P1=l :<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>t;   <SID>WS:AlignCtrl mIp0P0=l ;<CR>:'a,.Align<CR>:.,'zs/ \( *\);/;\1/ge<CR><SID>WE
-map <silent> <Leader>t<   <SID>WS:AlignCtrl mIp0P0=l <<CR>:'a,.Align<CR><SID>WE
-map <silent> <Leader>t=   <SID>WS:'a,'zs/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'zs@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'zs/==/``/ge<CR>:'a,'zs/!=/!`/ge<CR>'zk:AlignCtrl mIp1P1=l =<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^!=]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-1v/^\s*\/[*/]/s/\/[*/]/@&@/e<CR>:'a,'z-1v/^\s*\/[*/]/s/\*\//@&/e<CR>'zk<Leader>t@:'y,'zs/^\(\s*\) @/\1/e<CR>:'a,'z-1s/`/=/ge<CR>:'y,'zs/ @//eg<CR><SID>WE
-map <silent> <Leader>t?   <SID>WS:AlignCtrl mIp0P0=l ?<CR>:'a,.Align<CR>:.,'zs/ \( *\);/;\1/ge<CR><SID>WE
-map <silent> <Leader>t~   <SID>WS:AlignCtrl mIp0P0=l ~<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
-map <silent> <Leader>m=   <SID>WS:'a,'zs/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'zs@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'zs/==/``/ge<CR>:'a,'zs/!=/!`/ge<CR>'zk:AlignCtrl mIp1P1=l =<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^!=]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-s/%\ze[^=]/ @%@ /e<CR>'zk<Leader>t@:'y,'zs/^\(\s*\) @/\1/e<CR>:'a,'z-1s/`/=/ge<CR>:'y,'zs/ @//eg<CR><SID>WE
-map <silent> <Leader>tab  <SID>WS:'a,.s/^\(\t*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\t','@','g'),'\')/<CR>:AlignCtrl mI=l @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
-map <silent> <Leader>tml  <SID>WS:AlignCtrl mWp1P0=l \\\@<!\\\s*$<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>t| <SID>WS:AlignCtrl mIp0P0=l <Bar><CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>t#   <SID>WS:AlignCtrl mIp0P0=l #<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>t,   <SID>WS:AlignCtrl mIp0P1=l ,<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>ts,  <SID>WS:AlignCtrl mIp0P1=l ,<CR>:'a,.Align<CR>:'a,.s/\(\s*\),/,\1/ge<CR><SID>WE
+"...map <silent> <Leader>t:   <SID>WS:AlignCtrl mIp1P1=l :<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>t;   <SID>WS:AlignCtrl mIp0P0=l ;<CR>:'a,.Align<CR>:.,'zs/ \( *\);/;\1/ge<CR><SID>WE
+"...map <silent> <Leader>t<   <SID>WS:AlignCtrl mIp0P0=l <<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>t=   <SID>WS:'a,'zs/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'zs@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'zs/==/``/ge<CR>:'a,'zs/!=/!`/ge<CR>'zk:AlignCtrl mIp1P1=l =<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^!=]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-1v/^\s*\/[*/]/s/\/[*/]/@&@/e<CR>:'a,'z-1v/^\s*\/[*/]/s/\*\//@&/e<CR>'zk<Leader>t@:'y,'zs/^\(\s*\) @/\1/e<CR>:'a,'z-1s/`/=/ge<CR>:'y,'zs/ @//eg<CR><SID>WE
+"...map <silent> <Leader>t?   <SID>WS:AlignCtrl mIp0P0=l ?<CR>:'a,.Align<CR>:.,'zs/ \( *\);/;\1/ge<CR><SID>WE
+"...map <silent> <Leader>t~   <SID>WS:AlignCtrl mIp0P0=l ~<CR>:'a,.Align<CR>:'y,'zs/ \( *\);/;\1/ge<CR><SID>WE
+"...map <silent> <Leader>m=   <SID>WS:'a,'zs/\s\+\([*/+\-%<Bar>&\~^]\==\)/ \1/e<CR>:'a,'zs@ \+\([*/+\-%<Bar>&\~^]\)=@\1=@ge<CR>:'a,'zs/==/``/ge<CR>:'a,'zs/!=/!`/ge<CR>'zk:AlignCtrl mIp1P1=l =<CR>:AlignCtrl g =<CR>:'a,'z-1Align<CR>:'a,'z-1s@\([*/+\-%<Bar>&\~^!=]\)\( \+\)=@\2\1=@ge<CR>:'a,'z-1s/\( \+\);/;\1/ge<CR>:'a,'z-s/%\ze[^=]/ @%@ /e<CR>'zk<Leader>t@:'y,'zs/^\(\s*\) @/\1/e<CR>:'a,'z-1s/`/=/ge<CR>:'y,'zs/ @//eg<CR><SID>WE
+"...map <silent> <Leader>tab  <SID>WS:'a,.s/^\(\t*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\t','@','g'),'\')/<CR>:AlignCtrl mI=l @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
+"...map <silent> <Leader>tml  <SID>WS:AlignCtrl mWp1P0=l \\\@<!\\\s*$<CR>:'a,.Align<CR><SID>WE
 map <silent> <Leader>tsp  <SID>WS:'a,.s/^\(\s*\)\(.*\)/\=submatch(1).escape(substitute(submatch(2),'\s\+','@','g'),'\')/<CR>:AlignCtrl mI=lp0P0 @<CR>:'a,.Align<CR>:'y+1,'z-1s/@/ /g<CR><SID>WE
-map <silent> <Leader>tsq  <SID>WS:'a,.ReplaceQuotedSpaces<CR>:'a,.s/^\(\s*\)\(.*\)/\=submatch(1).substitute(submatch(2),'\s\+','@','g')/<CR>:AlignCtrl mIp0P0=l @<CR>:'a,.Align<CR>:'y+1,'z-1s/[%@]/ /g<CR><SID>WE
-map <silent> <Leader>tt   <SID>WS:AlignCtrl mIp1P1=l \\\@<!& \\\\<CR>:'a,.Align<CR><SID>WE
+"...map <silent> <Leader>tsq  <SID>WS:'a,.ReplaceQuotedSpaces<CR>:'a,.s/^\(\s*\)\(.*\)/\=submatch(1).substitute(submatch(2),'\s\+','@','g')/<CR>:AlignCtrl mIp0P0=l @<CR>:'a,.Align<CR>:'y+1,'z-1s/[%@]/ /g<CR><SID>WE
+"...map <silent> <Leader>tt   <SID>WS:AlignCtrl mIp1P1=l \\\@<!& \\\\<CR>:'a,.Align<CR><SID>WE
 
 " ---------------------------------------------------------------------
 " plain Align maps; these two are used in <Leader>acom..\afnc	{{{1
-map <silent> <Leader>t@   :AlignCtrl mIp1P1=l @<CR>:'a,.Align<CR>
-map <silent> <Leader>tW@  :AlignCtrl mWp1P1=l @<CR>:'a,.Align<CR>
-map <silent> <Leader>tdW@ :AlignCtrl v ^\s*/[/*]<CR>:AlignCtrl mWp1P1=l @<CR>:'a,.Align<CR>
+"...map <silent> <Leader>t@   :AlignCtrl mIp1P1=l @<CR>:'a,.Align<CR>
+"...map <silent> <Leader>tW@  :AlignCtrl mWp1P1=l @<CR>:'a,.Align<CR>
+"...map <silent> <Leader>tdW@ :AlignCtrl v ^\s*/[/*]<CR>:AlignCtrl mWp1P1=l @<CR>:'a,.Align<CR>
 
 " ---------------------------------------------------------------------
 " Joiner : maps used above	{{{1
-map <silent> <Leader>jnr=  :call <SID>CharJoiner("=")<CR>
-map <silent> <Leader>jnr,  :call <SID>CharJoiner(",")<CR>
+"...map <silent> <Leader>jnr=  :call <SID>CharJoiner("=")<CR>
+"...map <silent> <Leader>jnr,  :call <SID>CharJoiner(",")<CR>
 
 " ---------------------------------------------------------------------
 " visual-line mode variants: {{{1
-vmap <silent> <Leader>T|	:<BS><BS><BS><CR>ma'><Leader>T|
-vmap <silent> <Leader>T,	:<BS><BS><BS><CR>ma'><Leader>T,
-vmap <silent> <Leader>Ts,	:<BS><BS><BS><CR>ma'><Leader>Ts,
-vmap <silent> <Leader>T:	:<BS><BS><BS><CR>ma'><Leader>T:
-vmap <silent> <Leader>T<	:<BS><BS><BS><CR>ma'><Leader>T<
-vmap <silent> <Leader>T=	:<BS><BS><BS><CR>ma'><Leader>T=
-vmap <silent> <Leader>T@	:<BS><BS><BS><CR>ma'><Leader>T@
-vmap <silent> <Leader>Tsp	:<BS><BS><BS><CR>ma'><Leader>Tsp
-vmap <silent> <Leader>a?	:<BS><BS><BS><CR>ma'><Leader>a?
-vmap <silent> <Leader>a,	:<BS><BS><BS><CR>ma'><Leader>a,
-vmap <silent> <Leader>a<	:<BS><BS><BS><CR>ma'><Leader>a<
-vmap <silent> <Leader>a=	:<BS><BS><BS><CR>ma'><Leader>a=
-vmap <silent> <Leader>abox	:<BS><BS><BS><CR>ma'><Leader>abox
-vmap <silent> <Leader>acom	:<BS><BS><BS><CR>ma'><Leader>acom
-vmap <silent> <Leader>aocom	:<BS><BS><BS><CR>ma'><Leader>aocom
-vmap <silent> <Leader>ascom	:<BS><BS><BS><CR>ma'><Leader>ascom
-vmap <silent> <Leader>adec	:<BS><BS><BS><CR>ma'><Leader>adec
-vmap <silent> <Leader>adef	:<BS><BS><BS><CR>ma'><Leader>adef
-vmap <silent> <Leader>afnc	:<BS><BS><BS><CR>ma'><Leader>afnc
-vmap <silent> <Leader>anum	:<BS><BS><BS><CR>ma'><Leader>anum
-vmap <silent> <Leader>t|	:<BS><BS><BS><CR>ma'><Leader>t|
-vmap <silent> <Leader>t,	:<BS><BS><BS><CR>ma'><Leader>t,
-vmap <silent> <Leader>ts,	:<BS><BS><BS><CR>ma'><Leader>ts,
-vmap <silent> <Leader>t:	:<BS><BS><BS><CR>ma'><Leader>t:
-vmap <silent> <Leader>t;	:<BS><BS><BS><CR>ma'><Leader>t;
-vmap <silent> <Leader>t<	:<BS><BS><BS><CR>ma'><Leader>t<
-vmap <silent> <Leader>t=	:<BS><BS><BS><CR>ma'><Leader>t=
-vmap <silent> <Leader>t?	:<BS><BS><BS><CR>ma'><Leader>t?
-vmap <silent> <Leader>t@	:<BS><BS><BS><CR>ma'><Leader>t@
-vmap <silent> <Leader>tab	:<BS><BS><BS><CR>ma'><Leader>tab
-vmap <silent> <Leader>tml	:<BS><BS><BS><CR>ma'><Leader>tml
+"...vmap <silent> <Leader>T|	:<BS><BS><BS><CR>ma'><Leader>T|
+"...vmap <silent> <Leader>T,	:<BS><BS><BS><CR>ma'><Leader>T,
+"...vmap <silent> <Leader>Ts,	:<BS><BS><BS><CR>ma'><Leader>Ts,
+"...vmap <silent> <Leader>T:	:<BS><BS><BS><CR>ma'><Leader>T:
+"...vmap <silent> <Leader>T<	:<BS><BS><BS><CR>ma'><Leader>T<
+"...vmap <silent> <Leader>T=	:<BS><BS><BS><CR>ma'><Leader>T=
+"...vmap <silent> <Leader>T@	:<BS><BS><BS><CR>ma'><Leader>T@
+"...vmap <silent> <Leader>Tsp	:<BS><BS><BS><CR>ma'><Leader>Tsp
+"...vmap <silent> <Leader>a?	:<BS><BS><BS><CR>ma'><Leader>a?
+"...vmap <silent> <Leader>a,	:<BS><BS><BS><CR>ma'><Leader>a,
+"...vmap <silent> <Leader>a<	:<BS><BS><BS><CR>ma'><Leader>a<
+"...vmap <silent> <Leader>a=	:<BS><BS><BS><CR>ma'><Leader>a=
+"...vmap <silent> <Leader>abox	:<BS><BS><BS><CR>ma'><Leader>abox
+"...vmap <silent> <Leader>acom	:<BS><BS><BS><CR>ma'><Leader>acom
+"...vmap <silent> <Leader>aocom	:<BS><BS><BS><CR>ma'><Leader>aocom
+"...vmap <silent> <Leader>ascom	:<BS><BS><BS><CR>ma'><Leader>ascom
+"...vmap <silent> <Leader>adec	:<BS><BS><BS><CR>ma'><Leader>adec
+"...vmap <silent> <Leader>adef	:<BS><BS><BS><CR>ma'><Leader>adef
+"...vmap <silent> <Leader>afnc	:<BS><BS><BS><CR>ma'><Leader>afnc
+"...vmap <silent> <Leader>anum	:<BS><BS><BS><CR>ma'><Leader>anum
+"...vmap <silent> <Leader>t|	:<BS><BS><BS><CR>ma'><Leader>t|
+"...vmap <silent> <Leader>t,	:<BS><BS><BS><CR>ma'><Leader>t,
+"...vmap <silent> <Leader>ts,	:<BS><BS><BS><CR>ma'><Leader>ts,
+"...vmap <silent> <Leader>t:	:<BS><BS><BS><CR>ma'><Leader>t:
+"...vmap <silent> <Leader>t;	:<BS><BS><BS><CR>ma'><Leader>t;
+"...vmap <silent> <Leader>t<	:<BS><BS><BS><CR>ma'><Leader>t<
+"...vmap <silent> <Leader>t=	:<BS><BS><BS><CR>ma'><Leader>t=
+"...vmap <silent> <Leader>t?	:<BS><BS><BS><CR>ma'><Leader>t?
+"...vmap <silent> <Leader>t@	:<BS><BS><BS><CR>ma'><Leader>t@
+"...vmap <silent> <Leader>tab	:<BS><BS><BS><CR>ma'><Leader>tab
+"...vmap <silent> <Leader>tml	:<BS><BS><BS><CR>ma'><Leader>tml
 vmap <silent> <Leader>tsp	:<BS><BS><BS><CR>ma'><Leader>tsp
-vmap <silent> <Leader>tsq	:<BS><BS><BS><CR>ma'><Leader>tsq
-vmap <silent> <Leader>tp@	:<BS><BS><BS><CR>ma'><Leader>tp@
-vmap <silent> <Leader>tt	:<BS><BS><BS><CR>ma'><Leader>tt
-vmap <silent> <Leader>Htd	:<BS><BS><BS><CR>ma'><Leader>Htd
-vmap <silent> <Leader>anum  :B s/\(\d\)\s\+\(-\=[.,]\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0<CR>gv:Align [.,@]<CR>:'<,'>s/\([-0-9.,]*\)\(\s\+\)\([.,]\)/\2\1\3/ge<CR>:'<,'>s/@/ /ge<CR>
+"...vmap <silent> <Leader>tsq	:<BS><BS><BS><CR>ma'><Leader>tsq
+"...vmap <silent> <Leader>tp@	:<BS><BS><BS><CR>ma'><Leader>tp@
+"...vmap <silent> <Leader>tt	:<BS><BS><BS><CR>ma'><Leader>tt
+"...vmap <silent> <Leader>Htd	:<BS><BS><BS><CR>ma'><Leader>Htd
+"...vmap <silent> <Leader>anum  :B s/\(\d\)\s\+\(-\=[.,]\=\d\)/\1@\2/ge<CR>:AlignCtrl mp0P0<CR>gv:Align [.,@]<CR>:'<,'>s/\([-0-9.,]*\)\(\s\+\)\([.,]\)/\2\1\3/ge<CR>:'<,'>s/@/ /ge<CR>
 
 " ---------------------------------------------------------------------
 " CharJoiner: joins lines which end in the given character (spaces {{{1

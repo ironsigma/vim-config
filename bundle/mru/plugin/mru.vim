@@ -421,7 +421,7 @@ function! s:MRU_Display() "{{{
     nnoremap <buffer> <silent> u :MRU<CR>
     nnoremap <buffer> <silent> <2-LeftMouse> :call <SID>MRU_EditFile(0)<CR>
     nnoremap <buffer> <silent> q :close<CR>
-    nnoremap <buffer> <silent> d :call <SID>MRU_DeleteFile()<CR>
+    nnoremap <buffer> <silent> e :call <SID>MRU_DeleteFile()<CR>
 
     " Display the MRU list
     silent! 0put =g:MRU_LIST
