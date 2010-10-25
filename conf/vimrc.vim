@@ -44,11 +44,9 @@ set number                              " Line numbers
 "--------------------------------------------------------------------------
 " Vim Only Options
 "--------------------------------------------------------------------------
-if !&cp
-    set mouse=nv                        " Mouse in normal and visual
-    set foldcolumn=4                    " Columns for fold display
-    syntax on                           " Syntax Highlight on
-endif
+set mouse=nv                        " Mouse in normal and visual
+set foldcolumn=4                    " Columns for fold display
+syntax on                           " Syntax Highlight on
 
 " set status line
 set statusline=%<%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=\ %l,%v\ \ %p%%\ %L
@@ -78,7 +76,11 @@ if !has("gui_running")
 endif
 
 " Swap file location
-set dir^=$HOME/tmp,C:\\RCSVers\\
+if has("win32")
+    set dir^=c:\\rcsvers
+else
+    set dir^=$HOME/tmp
+endif
 
 "--------------------------------------------------------------------------
 " Keyboard Mappings
@@ -125,66 +127,64 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 "--------------------------------------------------------------------------
 " Plugin options
 "--------------------------------------------------------------------------
-if !&cp
+" Load bundles
+call pathogen#runtime_append_all_bundles() 
 
-    " Don't load matchparen
-    let g:loaded_matchparen = 1
+" Don't load matchparen
+let g:loaded_matchparen = 1
 
-    " Settings for MRU plugin
-    let MRU_Max_Entries = 50
-    let MRU_Window_Height = 25
-    let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
+" Settings for MRU plugin
+let MRU_Max_Entries = 50
+let MRU_Window_Height = 25
+let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
 
-    " Settings for RCSVersions plugin
-    let $TZ = 'PST8PDT'
-    let g:rvRcsOptions = ""
-    let g:rvLeaveRcsUnlocked = 1
-    let g:rvSaveDirectoryType = 1
-    if has("win32")
-        let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
-        let g:rvExcludeExpression   = '\c\.TMP'
-        let g:rvTempDir             = 'C:\\Temp\\'
-        let g:rvSaveDirectoryName   = 'C:\\RCSVers\\'
-    else
-        let g:rvExcludeExpression    = '^/tmp/'
-        let g:rvSaveDirectoryName   = "$HOME/.rcs/"
-    endif
-
-    " PHP highlighting
-    let php_sql_query = 1
-    let php_htmlInString = 1
-    let php_noShortTags = 1
-    let php_folding = 1
-
-    " Python highlighting
-    let python_highlight_all = 1
-    let python_print_as_function = 1
-
-    " Surround
-    xmap  <Leader>s    <Plug>Vsurround
-
-    " SnippetsEMU
-    let g:snippetsEmu_key = "<c-space>"
-
+" Settings for RCSVersions plugin
+let $TZ = 'PST8PDT'
+let g:rvRcsOptions = ""
+let g:rvLeaveRcsUnlocked = 1
+let g:rvSaveDirectoryType = 1
+if has("win32")
+    let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
+    let g:rvExcludeExpression   = '\c\.TMP'
+    let g:rvTempDir             = 'C:\\Temp\\'
+    let g:rvSaveDirectoryName   = 'C:\\RCSVers\\'
+else
+    let g:rvExcludeExpression    = '^/tmp/'
+    let g:rvSaveDirectoryName   = "$HOME/.rcs/"
 endif
+
+" PHP highlighting
+let php_sql_query = 1
+let php_htmlInString = 1
+let php_noShortTags = 1
+let php_folding = 1
+
+" Python highlighting
+let python_highlight_all = 1
+let python_print_as_function = 1
+
+" Surround
+xmap  <Leader>s    <Plug>Vsurround
+
+" SnippetsEMU
+let g:snippetsEmu_key = "<c-space>"
+
 "--------------------------------------------------------------------------
 " Auto commands
 "--------------------------------------------------------------------------
-if !&cp
-    " Enable file type detection.
-    filetype plugin indent on
+" Enable file type detection.
+filetype plugin indent on
 
-    " switch to current dir
-    autocmd BufEnter * :sil! lcd %:p:h
+" switch to current dir
+autocmd BufEnter * :sil! lcd %:p:h
 
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it when the position is invalid or when inside an event handler
-    " (happens when dropping a file on gvim).
-    autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   execute "normal g`\"zz" |
-    \ else |
-    \   execute "normal G$zz"|
-    \ endif
-endif
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+autocmd BufReadPost *
+\ if line("'\"") > 0 && line("'\"") <= line("$") |
+\   execute "normal g`\"zz" |
+\ else |
+\   execute "normal G$zz"|
+\ endif
 "--- EOF ------------------------------------------------------------------
