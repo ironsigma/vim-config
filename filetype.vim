@@ -12,12 +12,12 @@ augroup filetypedetect
     " extensions
     autocmd! BufRead,BufNewFile *.jad        setfiletype java
     autocmd! BufRead,BufNewFile *.java       compiler    ant
-    autocmd! BufRead,BufNewFile *.php        runtime     ftplugin/xml.vim | compiler php  | setl isk-=58 foldlevel=1
+    autocmd! BufRead,BufNewFile *.php        setfiletype php.html.javascript | compiler php  | setl isk-=58 foldlevel=1
     autocmd! BufRead,BufNewFile *.yml        setlocal    sts=2 sw=2
     autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=iu
     autocmd! BufRead,BufNewFile *.ion        setfiletype ion
     autocmd! BufRead,BufNewFile *.html,*.tpl runtime     ftplugin/xml.vim
-    autocmd! BufRead,BufNewFile *.bix        setfiletype php | runtime ftplugin/xml.vim | comp php | setl isk-=58 ts=4 noet foldlevel=1
+    autocmd! BufRead,BufNewFile *.bix        setfiletype php.html.javascript | compiler php | setl isk-=58 ts=4 noet foldlevel=1
 
     " types
     autocmd! FileType python  comp python

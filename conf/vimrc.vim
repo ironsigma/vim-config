@@ -171,8 +171,12 @@ let python_print_as_function = 1
 " Surround
 xmap  <Leader>s    <Plug>Vsurround
 
-" SnippetsEMU
-let g:snippetsEmu_key = "<c-space>"
+" SnipMate
+let g:snips_author = "Juan D Frias"
+
+" These will let SnipMate know to call AutoComplete plugin
+let g:SuperTabMappingForward = '<tab>'
+let g:SuperTabMappingBackward = '<s-tab>'
 
 "--------------------------------------------------------------------------
 " Auto commands
