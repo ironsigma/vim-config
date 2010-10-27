@@ -39,7 +39,6 @@ set modelines=5                         " Set the number of lines to look at
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set number                              " Line numbers
 
 "--------------------------------------------------------------------------
 " Vim Only Options

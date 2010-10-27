@@ -24,8 +24,8 @@ if has("win32")
     set columns=180
 elseif has("mac")
     winpos 109 46 " 22+24 for window bar
-    set lines=50
-    set columns=148
+    set lines=62
+    set columns=150
 else
     winpos 280 80
     set lines=60
@@ -44,6 +44,6 @@ set t_vb=                   " Turn off bell flashes
 "--------------------------------------------------------------------------
 " Color scheme
 "--------------------------------------------------------------------------
-colorscheme eclipse
+colorscheme sorceror
 
 "--- EOF ------------------------------------------------------------------
