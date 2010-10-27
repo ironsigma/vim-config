@@ -15,7 +15,6 @@ set expandtab                           " Use spaces instead of tabs
 set incsearch                           " Incremental search
 set hlsearch                            " Highlight search hits
 set showcmd                             " Show panding commands
-set cmdheight=1                         " lines for command window
 set laststatus=2                        " Always show status line
 set backspace=indent,eol,start          " Backspace over everyting
 set history=100                         " Save at most XX commands
@@ -24,18 +23,16 @@ set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
 set nobackup                            " No backups
 set visualbell                          " Use visual bell
-set viminfo=@200,'100,f1,rb:,:100,/100  " Vim info options
+set viminfo=!,@200,'100,f1,rb:,:100,/100  " Vim info options
 set lazyredraw                          " Don't redraw on macro execute
 set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
 set backupcopy=yes                      " Save resources
 set diffopt=filler,context:3            " Diff options
 set nostartofline                       " Keep cursor column when moving
-set scrolloff=0                         " Keep context lines
 set pastetoggle=<F10>                   " Toggle paste
 set fileformats=unix,dos                " File formats
 set fileformat=unix                     " Default to new unix format files
-set modelines=5                         " Set the number of lines to look at
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
@@ -52,13 +49,19 @@ set statusline=%<%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=\ %l,%v\ \ %p%%\ %L
 
 " Set invisible chars and display them
 set list
-set listchars=tab:>.,trail:.
+if has('win32')
+    set listchars=tab:›·,trail:×
+elseif has('mac')
+    set listchars=tab:›·,trail:×
+else
+    set listchars=tab:>.,trail:.
+endif
 
 " Used for redirection
 set shellpipe=2>&1\|tee
 
 " Term color scheme
-if has("win32unix")
+if has('win32unix')
     colorscheme eclipse
 else
     set t_Co=256
@@ -69,13 +72,13 @@ endif
 hi SpecialKey ctermfg=237
 
 " Disable bell
-if !has("gui_running")
+if !has('gui_running')
     set vb
     set t_vb=
 endif
 
 " Swap file location
-if has("win32")
+if has('win32')
     set dir^=c:\\rcsvers
 else
     set dir^=$HOME/tmp
@@ -109,8 +112,7 @@ nnoremap <silent> <f2> :MRU<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 - Toggle zoom window
-nnoremap <silent> <f5> :WinZoomToggle<cr>
+" F5 -
 
 " F6 -
 
@@ -123,11 +125,6 @@ nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 " F9  - Run external make command
 nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<cr>:echo "Make complete."<cr>
 
-" Remap arrows to change windows
-nnoremap <right> <c-w>l
-nnoremap <left>  <c-w>h
-nnoremap <up>    <c-w>k
-nnoremap <down>  <c-w>j
 "--------------------------------------------------------------------------
 " Plugin options
 "--------------------------------------------------------------------------
@@ -145,10 +142,10 @@ let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\
 
 " Settings for RCSVersions plugin
 let $TZ = 'PST8PDT'
-let g:rvRcsOptions = ""
+let g:rvRcsOptions = ''
 let g:rvLeaveRcsUnlocked = 1
 let g:rvSaveDirectoryType = 1
-if has("win32")
+if has('win32')
     let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
     let g:rvExcludeExpression   = '\c\.TMP'
     let g:rvTempDir             = 'C:\\Temp\\'
@@ -169,7 +166,7 @@ let python_highlight_all = 1
 let python_print_as_function = 1
 
 " Surround
-xmap  <Leader>s    <Plug>Vsurround
+xmap <Leader>s <Plug>Vsurround
 
 " SnipMate
 let g:snips_author = "Juan D Frias"
