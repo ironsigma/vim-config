@@ -36,6 +36,7 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
+set switchbuf=usetab,newtab             " Use tabs when spliting
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -91,7 +92,8 @@ endif
 noremap <space> :
 
 " Next buffer
-nnoremap <tab> :bn!<cr>
+nnoremap <silent> <tab> :sbn<cr>
+nnoremap <silent> <c-tab> :bn!<cr>
 
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
@@ -113,14 +115,15 @@ nnoremap <silent> <f3> :GundoToggle<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 -
+" F5 - YankRing
+nnoremap <silent> <f5> :YRShow<cr>
 
 " F6 -
 
-" F7 -
+" F7 - Toggle line numbering
 nnoremap <silent> <f7> :let &number = !&number<cr>
 
-" F8 - Toggle linewrapping
+" F8 - Toggle line wrapping
 nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 
 " F9  - Run external make command
@@ -174,6 +177,18 @@ let g:gundo_preview_bottom=1
 
 " SnipMate
 let g:snips_author = "Juan D Frias"
+
+" YankRing
+let g:yankring_min_element_length = 2
+let g:yankring_manage_numbered_reg = 1
+let g:yankring_clipboard_monitor = 0
+let g:yankring_paste_check_default_buffer = 0
+let  g:yankring_default_menu_mode = 0
+if has('win32')
+    let g:yankring_history_file = '_vimyring'
+else
+    let g:yankring_history_file = '.vimyring'
+endif
 
 "--------------------------------------------------------------------------
 " Auto commands
