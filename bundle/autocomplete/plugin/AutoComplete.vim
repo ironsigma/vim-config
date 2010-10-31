@@ -5,8 +5,8 @@
 "     History:  1.0.0  First implementation
 "
 
-inoremap <silent> <c-p>   <c-r>=<sid>AutoComplete('p')<cr>
-inoremap <silent> <c-n>   <c-r>=<sid>AutoComplete('n')<cr>
+inoremap <silent> <tab>   <c-r>=<sid>AutoComplete('p')<cr>
+inoremap <silent> <s-tab>   <c-r>=<sid>AutoComplete('n')<cr>
 
 function! <sid>AutoComplete(key)
     if (strpart(getline('.'),col('.')-2,1)=~'^\s\?$')

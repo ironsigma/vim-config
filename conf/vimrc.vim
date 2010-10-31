@@ -52,7 +52,7 @@ set list
 if has('win32')
     set listchars=tab:›·,trail:×
 elseif has('mac')
-    set listchars=tab:›·,trail:×
+    set listchars=tab:>-,trail:x
 else
     set listchars=tab:>.,trail:.
 endif
@@ -107,7 +107,8 @@ nnoremap <silent> <f1> :NERDTreeToggle<cr>
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
-" F3 -
+" F3 - Gundo
+nnoremap <silent> <f3> :GundoToggle<cr>
 
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
@@ -168,12 +169,11 @@ let python_print_as_function = 1
 " Surround
 xmap <Leader>s <Plug>Vsurround
 
+" Gundo
+let g:gundo_preview_bottom=1
+
 " SnipMate
 let g:snips_author = "Juan D Frias"
-
-" These will let SnipMate know to call AutoComplete plugin
-let g:SuperTabMappingForward = '<tab>'
-let g:SuperTabMappingBackward = '<s-tab>'
 
 "--------------------------------------------------------------------------
 " Auto commands
