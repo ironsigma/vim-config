@@ -95,6 +95,9 @@ noremap <space> :
 nnoremap <silent> <tab> :sbn<cr>
 nnoremap <silent> <c-tab> :bn!<cr>
 
+" Open new window with gf
+nnoremap <silent> gf :e <cfile><cr>
+
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
@@ -128,6 +131,9 @@ nnoremap <silent> <f8> :let &wrap = !&wrap<cr>
 
 " F9  - Run external make command
 nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<cr>:echo "Make complete."<cr>
+
+" F10 - Paste Toggle
+" see pastetoggle above
 
 "--------------------------------------------------------------------------
 " Plugin options
