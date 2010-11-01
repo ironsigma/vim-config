@@ -36,7 +36,10 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
+set showtabline=2                       " Always show tabline
 set switchbuf=usetab,newtab             " Use tabs when spliting
+set ignorecase                          " Ignore case during search
+set smartcase                           " Case sensitive if uppercase
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -91,12 +94,15 @@ endif
 " Easier on the shift.
 noremap <space> :
 
+" jj escapes, Who types jj anyway?
+inoremap jj <esc>
+
 " Next buffer
 nnoremap <silent> <tab> :sbn<cr>
 nnoremap <silent> <c-tab> :bn!<cr>
 
 " Open new window with gf
-nnoremap <silent> gf :e <cfile><cr>
+nnoremap <silent> gf <c-w>gf
 
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
@@ -195,6 +201,12 @@ if has('win32')
 else
     let g:yankring_history_file = '.vimyring'
 endif
+
+"--------------------------------------------------------------------------
+" Abbreviations
+"--------------------------------------------------------------------------
+iab NuM 12345678901234567890123456789012345678901234567890123456789012345678901234567890
+iab RuL ----+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8----+----9----+----0
 
 "--------------------------------------------------------------------------
 " Auto commands

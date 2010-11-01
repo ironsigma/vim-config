@@ -1,7 +1,7 @@
 # ExtJS
 snippet fly
 	Ext.fly('${1:id}')${2}
-snippet get
+snippet flyg
 	Ext.get('${1:id}')${2}
 snippet ready
 	Ext.onReady(function() {
@@ -36,7 +36,7 @@ snippet ife
 		${2}
 	} else{
 		${3}
-	};
+	}
 # tertiary conditional
 snippet if?
 	(${1:/* condition */} ? ${2:a} : ${3:b})
@@ -46,9 +46,6 @@ snippet switch
 		case '${3:case}':
 			${4:// code}
 			break;
-		${5}
-		default:
-			${2:// code}
 	}
 # case
 snippet case
