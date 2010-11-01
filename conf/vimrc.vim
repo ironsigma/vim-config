@@ -36,7 +36,6 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set showtabline=2                       " Always show tabline
 set switchbuf=usetab,newtab             " Use tabs when spliting
 set ignorecase                          " Ignore case during search
 set smartcase                           " Case sensitive if uppercase
@@ -63,6 +62,9 @@ endif
 
 " Used for redirection
 set shellpipe=2>&1\|tee
+
+" Better grep
+set grepprg=ack
 
 " Term color scheme
 if has('win32unix')
@@ -94,9 +96,6 @@ endif
 " Easier on the shift.
 noremap <space> :
 
-" jj escapes, Who types jj anyway?
-inoremap jj <esc>
-
 " Next buffer
 nnoremap <silent> <tab> :sbn<cr>
 nnoremap <silent> <c-tab> :bn!<cr>
@@ -111,6 +110,19 @@ imap <MiddleMouse> <Nop>
 " Restore selection on shift
 vnoremap <silent> < <gv
 vnoremap <silent> > >gv
+
+" Quotes and Braces
+inoremap '' ''<left>
+inoremap ' <right>
+inoremap <leader>' '
+
+inoremap "" ""<left>
+inoremap " <right>
+inoremap <leader>" "
+
+inoremap () ()<left>
+inoremap ) <right>
+inoremap <leader>) )
 
 " F1 - NERDTree
 nnoremap <silent> <f1> :NERDTreeToggle<cr>
