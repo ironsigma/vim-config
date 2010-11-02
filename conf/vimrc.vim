@@ -111,19 +111,6 @@ imap <MiddleMouse> <Nop>
 vnoremap <silent> < <gv
 vnoremap <silent> > >gv
 
-" Quotes and Braces
-inoremap '' ''<left>
-inoremap ' <right>
-inoremap <leader>' '
-
-inoremap "" ""<left>
-inoremap " <right>
-inoremap <leader>" "
-
-inoremap () ()<left>
-inoremap ) <right>
-inoremap <leader>) )
-
 " F1 - NERDTree
 nnoremap <silent> <f1> :NERDTreeToggle<cr>
 
