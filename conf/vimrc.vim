@@ -136,8 +136,7 @@ nnoremap <silent> <f3> :GundoToggle<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 - YankRing
-nnoremap <silent> <f5> :YRShow<cr>
+" F5 -
 
 " F6 -
 
@@ -201,18 +200,6 @@ let g:gundo_preview_bottom=1
 
 " SnipMate
 let g:snips_author = "Juan D Frias"
-
-" YankRing
-let g:yankring_min_element_length = 2
-let g:yankring_manage_numbered_reg = 1
-let g:yankring_clipboard_monitor = 0
-let g:yankring_paste_check_default_buffer = 0
-let  g:yankring_default_menu_mode = 0
-if has('win32')
-    let g:yankring_history_file = '_vimyring'
-else
-    let g:yankring_history_file = '.vimyring'
-endif
 
 "--------------------------------------------------------------------------
 " Abbreviations
