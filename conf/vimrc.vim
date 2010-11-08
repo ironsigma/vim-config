@@ -18,7 +18,6 @@ set showcmd                             " Show panding commands
 set laststatus=2                        " Always show status line
 set backspace=indent,eol,start          " Backspace over everyting
 set history=100                         " Save at most XX commands
-set ruler                               " show ruler
 set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
 set nobackup                            " No backups
@@ -48,7 +47,7 @@ set foldcolumn=4                    " Columns for fold display
 syntax on                           " Syntax Highlight on
 
 " set status line
-set statusline=%<%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=\ %l,%v\ \ %p%%\ %L
+set statusline=%<%q%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=%l,%v\ \ %p%%\ %L
 
 " Set invisible chars and display them
 set list
