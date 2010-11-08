@@ -117,8 +117,7 @@ nnoremap <silent> <f1> :NERDTreeToggle<cr>
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
-" F3 - Gundo
-nnoremap <silent> <f3> :GundoToggle<cr>
+" F3 -
 
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
@@ -181,9 +180,6 @@ let python_print_as_function = 1
 
 " Surround
 xmap <Leader>s <Plug>Vsurround
-
-" Gundo
-let g:gundo_preview_bottom=1
 
 " SnipMate
 let g:snips_author = "Juan D Frias"
