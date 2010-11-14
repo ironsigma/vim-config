@@ -10,9 +10,7 @@ if has("win32")
 elseif has("mac")
     set nomacatsui
     set antialias
-    set guifont=Menlo\ Regular:h12
-else
-    set guifont=Droid\ Sans\ Mono\ 8
+    set guifont=Droid_Sans_Mono:h12
 endif
 
 "--------------------------------------------------------------------------
@@ -24,7 +22,7 @@ if has("win32")
     set columns=180
 elseif has("mac")
     winpos 109 46 " 22+24 for window bar
-    set lines=62
+    set lines=46
     set columns=150
 else
     winpos 280 80

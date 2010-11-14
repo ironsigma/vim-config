@@ -16,6 +16,7 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.yml        setlocal    sts=2 sw=2
     autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=iu
     autocmd! BufRead,BufNewFile *.bix        setfiletype php.html.javascript | compiler php | setl isk-=58 ts=4 noet foldlevel=1
+    autocmd! BufRead,BufNewFile *.tex        setfiletype tex | setlocal fmr=(fold),(end) fdm=marker tw=79
 
     " types
     autocmd! FileType python  comp python
