@@ -35,8 +35,6 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set ignorecase                          " Ignore case during search
-set smartcase                           " Case sensitive if uppercase
 
 "--------------------------------------------------------------------------
 " Vim Only Options
