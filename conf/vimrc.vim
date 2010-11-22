@@ -35,7 +35,6 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set switchbuf=usetab,newtab             " Use tabs when spliting
 set ignorecase                          " Ignore case during search
 set smartcase                           " Case sensitive if uppercase
 
@@ -96,8 +95,7 @@ endif
 noremap <space> :
 
 " Next buffer
-nnoremap <silent> <tab> :sbn<cr>
-nnoremap <silent> <c-tab> :bn!<cr>
+nnoremap <silent> <tab> :bn!<cr>
 
 " Open new window with gf
 nnoremap <silent> gf <c-w>gf
