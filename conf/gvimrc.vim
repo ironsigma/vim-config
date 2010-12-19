@@ -5,12 +5,10 @@
 "--------------------------------------------------------------------------
 " Font
 "--------------------------------------------------------------------------
-if has("win32")
+if has("mac")
+    set guifont=Droid_Sans_Mono:h13
+elseif has("win32")
     set guifont=Consolas:h9:cANSI
-elseif has("mac")
-    set nomacatsui
-    set antialias
-    set guifont=Droid_Sans_Mono:h12
 endif
 
 "--------------------------------------------------------------------------
@@ -21,9 +19,12 @@ if has("win32")
     set lines=64
     set columns=180
 elseif has("mac")
-    winpos 109 46 " 22+24 for window bar
-    set lines=46
+    winpos 360 1058
+    set lines=68
     set columns=150
+    "winpos 109 46 " 22+24 for window bar
+    "set lines=46
+    "set columns=150
 else
     winpos 280 80
     set lines=60
