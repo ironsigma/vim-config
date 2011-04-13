@@ -132,7 +132,7 @@ endfunction
 function! pathogen#helptags() " {{{1
   for dir in pathogen#split(&rtp)
     if dir[0 : strlen($VIM)-1] !=# $VIM && isdirectory(dir.'/doc') && (!filereadable(dir.'/doc/tags') || filewritable(dir.'/doc/tags'))
-      helptags `=dir.'/doc'`
+      sil! helptags `=dir.'/doc'`
     endif
   endfor
 endfunction " }}}1

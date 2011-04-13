@@ -6,7 +6,7 @@
 " Font
 "--------------------------------------------------------------------------
 if has("mac")
-    set guifont=Droid_Sans_Mono:h13
+    set guifont=Consolas:h14
 elseif has("win32")
     set guifont=Consolas:h9:cANSI
 endif
@@ -14,20 +14,17 @@ endif
 "--------------------------------------------------------------------------
 " Window position and size
 "--------------------------------------------------------------------------
+set lines=999
 if has("win32")
     winpos 300 0
-    set lines=64
     set columns=180
 elseif has("mac")
-    winpos 360 1058
-    set lines=68
-    set columns=150
-    "winpos 109 46 " 22+24 for window bar
-    "set lines=46
-    "set columns=150
+    if $HOSTNAME == 'a4142197.federated.fds'
+        winpos 210 1058
+        set columns=160
+    endif
 else
     winpos 280 80
-    set lines=60
     set columns=150
 endif
 
