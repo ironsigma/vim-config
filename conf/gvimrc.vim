@@ -6,7 +6,7 @@
 " Font
 "--------------------------------------------------------------------------
 if has("mac")
-    set guifont=Consolas:h14
+    set guifont=Menlo:h14
 elseif has("win32")
     set guifont=Consolas:h9:cANSI
 endif

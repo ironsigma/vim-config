@@ -102,9 +102,9 @@ nnoremap <silent> gf <c-w>gf
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
 
-" Restore selection on shift
-vnoremap <silent> < <gv
-vnoremap <silent> > >gv
+" Navigate by visual lines
+noremap k gk
+noremap j gj
 
 " F1 - NERDTree
 nnoremap <silent> <f1> :NERDTreeToggle<cr>
