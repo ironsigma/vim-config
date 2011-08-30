@@ -72,6 +72,7 @@ endif
 
 " Color scheme overlay
 hi SpecialKey ctermfg=237
+hi LineNr ctermfg=245 ctermbg=234
 
 " Disable bell
 if !has('gui_running')
