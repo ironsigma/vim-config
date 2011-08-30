@@ -117,7 +117,8 @@ nnoremap <silent> <f2> :MRU<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 -
+" F5 - Zoom window
+nmap <unique> <f5> <Plug>ZoomWin
 
 " F6 -
 
