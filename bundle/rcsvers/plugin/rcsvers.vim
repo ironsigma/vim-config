@@ -1038,28 +1038,20 @@ function! s:DisplayLog()
         sil exe ":g!/^revision\\|^date/d"
         sil exe "normal 1G"
         " Format date and revision into a single line.
-        let l:lines = line("$")
-        let l:curr_line = 0
-
-        while l:curr_line <= l:lines
-            " Join the revision to the date...
-            normal Jj
-            let l:curr_line = l:curr_line + 2
-        endwhile
+        sil exe ":g/^revision /j"
 
         if (g:rvShowUser !=0)
             " format as: 'revision: date time author'
-            sil! exe ":%s/revision\\s\\+\\([0-9.]\\+\\).\*".
-                    \"date:\\([^;]\\+\\).\*".
-                    \"author:\\([^;]\\+\\)".
-                    \"[^~]\\+./".
-                    \"\\1:\\2\\3/g"
+            sil! exe ":%s/revision\\s\\+\\([0-9.]\\+\\)\\s\\+".
+                    \"date:\\s\\+\\([^;]\\+\\);\\s\\+".
+                    \"author:\\s\\+\\([^;]\\+\\)[^~]\\+\\~/".
+                    \"\\1: \\2 \\3"
         else
             " format as: 'revision: date time '
-            sil! exe ":%s/revision\\s\\+\\([0-9.]\\+\\).\*".
-                    \"date:\\([^;]\\+\\)".
-                    \"[^~]\\+./".
-                    \"\\1:\\2/g"
+            sil! exe ":%s/revision\\s\\+\\([0-9.]\\+\\)\\s\\+".
+                    \"date:\\s\\+\\([^;]\\+\\);\\s\\+".
+                    \"author:\\s\\+\\([^;]\\+\\)[^~]\\+\\~/".
+                    \"\\1: \\2"
         endif
 
         " Remove default "vim" descriptions or rvDescription
