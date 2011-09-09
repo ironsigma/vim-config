@@ -171,6 +171,9 @@ let php_htmlInString = 1
 let php_noShortTags = 1
 let php_folding = 1
 
+" PHPDocumentor
+nnoremap <leader>d :call PhpDocSingle()<cr>
+
 " Python highlighting
 let python_highlight_all = 1
 let python_print_as_function = 1
