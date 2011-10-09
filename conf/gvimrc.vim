@@ -14,7 +14,12 @@ endif
 "--------------------------------------------------------------------------
 " Window position and size
 "--------------------------------------------------------------------------
-set lines=999
+if has('x11')
+    set lines=58
+else
+    set lines=999
+endif
+
 if has("win32")
     winpos 300 0
     set columns=180
@@ -23,6 +28,9 @@ elseif has("mac")
         winpos 210 1058
         set columns=160
     endif
+elseif has('x11')
+    winpos 280 0
+    set columns=150
 else
     winpos 280 80
     set columns=150
