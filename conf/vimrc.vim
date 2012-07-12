@@ -156,10 +156,11 @@ let g:rvRcsOptions = ''
 let g:rvLeaveRcsUnlocked = 1
 let g:rvSaveDirectoryType = 1
 if has('win32')
+    let g:rvDirSeparator = "\/"
     let g:rvCompareProgram      = 'start C:\Program Files\Beyond Compare 3\BCompare.exe'
     let g:rvExcludeExpression   = '\c\.TMP'
-    let g:rvTempDir             = 'C:\\Temp\\'
-    let g:rvSaveDirectoryName   = 'C:\\RCSVers\\'
+    let g:rvTempDir             = 'C:/Temp/'
+    let g:rvSaveDirectoryName   = 'C:/RCSVers/'
 else
     let g:rvExcludeExpression    = '^/tmp/'
     let g:rvSaveDirectoryName   = "$HOME/.rcs/"
