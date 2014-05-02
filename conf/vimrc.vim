@@ -57,10 +57,10 @@ else
 endif
 
 " Used for redirection
-set shellpipe=2>&1\|tee
+set shellpipe=2>&1\ >
 
 " Better grep
-set grepprg=ack
+set grepprg=ack-grep
 
 " Term color scheme
 if has('win32unix')
@@ -167,9 +167,8 @@ endif
 
 " PHP highlighting
 let php_sql_query = 1
-let php_htmlInString = 1
-let php_noShortTags = 1
-let php_folding = 1
+let php_html_in_strings = 1
+let php_no_shorttags = 1
 
 " PHPDocumentor
 nnoremap <leader>d :call PhpDocSingle()<cr>
