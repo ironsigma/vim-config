@@ -169,6 +169,9 @@ let php_no_shorttags = 1
 " PHPDocumentor
 nnoremap <leader>d :call PhpDocSingle()<cr>
 
+" Conflict finder
+nnoremap <leader>n /^\(<<<<<<<\\|=======\\|>>>>>>>\)<cr>
+
 " Python highlighting
 let python_highlight_all = 1
 let python_print_as_function = 1
