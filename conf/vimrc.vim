@@ -70,10 +70,6 @@ else
     colorscheme xoria_rails256
 endif
 
-" Color scheme overlay
-hi SpecialKey ctermfg=237
-hi LineNr ctermfg=245 ctermbg=234
-
 " Disable bell
 if !has('gui_running')
     set vb
@@ -118,8 +114,7 @@ nnoremap <silent> <f2> :MRU<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 - Zoom window
-nmap <unique> <f5> <Plug>ZoomWin
+" F5 -
 
 " F6 -
 
@@ -139,8 +134,7 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 " Plugin options
 "--------------------------------------------------------------------------
 " Load bundles
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+execute pathogen#infect()
 
 " Don't load matchparen
 let g:loaded_matchparen = 1
@@ -148,7 +142,9 @@ let g:loaded_matchparen = 1
 " Settings for MRU plugin
 let MRU_Max_Entries = 50
 let MRU_Window_Height = 25
-let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
+if has('win32')
+    let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
+endif
 
 " Settings for RCSVersions plugin
 let $TZ = 'PST8PDT'
@@ -176,18 +172,6 @@ nnoremap <leader>d :call PhpDocSingle()<cr>
 " Python highlighting
 let python_highlight_all = 1
 let python_print_as_function = 1
-
-" Surround
-xmap <Leader>s <Plug>Vsurround
-
-" SnipMate
-let g:snips_author = "Juan D Frias"
-
-"--------------------------------------------------------------------------
-" Abbreviations
-"--------------------------------------------------------------------------
-iab NuM 12345678901234567890123456789012345678901234567890123456789012345678901234567890
-iab RuL ----+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8----+----9----+----0
 
 "--------------------------------------------------------------------------
 " Auto commands
