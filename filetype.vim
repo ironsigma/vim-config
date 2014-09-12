@@ -10,7 +10,7 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile build.xml    compiler    ant
 
     " extensions
-    autocmd! BufRead,BufNewFile *.mkd        setfiletype markdown | setl spell tw=80
+    autocmd! BufRead,BufNewFile *.mkd        setfiletype markdown | setl tw=80
     autocmd! BufRead,BufNewFile *.twig       setfiletype twig
     autocmd! BufRead,BufNewFile *.jad        setfiletype java
     autocmd! BufRead,BufNewFile *.java       compiler    ant | set fdm=syntax
