@@ -92,9 +92,6 @@ noremap <space> :
 " Next buffer
 nnoremap <silent> <tab> :bn!<cr>
 
-" Open new window with gf
-nnoremap <silent> gf <c-w>gf
-
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
@@ -136,8 +133,23 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 " Load bundles
 execute pathogen#infect()
 
+" NERDTree Filters
+let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
+
 " Don't load matchparen
 let g:loaded_matchparen = 1
+
+" YouCompleteMe
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+let g:ycm_use_ultisnips_completer = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_complete_in_comments = 1
+
+" Utilsnip
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-p>"
+let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file
 
 " Settings for MRU plugin
 let MRU_Max_Entries = 50
@@ -165,12 +177,6 @@ endif
 let php_sql_query = 1
 let php_html_in_strings = 1
 let php_no_shorttags = 1
-
-" PHPDocumentor
-nnoremap <leader>d :call PhpDocSingle()<cr>
-
-" Conflict finder
-nnoremap <leader>n /^\(<<<<<<<\\|=======\\|>>>>>>>\)<cr>
 
 " Python highlighting
 let python_highlight_all = 1

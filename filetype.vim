@@ -16,19 +16,10 @@ augroup filetypedetect
     autocmd! BufRead,BufNewFile *.java       compiler    ant | set fdm=syntax
     autocmd! BufRead,BufNewFile *.php        setfiletype php.html.javascript | compiler php  | setl isk-=58 foldlevel=1
     autocmd! BufRead,BufNewFile *.yml        setlocal    sts=4 sw=4
-    autocmd! BufRead,BufNewFile *.pl         compiler    perl | setlocal complete-=iu
-    autocmd! BufRead,BufNewFile *.bix        setfiletype php.html.javascript | compiler php | setl isk-=58 ts=4 noet foldlevel=1
-    autocmd! BufRead,BufNewFile *.tex        setfiletype tex | setlocal fmr=(fold),(end) fdm=marker
+    autocmd! BufRead,BufNewFile *.pl         compiler    perl
 
     " types
     autocmd! FileType python  comp python
-
-    " auto-complete
-    autocmd! FileType html setl omnifunc=htmlcomplete#CompleteTags
-    autocmd! FileType xml  setl omnifunc=xmlcomplete#CompleteTags
-    autocmd! FileType php  setl omnifunc=phpcomplete#CompletePHP
-    autocmd! FileType css  setl omnifunc=csscomplete#CompleteCSS
-    autocmd! FileType javascript  setl omnifunc=javascriptcomplete#CompleteJS
 
 augroup END
 
