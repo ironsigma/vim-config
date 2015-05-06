@@ -27,7 +27,7 @@ set lazyredraw                          " Don't redraw on macro execute
 set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
 set backupcopy=yes                      " Save resources
-set diffopt=filler,context:3            " Diff options
+set diffopt=vertical,filler,context:3   " Diff options
 set nostartofline                       " Keep cursor column when moving
 set pastetoggle=<F10>                   " Toggle paste
 set fileformats=unix,dos                " File formats
