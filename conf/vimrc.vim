@@ -63,12 +63,8 @@ set shellpipe=2>&1\ >
 set grepprg=ack-grep
 
 " Term color scheme
-if has('win32unix')
-    colorscheme eclipse
-else
-    set t_Co=256
-    colorscheme xoria_rails256
-endif
+set background=dark
+colorscheme solarize
 
 " Disable bell
 if !has('gui_running')
