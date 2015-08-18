@@ -22,11 +22,10 @@ set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
 set nobackup                            " No backups
 set visualbell                          " Use visual bell
-set viminfo=!,@200,'100,f1,rb:,:100,/100  " Vim info options
+set viminfo=!,'100,f1,r/tmp,:100,/100   " Vim info options
 set lazyredraw                          " Don't redraw on macro execute
 set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
-set backupcopy=yes                      " Save resources
 set diffopt=vertical,filler,context:3   " Diff options
 set nostartofline                       " Keep cursor column when moving
 set pastetoggle=<F10>                   " Toggle paste
@@ -134,12 +133,6 @@ let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
 
 " Don't load matchparen
 let g:loaded_matchparen = 1
-
-" YouCompleteMe
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-let g:ycm_use_ultisnips_completer = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_complete_in_comments = 1
 
 " Utilsnip
 let g:UltiSnipsExpandTrigger       = "<c-j>"
