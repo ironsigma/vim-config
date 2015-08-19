@@ -1,24 +1,45 @@
-" Snippets for PHP
+" vim filetype=php
 
-call SnippetAC('php', "<?php\<cr><@>\<cr>?>")
+call ParseSnippetFile(expand('<sfile>:p'))
+finish
 
-call SnippetAC('if', "if (<@>) {\<cr>}")
-call SnippetAC('iif', "<?php if (<@>) : ?>\<cr><?php endif ?>")
+:snippet <? PHP tag
+<?php
+<@>
+?>
 
-call SnippetAC('for', "for ($i = 0; $i < <@>; $i++) {\<cr>}")
-call SnippetAC('ifor', "<?php for ($i = 0; $i < <@>; $i++) : ?>\<cr><?php endfor ?>")
+:snippet if
+if (<@>) {
+}
 
-call SnippetAC('fore', "foreach (<@>) {\<cr>}")
-call SnippetAC('ifore', "<?php foreach (<@>) : ?>\<cr><?php endforeach ?>")
+:snippet iif Inline HTML if
+<?php if (<@>) : ?>
+<?php endif ?>
 
-call SnippetAC('html',
-\"<!doctype html>\<cr>
-\<html lang=\"en\">\<cr>
-\<head>\<cr>
-\    <meta charset=\"utf-8\" />\<cr>
-\    <title><@></title>\<cr>
-\    <link rel=\"stylesheet\" href=\"css/styles.css\">\<cr>
-\</head>\<cr>
-\<body>\<cr>
-\</body>\<cr>
-\</html>")
+:snippet for
+for ($i = 0; $i < <@>; $i++) {
+}
+
+:snippet ifor Inline HTML for
+<?php for ($i = 0; $i < <@>; $i++) : ?>
+<?php endfor ?>
+
+:snippet fore
+foreach (<@>) {
+}
+
+:snippet ifore Inline HTML foreach
+<?php foreach (<@>) : ?>
+<?php endforeach ?>
+
+:snippet html HTML5 Template
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title><@></title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+</body>
+</html>
