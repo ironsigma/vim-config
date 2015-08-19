@@ -22,12 +22,11 @@ set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
 set nobackup                            " No backups
 set visualbell                          " Use visual bell
-set viminfo=!,@200,'100,f1,rb:,:100,/100  " Vim info options
+set viminfo=!,'100,f1,r/tmp,:100,/100   " Vim info options
 set lazyredraw                          " Don't redraw on macro execute
 set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
-set backupcopy=yes                      " Save resources
-set diffopt=filler,context:3            " Diff options
+set diffopt=vertical,filler,context:3   " Diff options
 set nostartofline                       " Keep cursor column when moving
 set pastetoggle=<F10>                   " Toggle paste
 set fileformats=unix,dos                " File formats
@@ -57,22 +56,14 @@ else
 endif
 
 " Used for redirection
-set shellpipe=2>&1\|tee
+set shellpipe=2>&1\ >
 
 " Better grep
-set grepprg=ack
+set grepprg=ack-grep
 
 " Term color scheme
-if has('win32unix')
-    colorscheme eclipse
-else
-    set t_Co=256
-    colorscheme xoria_rails256
-endif
-
-" Color scheme overlay
-hi SpecialKey ctermfg=237
-hi LineNr ctermfg=245 ctermbg=234
+set background=dark
+colorscheme solarize
 
 " Disable bell
 if !has('gui_running')
@@ -96,9 +87,6 @@ noremap <space> :
 " Next buffer
 nnoremap <silent> <tab> :bn!<cr>
 
-" Open new window with gf
-nnoremap <silent> gf <c-w>gf
-
 " Diable middle mouse click paste
 map <MiddleMouse> <Nop>
 imap <MiddleMouse> <Nop>
@@ -118,8 +106,7 @@ nnoremap <silent> <f2> :MRU<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 - Zoom window
-nmap <unique> <f5> <Plug>ZoomWin
+" F5 -
 
 " F6 -
 
@@ -139,16 +126,26 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 " Plugin options
 "--------------------------------------------------------------------------
 " Load bundles
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+execute pathogen#infect()
+
+" NERDTree Filters
+let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
 
 " Don't load matchparen
 let g:loaded_matchparen = 1
 
+" Utilsnip
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-p>"
+let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file
+
 " Settings for MRU plugin
 let MRU_Max_Entries = 50
 let MRU_Window_Height = 25
-let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
+if has('win32')
+    let MRU_Exclude_Files = '^\(C:\\Documents and Settings\\[^\\]\+\\Local Settings\\Temp\\.*\)\|\(C:\\Users\\[^\\]\+\\AppData\\Local\\Temp\\.*\)$'
+endif
 
 " Settings for RCSVersions plugin
 let $TZ = 'PST8PDT'
@@ -168,28 +165,12 @@ endif
 
 " PHP highlighting
 let php_sql_query = 1
-let php_htmlInString = 1
-let php_noShortTags = 1
-let php_folding = 1
-
-" PHPDocumentor
-nnoremap <leader>d :call PhpDocSingle()<cr>
+let php_html_in_strings = 1
+let php_no_shorttags = 1
 
 " Python highlighting
 let python_highlight_all = 1
 let python_print_as_function = 1
-
-" Surround
-xmap <Leader>s <Plug>Vsurround
-
-" SnipMate
-let g:snips_author = "Juan D Frias"
-
-"--------------------------------------------------------------------------
-" Abbreviations
-"--------------------------------------------------------------------------
-iab NuM 12345678901234567890123456789012345678901234567890123456789012345678901234567890
-iab RuL ----+----1----+----2----+----3----+----4----+----5----+----6----+----7----+----8----+----9----+----0
 
 "--------------------------------------------------------------------------
 " Auto commands

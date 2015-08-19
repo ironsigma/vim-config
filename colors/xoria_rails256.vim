@@ -12,12 +12,13 @@ highlight FoldColumn                ctermbg=234     ctermfg=245
 highlight Identifier                cterm=NONE      ctermfg=67
 highlight Include                   cterm=NONE      ctermfg=173
 highlight Keyword                   ctermfg=173
-highlight LineNr                    ctermfg=235     ctermbg=147
+highlight SpecialKey                ctermfg=237
+highlight LineNr                    ctermfg=245     ctermbg=234
 highlight MatchParen                ctermfg=15      ctermbg=23
 highlight Normal                    ctermfg=254     ctermbg=233
 highlight Number                    ctermfg=107
 highlight PreCondit                 cterm=NONE      ctermfg=173
-highlight PreProc                   ctermfg=254
+highlight PreProc                   ctermfg=215
 highlight Pmenu                     ctermfg=168
 highlight PmenuSel                  ctermfg=168
 highlight Search                    cterm=italic    ctermbg=235
