@@ -1,9 +1,9 @@
-" vim filetype=vim
+" vim: filetype=vim
 ParseThisSnippetFile
 finish
 
 :snippet function
-function<@>
+function! s:<@>
 endfunction
 
 :snippet if

@@ -1,14 +1,23 @@
-" vim filetype=php
+" vim: filetype=php
 ParseThisSnippetFile
 finish
 
-:snippet <? PHP tag
+:snippet php <?PHP tag block ?>
 <?php
 <@>
 ?>
 
+:snippet echo Inline echo
+<?php echo <@> ?>
+
 :snippet if
 if (<@>) {
+}
+
+:snippet class
+class <@> {
+    public function __construct() {
+    }
 }
 
 :snippet iif Inline HTML if
@@ -30,15 +39,3 @@ foreach (<@>) {
 :snippet ifore Inline HTML foreach
 <?php foreach (<@>) : ?>
 <?php endforeach ?>
-
-:snippet html HTML5 Template
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title><@></title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-</body>
-</html>

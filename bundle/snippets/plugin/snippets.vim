@@ -10,22 +10,13 @@ command! -nargs=0 -bang ListSnippets call <sid>ListSnippets('<bang>')
 command! -nargs=0 -complete=file ParseThisSnippetFile call <sid>ParseSnippetFile(expand('<sfile>:p'))
 
 let s:SNIP_TOKEN = ':snippet'
-let s:SNIP_KEYWORD_START = strlen(s:SNIP_TOKEN) + 1
+let s:SNIP_ALIAS_TOKEN = ':alias'
 
-let s:snippet_list = {}
+let s:snippet_templates = {}
+let s:snippet_aliases = {}
 let s:snippet_files = {}
 
-function! s:ListSnippets(expand)
-    for l:key in keys(s:snippet_list)
-        if a:expand == '!'
-            echo l:key . ' ' . s:snippet_list[key][0] . "\n" . s:snippet_list[key][1] . "\n\n"
-        else
-            echo l:key . ' ' . s:snippet_list[key][0]
-        endif
-    endfor
-endfunction
-
-function! s:ExpandTemplate()
+function! s:ExpandTemplate() " {{{1
     let l:line = getline('.')
 
     " find location of first non-word char
@@ -36,10 +27,34 @@ function! s:ExpandTemplate()
 
     " extract keyword
     let l:keyword = strpart(l:line, l:start_pos, col('.') - l:start_pos)
-    echom 'keyword ['. l:keyword .']'
+
+    " no keyword found display candidates
+    if l:keyword == ''
+        let l:keywords = []
+        " add keywords
+        for l:key in keys(s:snippet_templates)
+            call add(l:keywords, {'word': l:key,
+                \'menu': s:snippet_templates[l:key][0]})
+        endfor
+        " add aliases
+        for l:key in keys(s:snippet_aliases)
+            call add(l:keywords, {'word': l:key,
+                \'menu': s:snippet_templates[s:snippet_aliases[l:key]][0],
+                \'kind': 'v'})
+        endfor
+        call sort(l:keywords, "<sid>SortKeywords")
+        call complete(col('.'), l:keywords)
+        return ''
+    endif
 
     " try to find snippet by trimming keyword until empty
-    while !has_key(s:snippet_list, l:keyword)
+    while !has_key(s:snippet_templates, l:keyword)
+        " is it an alias?
+        if has_key(s:snippet_aliases, l:keyword)
+            let l:keyword = s:snippet_aliases[l:keyword]
+            break
+        endif
+        " trim it
         let l:keyword = strpart(l:keyword, 0, strlen(l:keyword) - 1)
         if l:keyword == ''
             return ''
@@ -54,24 +69,28 @@ function! s:ExpandTemplate()
     endif
 
     " if at end of line, append, otherwise insert the text
-    if strlen(l:line) == l:start_pos + strlen(keyword) + 1
+    if strlen(l:line) == l:start_pos + strlen(keyword)
         let l:insert = 'a'
     else
         let l:insert = 'i'
     endif
 
     " if there a cursor token, move back to it
-    if stridx(s:snippet_list[l:keyword][1], '<@>') == -1
+    if stridx(s:snippet_templates[l:keyword][1], '<@>') == -1
         let l:move_cursor = ''
     else
         let l:move_cursor = "\<esc>?<@>\<cr>cf>"
     endif
 
     return "\<esc>0". l:col_move .'d'. strlen(keyword) .'l'.
-            \ l:insert . s:snippet_list[l:keyword][1] . l:move_cursor
+            \ l:insert . s:snippet_templates[l:keyword][1] . l:move_cursor
 endf
 
-function! s:ParseSnippetFile(file)
+function! s:SortKeywords(a, b) " {{{1
+    return a:a['word'] == a:b['word'] ? 0 : a:a['word'] > a:b['word'] ? 1 : -1
+endfunction
+
+function! s:ParseSnippetFile(file) " {{{1
     if has_key(s:snippet_files, a:file)
         return
     endif
@@ -82,21 +101,32 @@ function! s:ParseSnippetFile(file)
 
     for line in readfile(a:file)
 
+        " Matches alias line
+        if match(l:line, '^'. s:SNIP_ALIAS_TOKEN) != -1
+            let l:aliases = split(strpart(l:line, strlen(s:SNIP_ALIAS_TOKEN) + 1))
+            let l:target = remove(l:aliases, -1)
+            for l:alias in l:aliases
+                let s:snippet_aliases[l:alias] = l:target
+            endfor
+            continue
+        endif
+
         " Matches snippet start token
-        if match(line, '^'. s:SNIP_TOKEN) != -1
+        if match(l:line, '^'. s:SNIP_TOKEN) != -1
 
             " Save previous snippet
             if l:in_snippet
-                let s:snippet_list[l:keyword] = [l:description, l:snippet]
+                let s:snippet_templates[l:keyword] = [l:description, l:snippet]
             endif
 
             " Capture keyword and description
-            let l:pos = stridx(line, ' ', s:SNIP_KEYWORD_START)
+            let l:keyword_start = strlen(s:SNIP_TOKEN) + 1
+            let l:pos = stridx(line, ' ', l:keyword_start)
             if l:pos != -1
-                let l:keyword = strpart(line, s:SNIP_KEYWORD_START, l:pos - s:SNIP_KEYWORD_START)
-                let l:description = strpart(line, s:SNIP_KEYWORD_START + strlen(l:keyword) + 1)
+                let l:keyword = strpart(line, l:keyword_start, l:pos - l:keyword_start)
+                let l:description = strpart(line, l:keyword_start + strlen(l:keyword) + 1)
             else
-                let l:keyword = strpart(line, s:SNIP_KEYWORD_START)
+                let l:keyword = strpart(line, l:keyword_start)
                 let l:description = ''
             endif
 
@@ -137,6 +167,9 @@ function! s:ParseSnippetFile(file)
         endif
 
         " Save
-        let s:snippet_list[l:keyword] = [l:description, l:snippet]
+        let s:snippet_templates[l:keyword] = [l:description, l:snippet]
     endif
 endfunction
+" }}}
+
+" vim: fdm=marker

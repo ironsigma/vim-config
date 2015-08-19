@@ -6,6 +6,7 @@
 inoremap <expr> <silent> <tab>   <sid>AutoComplete('p')
 inoremap <expr> <silent> <s-tab> <sid>AutoComplete('n')
 
+let s:type = 'none'
 
 function! s:AutoComplete(key)
     if pumvisible()
