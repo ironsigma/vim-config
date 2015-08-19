@@ -1,6 +1,5 @@
 " vim filetype=php
-
-call ParseSnippetFile(expand('<sfile>:p'))
+ParseThisSnippetFile
 finish
 
 :snippet <? PHP tag

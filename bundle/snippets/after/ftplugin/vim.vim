@@ -1,6 +1,5 @@
 " vim filetype=vim
-
-call ParseSnippetFile(expand('<sfile>:p'))
+ParseThisSnippetFile
 finish
 
 :snippet function
