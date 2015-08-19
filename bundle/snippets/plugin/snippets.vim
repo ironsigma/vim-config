@@ -1,5 +1,5 @@
 "      Author:  Juan D Frias
-"     Version:  3.0.0
+"     Version:  3.0.1
 " Description:  Use ctrl-space to expand templates
 "
 
@@ -13,6 +13,7 @@ let s:SNIP_TOKEN = ':snippet'
 let s:SNIP_KEYWORD_START = strlen(s:SNIP_TOKEN) + 1
 
 let s:snippet_list = {}
+let s:snippet_files = {}
 
 function! s:ListSnippets(expand)
     for l:key in keys(s:snippet_list)
@@ -71,6 +72,11 @@ function! s:ExpandTemplate()
 endf
 
 function! s:ParseSnippetFile(file)
+    if has_key(s:snippet_files, a:file)
+        return
+    endif
+
+    let s:snippet_files[a:file] = 1
     let l:in_snippet = 0
     let l:is_empty_line = 0
 
