@@ -42,17 +42,14 @@ set mouse=nv                        " Mouse in normal and visual
 set foldcolumn=4                    " Columns for fold display
 syntax on                           " Syntax Highlight on
 
-" set status line
-set statusline=%<%q%F\ %w%r%y[%{&ff}][%{&enc}]%m\%=%l,%v\ \ %p%%\ %L
-
 " Set invisible chars and display them
 set list
 if has('win32')
-    set listchars=tab:��,trail:�
+    set listchars=tab:·,trail:×
 elseif has('mac')
     set listchars=tab:>-,trail:x
 else
-    set listchars=tab:>.,trail:.
+    set listchars=tab:»­,trail:×
 endif
 
 " Used for redirection
@@ -62,8 +59,7 @@ set shellpipe=2>&1\ >
 set grepprg=ack-grep
 
 " Term color scheme
-set background=dark
-colorscheme solarize
+colorscheme xoria_rails256
 
 " Disable bell
 if !has('gui_running')
@@ -127,6 +123,10 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 "--------------------------------------------------------------------------
 " Load bundles
 execute pathogen#infect()
+
+" Airline
+let g:airline_powerline_fonts=1
+let g:airline_detect_crypt=0
 
 " NERDTree Filters
 let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
