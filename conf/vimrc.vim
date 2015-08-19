@@ -127,6 +127,7 @@ execute pathogen#infect()
 " Airline
 let g:airline_powerline_fonts=1
 let g:airline_detect_crypt=0
+let g:airline#extensions#tabline#enabled = 1
 
 " NERDTree Filters
 let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
