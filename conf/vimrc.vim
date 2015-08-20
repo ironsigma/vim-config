@@ -38,6 +38,7 @@ set wildmenu                            " Command line completion
 set scrolloff=1                         " Keep one line while scrolling
 set sidescroll=5                        " 5 chars while side scrolling
 set formatoptions+=j                    " Remove comment when joining lines
+set sessionoptions-=options             " Pathogen runtime fix
 
 "--------------------------------------------------------------------------
 " Vim Only Options
