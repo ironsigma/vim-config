@@ -34,7 +34,6 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set wildmenu                            " Command line completion
 set scrolloff=1                         " Keep one line while scrolling
 set sidescroll=5                        " 5 chars while side scrolling
 set formatoptions+=j                    " Remove comment when joining lines
@@ -60,6 +59,11 @@ set shellpipe=2>&1\ >
 
 " Better grep
 set grepprg=ack-grep
+
+if !has('gui_running')
+    set t_Co=256
+    set background=dark
+endif
 
 " Term color scheme
 colorscheme xoria_rails256
@@ -129,8 +133,7 @@ execute pathogen#infect()
 
 " Airline
 let g:airline_powerline_fonts=1
-let g:airline_detect_crypt=0
-let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='papercolor'
 
 " NERDTree Filters
 let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
