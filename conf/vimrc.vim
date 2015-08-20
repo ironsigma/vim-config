@@ -22,7 +22,7 @@ set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
 set nobackup                            " No backups
 set visualbell                          " Use visual bell
-set viminfo=!,'100,f1,r/tmp,:100,/100   " Vim info options
+set viminfo='100,f1,r/tmp,:100,/100     " Vim info options
 set lazyredraw                          " Don't redraw on macro execute
 set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
@@ -34,6 +34,10 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
+set wildmenu                            " Command line completion
+set scrolloff=1                         " Keep one line while scrolling
+set sidescroll=5                        " 5 chars while side scrolling
+set formatoptions+=j                    " Remove comment when joining lines
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -45,11 +49,9 @@ syntax on                           " Syntax Highlight on
 " Set invisible chars and display them
 set list
 if has('win32')
-    set listchars=tab:·,trail:×
-elseif has('mac')
-    set listchars=tab:>-,trail:x
+    set listchars=tab:·,trail:×,nbsp:␣,extends:→,precedes:←
 else
-    set listchars=tab:»­,trail:×
+    set listchars=tab:⇒·,trail:◇,nbsp:␣,extends:→,precedes:←
 endif
 
 " Used for redirection
