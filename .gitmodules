@@ -6,7 +6,7 @@
 	url = https://github.com/bling/vim-airline.git
 [submodule "bundle/vim-twig"]
 	path = bundle/vim-twig
-	url = https://github.com/lunaru/vim-twig.git
+	url = https://github.com/evidens/vim-twig.git
 [submodule "bundle/phpsyntax"]
 	path = bundle/phpsyntax
 	url = https://github.com/StanAngeloff/php.vim.git
