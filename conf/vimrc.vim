@@ -135,15 +135,6 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 " Load bundles
 execute pathogen#infect()
 
-" EasyTags
-set tags=./tags;
-let g:easytags_dynamic_files = 1
-let g:easytags_async = 1
-let g:easytags_auto_hilight = 0
-let g:easytags_include_members = 1
-let g:easytags_resolve_links = 1
-let g:easytags_autorecurse = 1
-
 " Airline
 let g:airline_powerline_fonts=1
 let g:airline_theme='papercolor'
