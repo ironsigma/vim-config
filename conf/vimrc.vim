@@ -38,6 +38,8 @@ set scrolloff=1                         " Keep one line while scrolling
 set sidescroll=5                        " 5 chars while side scrolling
 set formatoptions+=j                    " Remove comment when joining lines
 set sessionoptions-=options             " Pathogen runtime fix
+set cursorline                          " Show cursor line
+set number                              " Show line numbers
 
 "--------------------------------------------------------------------------
 " Vim Only Options
@@ -67,6 +69,7 @@ endif
 
 " Term color scheme
 colorscheme xoria_rails256
+hi CursorLine cterm=None ctermbg=235
 
 " Disable bell
 if !has('gui_running')
@@ -104,7 +107,8 @@ nnoremap <silent> <f1> :NERDTreeToggle<cr>
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
 
-" F3 -
+" F3 - Toggle Tagbar
+nnoremap <silent> <f3> :TagbarToggle<cr>
 
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
@@ -130,6 +134,15 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 "--------------------------------------------------------------------------
 " Load bundles
 execute pathogen#infect()
+
+" EasyTags
+set tags=./tags;
+let g:easytags_dynamic_files = 1
+let g:easytags_async = 1
+let g:easytags_auto_hilight = 0
+let g:easytags_include_members = 1
+let g:easytags_resolve_links = 1
+let g:easytags_autorecurse = 1
 
 " Airline
 let g:airline_powerline_fonts=1
