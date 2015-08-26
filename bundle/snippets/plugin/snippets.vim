@@ -1,13 +1,12 @@
 "      Author:  Juan D Frias
-"     Version:  3.0.1
+"     Version:  3.0.2
 " Description:  Use ctrl-space to expand templates
 "
 
 inoremap <c-space> <c-r>=<sid>ExpandTemplate()<cr>
 inoremap <c-@> <c-r>=<sid>ExpandTemplate()<cr>
 
-command! -nargs=0 -bang ListSnippets call <sid>ListSnippets('<bang>')
-command! -nargs=0 -complete=file ParseThisSnippetFile call <sid>ParseSnippetFile(expand('<sfile>:p'))
+command! -nargs=0 ParseThisSnippetFile call <sid>ParseSnippetFile(expand('<sfile>:p'))
 
 let s:SNIP_TOKEN = ':snippet'
 let s:SNIP_ALIAS_TOKEN = ':alias'
