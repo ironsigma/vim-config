@@ -2,8 +2,19 @@
 ParseThisSnippetFile
 finish
 
-:snippet function
-function! s:<@>
+:snippet class
+let s:<@>MyClass = {}
+
+function s:MyClass.new() dict
+    let this = copy(self)
+    return this
+endfunction
+
+:snippet log
+echo '['. <@> .']'
+
+:snippet fun
+function<@>
 endfunction
 
 :snippet if
@@ -11,5 +22,5 @@ if <@>
 endif
 
 :snippet for
-for <@> in
+for <@>
 endfor
