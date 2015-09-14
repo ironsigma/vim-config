@@ -1,6 +1,6 @@
 " Package Explorer
 " Author: Juan D Frias
-" Version: 4.2
+" Version: 4.3
 " Copyright: Sep 2015, All Rights Reserved
 
 " Options: {{{1
@@ -368,8 +368,8 @@ endfunction
 
 " Method: handleOpenNode(expand, split) {{{2
 "   expand: 1: only open, 0: only close, -1: toggle, 2: no change
-"   split:  1: split, 0: no split, -1: no open
-function s:PackageView.handleOpenNode(expand, split)
+"   open:  noopen, edit, split, tab
+function s:PackageView.handleOpenNode(expand, open)
     let selectedNode = self._getSelectedNode()
     if empty(selectedNode)
         return
@@ -377,7 +377,7 @@ function s:PackageView.handleOpenNode(expand, split)
 
     " Folder/Package
     if selectedNode.isFolder()
-        if a:expand == 2
+        if a:expand == 'noexpcollapse'
             return
         endif
         if !self._expandCollapseNode(selectedNode, a:expand)
@@ -388,7 +388,7 @@ function s:PackageView.handleOpenNode(expand, split)
         call self._popCursorPos()
 
         " if only expanding
-        if a:expand == 1
+        if a:expand == 'expand'
             let movedown = 0
             " if file children, move down
             if selectedNode.fileCount() != 0
@@ -412,10 +412,14 @@ function s:PackageView.handleOpenNode(expand, split)
     endif
 
     " file
-    if a:split != -1
+    if a:open != 'noopen'
         let file = fnameescape(selectedNode.getAbsolutePath())
-        if a:split
+        if a:open == 'split'
             execute 'wincmd p | split '. file
+        elseif a:open == 'vsplit'
+            execute 'wincmd p | vsplit '. file
+        elseif a:open == 'tab'
+            execute 'tabnew '. file
         else
             execute 'wincmd p | edit '. file
         endif
@@ -807,10 +811,12 @@ function s:PackageView._updateView() dict
     setlocal nomodifiable
 
     nnoremap <silent> <buffer> q :sil! bwipe!<cr>
-    nnoremap <silent> <buffer> o :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', -1, 0)<cr>
+    nnoremap <silent> <buffer> o :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'toggle', 'edit')<cr>
+    nnoremap <silent> <buffer> i :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'split')<cr>
+    nnoremap <silent> <buffer> v :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'vsplit')<cr>
+    nnoremap <silent> <buffer> t :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'tab')<cr>
+    nnoremap <silent> <buffer> l :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'expand', 'noopen')<cr>
     nnoremap <silent> <buffer> O :call <sid>call_dict_method('s:PackageView', 'handleExpandCollapseNodeRecursive')<cr>
-    nnoremap <silent> <buffer> i :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 2, 1)<cr>
-    nnoremap <silent> <buffer> l :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 1, -1)<cr>
     nnoremap <silent> <buffer> h :call <sid>call_dict_method('s:PackageView', 'handleCollapseNode')<cr>
     nnoremap <silent> <buffer> D :call <sid>call_dict_method('s:PackageView', 'handleDeleteNode')<cr>
     nnoremap <silent> <buffer> a :call <sid>call_dict_method('s:PackageView', 'handleAddNode')<cr>
@@ -838,7 +844,9 @@ function s:PackageView._addHelpText() dict
     call self._addEntry('help', 'h - Close folder', {})
     call self._addEntry('help', 'o - Open/Close folder, open file', {})
     call self._addEntry('help', 'O - Open/Close folder recursivly', {})
-    call self._addEntry('help', 'i - Open file (split)', {})
+    call self._addEntry('help', 'i - Open file (horizontal split)', {})
+    call self._addEntry('help', 'v - Open file (vert split)', {})
+    call self._addEntry('help', 't - Open file (new tab)', {})
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', 'D - Delete file/folder', {})
     call self._addEntry('help', 'a - Add file/folder', {})
@@ -876,14 +884,11 @@ endfunction
 
 " Method: _expandCollapseNode(node, expand) {{{2
 function s:PackageView._expandCollapseNode(node, expand) dict
-    if a:expand == -1
-        let a:node.expanded = !a:node.expanded
-        return 1
-    endif
-    if a:node.expanded == a:expand
+    if (a:node.expanded == 1 && a:expand == 'expand')
+        \ || (a:node.expanded == 0 && a:expand == 'collapse')
         return 0
     endif
-    let a:node.expanded = a:expand
+    let a:node.expanded = !a:node.expanded
     return 1
 endfunction
 
