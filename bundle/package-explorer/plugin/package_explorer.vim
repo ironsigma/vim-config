@@ -1,6 +1,6 @@
 " Package Explorer
 " Author: Juan D Frias
-" Version: 4.1.1
+" Version: 4.2
 " Copyright: Sep 2015, All Rights Reserved
 
 " Options: {{{1
@@ -199,11 +199,11 @@ function s:FileSystemNode.refresh(...)
         return
     endif
     call self._populate(1)
-    if a:0 == 0
+    if a:0 == 0 || !a:1
         return
     endif
     for folder in values(self.__folders)
-        call folder.refresh(a:recursive)
+        call folder.refresh(a:1)
     endfor
 endfunction
 
@@ -763,6 +763,15 @@ function s:PackageView.handleRemovePathFromSource() dict
     echo 'Path "'. path .'", is not a source path.'
 endfunction
 
+
+" Method: handleRefreshNode(recursive) {{{2
+function s:PackageView.handleRefreshNode(recursive) dict
+    call self.__rootNode.refresh(a:recursive)
+    call self._pushCursorPos()
+    call self._updateView()
+    call self._popCursorPos()
+endfunction
+
 " Method: _updateView() {{{2
 function s:PackageView._updateView() dict
     let self.__nodeLookup = []
@@ -813,7 +822,9 @@ function s:PackageView._updateView() dict
     nnoremap <silent> <buffer> S :call <sid>call_dict_method('s:PackageView', 'handleRemovePathFromSource')<cr>
     nnoremap <silent> <buffer> . :call <sid>call_dict_method('s:PackageView', 'handleToggleHidden')<cr>
     nnoremap <silent> <buffer> ? :call <sid>call_dict_method('s:PackageView', 'handleToggleShowHelp')<cr>
-    nnoremap <silent> <buffer> r :call <sid>call_dict_method('s:PackageView', 'handleRenameNode')<cr>
+    nnoremap <silent> <buffer> m :call <sid>call_dict_method('s:PackageView', 'handleRenameNode')<cr>
+    nnoremap <silent> <buffer> r :call <sid>call_dict_method('s:PackageView', 'handleRefreshNode', 0)<cr>
+    nnoremap <silent> <buffer> R :call <sid>call_dict_method('s:PackageView', 'handleRefreshNode', 1)<cr>
 endfunction
 
 " Method: _addHelpText() {{{2
@@ -831,10 +842,12 @@ function s:PackageView._addHelpText() dict
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', 'D - Delete file/folder', {})
     call self._addEntry('help', 'a - Add file/folder', {})
-    call self._addEntry('help', 'r - Rename/Move file/folder', {})
+    call self._addEntry('help', 'm - Rename/Move file/folder', {})
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', 'C - Change root', {})
     call self._addEntry('help', 'U - Up a root level', {})
+    call self._addEntry('help', 'r - refresh files/folder', {})
+    call self._addEntry('help', 'R - refresh recursivly', {})
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', 's - add path as source', {})
     call self._addEntry('help', 'S - remove path from source', {})
