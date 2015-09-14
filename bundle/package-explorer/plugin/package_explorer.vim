@@ -1,6 +1,6 @@
 " Package Explorer
 " Author: Juan D Frias
-" Version: 4.1
+" Version: 4.1.1
 " Copyright: Sep 2015, All Rights Reserved
 
 " Options: {{{1
@@ -983,10 +983,9 @@ function s:PackageView._displayPackage(path_start, node) dict
     let indent = '  '
     let nodePath = a:node.getRelativePath(self.__rootNode)
     let package = strpart(nodePath, a:path_start)
-    let package = strpart(package, 0, strlen(package) - 1)
 
     if package != ''
-        let pkg = substitute(package, '\v(.)[^/]*/', '\1.', 'g')
+        let pkg = self._compressPackageName(package)
         let icon = a:node.expanded ? '▼ ' : '▶ '
         call self._addEntry('package', indent . icon . pkg, a:node)
         let indent .= '  '
@@ -1001,6 +1000,20 @@ function s:PackageView._displayPackage(path_start, node) dict
     endfor
 endfunction
 
+" Method: _compressPackageName(name) {{{2
+function s:PackageView._compressPackageName(name) dict
+    let max_len = g:pkgexpWindowWidth - 5
+    let packages = split(a:name, '/')
+    let numpkgs = len(packages) - 1
+    let compressed = join(packages, '.')
+    let index = 0
+    while strlen(compressed) > max_len && index < numpkgs
+        let packages[index] = packages[index][0]
+        let compressed = join(packages, '.')
+        let index += 1
+    endwhile
+    return compressed
+endfunction
 " Method: _isHiddenFile(filename) {{{2
 function s:PackageView._isHiddenFile(filename) dict
     if self.showHidden
