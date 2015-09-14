@@ -101,8 +101,8 @@ imap <MiddleMouse> <Nop>
 noremap k gk
 noremap j gj
 
-" F1 - NERDTree
-nnoremap <silent> <f1> :NERDTreeToggle<cr>
+" F1 - Package Explorer
+nnoremap <silent> <f1> :PackageExplorerToggle<cr>
 
 " F2 - MRU plugin
 nnoremap <silent> <f2> :MRU<cr>
