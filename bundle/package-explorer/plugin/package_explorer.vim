@@ -1,6 +1,6 @@
 " Package Explorer
 " Author: Juan D Frias
-" Version: 4.0
+" Version: 4.1
 " Copyright: Sep 2015, All Rights Reserved
 
 " Options: {{{1
@@ -422,6 +422,19 @@ function s:PackageView.handleOpenNode(expand, split)
     endif
 endfunction
 
+" Method: handleExpandCollapseNodeRecursive() {{{2
+function s:PackageView.handleExpandCollapseNodeRecursive() dict
+    let selectedNode = self._getSelectedNode()
+    if empty(selectedNode) || selectedNode.isFile()
+        return
+    endif
+
+    call self._expandCollapseNodeRecursive(selectedNode, !selectedNode.expanded)
+    call self._pushCursorPos()
+    call self._updateView()
+    call self._popCursorPos()
+endfunction
+
 " Method: handleCollapseNode() {{{2
 function s:PackageView.handleCollapseNode()
     let curr_line = line('.')
@@ -679,11 +692,15 @@ function s:PackageView.handleToggleHidden() dict
     call self._updateView()
     call self._popCursorPos()
 endfunction
-" Method: handleShowInfo() {{{2
-function s:PackageView.handleShowInfo() dict
+" Method: handleShowInfo(full) {{{2
+function s:PackageView.handleShowInfo(full) dict
     let selectedNode = self._getSelectedNode()
     if !empty(selectedNode)
-        echo selectedNode.getAbsolutePath()
+        if a:full
+            echo selectedNode.getAbsolutePath()
+        else
+            echo selectedNode.getRelativePath(self.__rootNode)
+        endif
     endif
 endfunction
 
@@ -782,6 +799,7 @@ function s:PackageView._updateView() dict
 
     nnoremap <silent> <buffer> q :sil! bwipe!<cr>
     nnoremap <silent> <buffer> o :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', -1, 0)<cr>
+    nnoremap <silent> <buffer> O :call <sid>call_dict_method('s:PackageView', 'handleExpandCollapseNodeRecursive')<cr>
     nnoremap <silent> <buffer> i :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 2, 1)<cr>
     nnoremap <silent> <buffer> l :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 1, -1)<cr>
     nnoremap <silent> <buffer> h :call <sid>call_dict_method('s:PackageView', 'handleCollapseNode')<cr>
@@ -789,7 +807,8 @@ function s:PackageView._updateView() dict
     nnoremap <silent> <buffer> a :call <sid>call_dict_method('s:PackageView', 'handleAddNode')<cr>
     nnoremap <silent> <buffer> C :call <sid>call_dict_method('s:PackageView', 'handleChangeRoot', 'selected')<cr>
     nnoremap <silent> <buffer> U :call <sid>call_dict_method('s:PackageView', 'handleChangeRoot', 'root-parent')<cr>
-    nnoremap <silent> <buffer> p :call <sid>call_dict_method('s:PackageView', 'handleShowInfo')<cr>
+    nnoremap <silent> <buffer> p :call <sid>call_dict_method('s:PackageView', 'handleShowInfo', 0)<cr>
+    nnoremap <silent> <buffer> P :call <sid>call_dict_method('s:PackageView', 'handleShowInfo', 1)<cr>
     nnoremap <silent> <buffer> s :call <sid>call_dict_method('s:PackageView', 'handleAddPathAsSource')<cr>
     nnoremap <silent> <buffer> S :call <sid>call_dict_method('s:PackageView', 'handleRemovePathFromSource')<cr>
     nnoremap <silent> <buffer> . :call <sid>call_dict_method('s:PackageView', 'handleToggleHidden')<cr>
@@ -807,6 +826,7 @@ function s:PackageView._addHelpText() dict
     call self._addEntry('help', 'l - Open folder', {})
     call self._addEntry('help', 'h - Close folder', {})
     call self._addEntry('help', 'o - Open/Close folder, open file', {})
+    call self._addEntry('help', 'O - Open/Close folder recursivly', {})
     call self._addEntry('help', 'i - Open file (split)', {})
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', 'D - Delete file/folder', {})
@@ -819,7 +839,8 @@ function s:PackageView._addHelpText() dict
     call self._addEntry('help', 's - add path as source', {})
     call self._addEntry('help', 'S - remove path from source', {})
     call self._addEntry('help', ' ', {})
-    call self._addEntry('help', 'p - Print selected path', {})
+    call self._addEntry('help', 'p - Print selected relative path', {})
+    call self._addEntry('help', 'P - Print selected full path', {})
     call self._addEntry('help', '. - Toggle hidden files ['. (self.showHidden ? 'on' : 'off') .']', {})
     call self._addEntry('help', ' ', {})
     call self._addEntry('help', '? - Toggle help', {})
@@ -841,7 +862,7 @@ function s:PackageView._addCurrentPath() dict
 endfunction
 
 " Method: _expandCollapseNode(node, expand) {{{2
-function s:PackageView._expandCollapseNode(node, expand)
+function s:PackageView._expandCollapseNode(node, expand) dict
     if a:expand == -1
         let a:node.expanded = !a:node.expanded
         return 1
@@ -851,6 +872,14 @@ function s:PackageView._expandCollapseNode(node, expand)
     endif
     let a:node.expanded = a:expand
     return 1
+endfunction
+
+" Method: _expandCollapseNodeRecursive(node, expand) {{{2
+function s:PackageView._expandCollapseNodeRecursive(node, expand) dict
+    let a:node.expanded = a:expand == 1
+    for folder in a:node.getFolders()
+        call self._expandCollapseNodeRecursive(folder, a:expand)
+    endfor
 endfunction
 
 " Method: _getSelectedNode([lineno]) : FileSystemNode {{{2
