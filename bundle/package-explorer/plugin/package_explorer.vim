@@ -1002,7 +1002,14 @@ function s:PackageView._displayPackage(path_start, node) dict
         call self._displayPackage(a:path_start, folderNode)
     endfor
 
-    if a:node.fileCount() == 0 && (
+    let files = []
+    for fileNode in a:node.getFiles()
+        if !self._isHiddenFile(fileNode.name)
+            call add(files, fileNode)
+        endif
+    endfor
+
+    if len(files) == 0 && (
         \ a:node.folderCount() != 0 ||
         \ a:node.folderCount() == 0 && !self.showHidden
     \ )
@@ -1029,10 +1036,8 @@ function s:PackageView._displayPackage(path_start, node) dict
         return
     endif
 
-    for fileNode in a:node.getFiles()
-        if !self._isHiddenFile(fileNode.name)
-            call self._addEntry('file', indent . fileNode.name, fileNode)
-        endif
+    for fileNode in files
+        call self._addEntry('file', indent . fileNode.name, fileNode)
     endfor
 endfunction
 
