@@ -874,6 +874,10 @@ endfunction
 
 " Method: _addCurrentPath() {{{2
 function s:PackageView._addCurrentPath() dict
+    if self.__rootNode == self.__fileSystemRootNode
+        call self._addEntry('path', '/', self.__rootNode)
+        return
+    endif
     let path = self.__rootNode.getAbsolutePath()
     let path = strpart(path, 0, strlen(path) - 1)
     if strlen(path) > g:pkgexpWindowWidth - 2
@@ -998,12 +1002,20 @@ function s:PackageView._displayPackage(path_start, node) dict
         call self._displayPackage(a:path_start, folderNode)
     endfor
 
-    if a:node.fileCount() == 0
+    if a:node.fileCount() == 0 && (
+        \ a:node.folderCount() != 0 ||
+        \ a:node.folderCount() == 0 && !self.showHidden
+    \ )
         return
     endif
 
     let indent = '  '
     let nodePath = a:node.getRelativePath(self.__rootNode)
+
+    if self._isHiddenFolder(nodePath . a:node.name . '/', a:node.name)
+        return
+    endif
+
     let package = strpart(nodePath, a:path_start)
 
     if package != ''
@@ -1018,7 +1030,9 @@ function s:PackageView._displayPackage(path_start, node) dict
     endif
 
     for fileNode in a:node.getFiles()
-        call self._addEntry('file', indent . fileNode.name, fileNode)
+        if !self._isHiddenFile(fileNode.name)
+            call self._addEntry('file', indent . fileNode.name, fileNode)
+        endif
     endfor
 endfunction
 
