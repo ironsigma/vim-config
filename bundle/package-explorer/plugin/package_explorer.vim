@@ -770,7 +770,11 @@ endfunction
 
 " Method: handleRefreshNode(recursive) {{{2
 function s:PackageView.handleRefreshNode(recursive) dict
-    call self.__rootNode.refresh(a:recursive)
+    let selectedNode = self._getSelectedNode()
+    if empty(selectedNode)
+        return
+    endif
+    call selectedNode.refresh(a:recursive)
     call self._pushCursorPos()
     call self._updateView()
     call self._popCursorPos()
