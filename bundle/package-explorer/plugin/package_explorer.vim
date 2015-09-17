@@ -728,10 +728,10 @@ function s:PackageView.handleShowInfo(full) dict
     let type = getftype(full_path)
 
     let ownergroup = ''
-    if has('unix') || has('win32unix')
-        let ownergroup = system('stat --printf "%U:%G " ' . shellescape(full_path))
-    elseif has('macunix')
+    if has('macunix')
         let ownergroup = split(system('stat -f "%U:%G " ' . shellescape(full_path)), "\n")[0]
+    elseif has('unix') || has('win32unix')
+        let ownergroup = system('stat --printf "%U:%G " ' . shellescape(full_path))
     endif
 
     if type == 'dir'
