@@ -368,7 +368,7 @@ endfunction
 
 " Method: handleOpenNode(expand, split) {{{2
 "   expand: 1: only open, 0: only close, -1: toggle, 2: no change
-"   open:  noopen, edit, split, tab
+"   open:  noopen, edit, split, splitbelow, tab
 function s:PackageView.handleOpenNode(expand, open)
     let selectedNode = self._getSelectedNode()
     if empty(selectedNode)
@@ -416,6 +416,8 @@ function s:PackageView.handleOpenNode(expand, open)
         let file = fnameescape(selectedNode.getAbsolutePath())
         if a:open == 'split'
             execute 'wincmd p | split '. file
+        elseif a:open == 'splitbelow'
+            execute 'wincmd p | bel split '. file
         elseif a:open == 'vsplit'
             execute 'wincmd p | vsplit '. file
         elseif a:open == 'tab'
@@ -817,6 +819,7 @@ function s:PackageView._updateView() dict
     nnoremap <silent> <buffer> q :sil! bwipe!<cr>
     nnoremap <silent> <buffer> o :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'toggle', 'edit')<cr>
     nnoremap <silent> <buffer> i :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'split')<cr>
+    nnoremap <silent> <buffer> I :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'splitbelow')<cr>
     nnoremap <silent> <buffer> v :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'vsplit')<cr>
     nnoremap <silent> <buffer> t :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'noexpcollapse', 'tab')<cr>
     nnoremap <silent> <buffer> l :call <sid>call_dict_method('s:PackageView', 'handleOpenNode', 'expand', 'noopen')<cr>
@@ -849,6 +852,7 @@ function s:PackageView._addHelpText() dict
     call self._addEntry('help', 'o - Open/Close folder, open file', {})
     call self._addEntry('help', 'O - Open/Close folder recursivly', {})
     call self._addEntry('help', 'i - Open file (horizontal split)', {})
+    call self._addEntry('help', 'I - Open file (horizontal split below)', {})
     call self._addEntry('help', 'v - Open file (vert split)', {})
     call self._addEntry('help', 't - Open file (new tab)', {})
     call self._addEntry('help', ' ', {})
