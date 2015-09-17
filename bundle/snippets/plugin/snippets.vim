@@ -90,11 +90,12 @@ function! s:SortKeywords(a, b) " {{{1
 endfunction
 
 function! s:ParseSnippetFile(file) " {{{1
-    if has_key(s:snippet_files, a:file)
+    let mtime = getftime(a:file)
+    if has_key(s:snippet_files, a:file) && s:snippet_files[a:file] == mtime
         return
     endif
 
-    let s:snippet_files[a:file] = 1
+    let s:snippet_files[a:file] = mtime
     let l:in_snippet = 0
     let l:is_empty_line = 0
 
