@@ -701,13 +701,51 @@ endfunction
 " Method: handleShowInfo(full) {{{2
 function s:PackageView.handleShowInfo(full) dict
     let selectedNode = self._getSelectedNode()
-    if !empty(selectedNode)
-        if a:full
-            echo selectedNode.getAbsolutePath()
+    if empty(selectedNode)
+        return
+    endif
+
+    let full_path = selectedNode.getAbsolutePath()
+    if a:full
+        let path = full_path
+    else
+        let path = selectedNode.getRelativePath(self.__rootNode)
+    endif
+
+    let file_time = getftime(full_path)
+    let delta_time = localtime() - file_time
+    if delta_time > 31536000 " outside the current year
+        let time = strftime('%Y %b %d %H:%M', file_time)
+    elseif delta_time > 86400 " outside today
+        let time = strftime('%b %d %H:%M', file_time)
+    else " within today
+        let time = strftime('%H:%M', file_time)
+    endif
+
+    let type = getftype(full_path)
+
+    if type == 'dir'
+        let size = ''
+    else
+        let size = getfsize(full_path)
+        if size == -1
+            let size = 'unknown '
+        elseif size == -2
+            let size = 'really big '
         else
-            echo selectedNode.getRelativePath(self.__rootNode)
+            if size > 1000000000
+                let size = printf('%.2fG ', size / 1000000000.0)
+            elseif size > 1000000
+                let size = printf('%.2fM ', size / 1000000.0)
+            elseif size > 1000
+                let size = printf('%.2fK ', size / 1000.0)
+            else
+                let size = size . ' '
+            endif
         endif
     endif
+
+    echo printf('%s: %s%s %s %s', type, size, getfperm(full_path), time, path)
 endfunction
 
 " Method: handleToggleShowHelp() {{{2
