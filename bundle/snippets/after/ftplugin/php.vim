@@ -7,11 +7,26 @@ finish
 <@>
 ?>
 
+:snippet e Inline short tags
+<?= <@> ?>
+
 :snippet echo Inline echo
 <?php echo <@> ?>
 
 :snippet if
 if (<@>) {
+}
+
+:snippet priv Private function
+private function <@>() {
+}
+
+:snippet pub Public function
+public function <@>() {
+}
+
+:snippet stat Static public function
+public static function <@>() {
 }
 
 :snippet class
