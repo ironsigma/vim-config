@@ -709,7 +709,10 @@ function s:PackageView.handleShowInfo(full) dict
     if a:full
         let path = full_path
     else
-        let path = selectedNode.getRelativePath(self.__rootNode)
+        let path = strpart(selectedNode.getRelativePath(self.__rootNode), 1)
+        if path == ''
+            let path = selectedNode.name . '/'
+        endif
     endif
 
     let file_time = getftime(full_path)
@@ -723,6 +726,13 @@ function s:PackageView.handleShowInfo(full) dict
     endif
 
     let type = getftype(full_path)
+
+    let ownergroup = ''
+    if has('unix') || has('win32unix')
+        let ownergroup = system('stat --printf "%U:%G " ' . shellescape(full_path))
+    elseif has('macunix')
+        let ownergroup = split(system('stat -f "%U:%G " ' . shellescape(full_path)), "\n")[0]
+    endif
 
     if type == 'dir'
         let size = ''
@@ -745,7 +755,7 @@ function s:PackageView.handleShowInfo(full) dict
         endif
     endif
 
-    echo printf('%s: %s%s %s %s', type, size, getfperm(full_path), time, path)
+    echo printf('%s: %s%s %s%s %s', type, size, getfperm(full_path), ownergroup, time, path)
 endfunction
 
 " Method: handleToggleShowHelp() {{{2
