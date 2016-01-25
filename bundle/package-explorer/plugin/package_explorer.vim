@@ -18,7 +18,7 @@
 "   match starts:   /.*/   - hide folder starting with dot at root level
 "
 if !exists('g:pkgexpHidden')
-    let g:pkgexpHidden = ['.*/', '/target/', '*.swp', '*~', '.*']
+    let g:pkgexpHidden = ['.*/', '/target/', '*.pyc', '*.swp', '*~', '.*']
 endif
 
 " Window width
