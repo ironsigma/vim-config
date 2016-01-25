@@ -8,7 +8,6 @@
 "--------------------------------------------------------------------------
 set nocompatible                        " Use vim addvance settings
 set autoindent                          " Auto-indent on
-set tabstop=8                           " Use 8 spaces for tabs
 set shiftwidth=4                        " 4 spaces for autoindent
 set softtabstop=4                       " Use soft tabs
 set expandtab                           " Use spaces instead of tabs
@@ -20,11 +19,9 @@ set backspace=indent,eol,start          " Backspace over everyting
 set history=100                         " Save at most XX commands
 set showmatch                           " Display matching paren
 set matchtime=2                         " Be breif when displaying the match
-set nobackup                            " No backups
 set visualbell                          " Use visual bell
 set viminfo='100,f1,r/tmp,:100,/100     " Vim info options
 set lazyredraw                          " Don't redraw on macro execute
-set noerrorbells                        " Don't make noise
 set autoread                            " Re-read if modified
 set diffopt=vertical,filler,context:3   " Diff options
 set nostartofline                       " Keep cursor column when moving
@@ -34,8 +31,6 @@ set fileformat=unix                     " Default to new unix format files
 set keywordprg=                         " Set K to internal help
 set report=0                            " Report all line changes
 set shortmess=aO                        " Short messages
-set scrolloff=1                         " Keep one line while scrolling
-set sidescroll=5                        " 5 chars while side scrolling
 set formatoptions+=j                    " Remove comment when joining lines
 set sessionoptions-=options             " Pathogen runtime fix
 set cursorline                          " Show cursor line
@@ -113,7 +108,8 @@ nnoremap <silent> <f3> :TagbarToggle<cr>
 " F4 - Toggle highlight search
 nnoremap <silent> <f4> :nohlsearch<cr>
 
-" F5 -
+" F5 - Sync syntax highlight
+nnoremap <silent> <f5> :syntax sync fromstart<cr>
 
 " F6 -
 
