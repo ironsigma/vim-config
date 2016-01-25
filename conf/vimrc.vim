@@ -189,6 +189,11 @@ let python_print_as_function = 1
 " Enable file type detection.
 filetype plugin indent on
 
+autocmd BufRead *
+\ if search('^\t', 'cnw', 0, 200) != 0 |
+\  execute "setl ts=4 noexpandtab" |
+\ endif
+
 " switch to current dir
 autocmd BufEnter * :sil! lcd %:p:h
 
