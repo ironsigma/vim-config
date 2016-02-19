@@ -1,5 +1,5 @@
 "      Author:  Juan D Frias
-"     Version:  3.0.2
+"     Version:  3.0.3
 " Description:  Use ctrl-space to expand templates
 "
 
@@ -76,13 +76,13 @@ function! s:ExpandTemplate() " {{{1
 
     " if there a cursor token, move back to it
     if stridx(s:snippet_templates[l:keyword][1], '<@>') == -1
-        let l:move_cursor = ''
+        let l:move_cursor = 'a'
     else
         let l:move_cursor = "\<esc>?<@>\<cr>cf>"
     endif
 
-    return "\<esc>0". l:col_move .'d'. strlen(keyword) .'l'.
-            \ l:insert . s:snippet_templates[l:keyword][1] . l:move_cursor
+    return "\<esc>:set paste\<cr>0". l:col_move .'d'. strlen(keyword) .'l'.
+            \ l:insert . s:snippet_templates[l:keyword][1] . "\<esc>:set nopaste\<cr>" . l:move_cursor
 endf
 
 function! s:SortKeywords(a, b) " {{{1
