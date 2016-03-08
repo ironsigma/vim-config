@@ -131,6 +131,11 @@ nnoremap <silent> <f9> :echo "Running make..."<cr>:sil! make<cr>:cw<cr>:redraw!<
 " Load bundles
 execute pathogen#infect()
 
+
+" Python folding
+let g:SimpylFold_docstring_preview = 1
+let g:SimpylFold_fold_docstring = 0
+
 " Airline
 let g:airline_powerline_fonts=1
 let g:airline_theme='papercolor'
@@ -140,12 +145,6 @@ let g:NERDTreeIgnore = ['\~$', '\.pyc$', '^__pycache__$']
 
 " Don't load matchparen
 let g:loaded_matchparen = 1
-
-" Utilsnip
-let g:UltiSnipsExpandTrigger       = "<c-j>"
-let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-p>"
-let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file
 
 " Settings for MRU plugin
 let MRU_Max_Entries = 50
