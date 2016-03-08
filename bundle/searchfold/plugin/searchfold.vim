@@ -53,11 +53,11 @@
 "                   <cr> - quit restore folds and keep cursor at current
 "                          position.
 "
-"                   j    - Down/Next match.
-"                   k    - Up/Previous match.
+"                   n     - Down/Next match.
+"                   N     - Up/Previous match.
 "
-"                   J    - Scroll Down.
-"                   K    - Scroll Up.
+"                   j    - Scroll Down.
+"                   k    - Scroll Up.
 "
 "                   m    - More context
 "                   l    - Less context
@@ -338,7 +338,7 @@ function! s:SearchFold()
 
     " Display status line
     echohl Search
-    echo "<cr>-Quit(here) q-Quit(prev), e-Exit(keep folds) jk-Next/Prev JK-Up/Down ml-More/Less +-(inc/dec)"
+    echo "<cr>-Quit(here) q-Quit(prev), e-Exit(keep folds) j/k-Scroll up/dn n/k-Next/Prev ml-More/Less"
     echohl NONE
 
     " Process keystrokes {{{2
@@ -380,25 +380,25 @@ function! s:SearchFold()
         endif
 
         " Down / find next.
-        if nr2char(l:op) == 'j'
+        if nr2char(l:op) == 'n'
             sil! exe "normal $n"
             call s:HighlightLine()
         endif
 
         " Scroll Up
-        if nr2char(l:op) == "J"
+        if nr2char(l:op) == "j"
             sil! exe "normal 5\<c-e>"
             redraw
         endif
 
         " Up / find previous.
-        if nr2char(l:op) == 'k'
+        if nr2char(l:op) == 'N'
             sil! exe "normal 0N"
             call s:HighlightLine()
         endif
 
         " Scroll Down.
-        if nr2char(l:op) == "K"
+        if nr2char(l:op) == "k"
             sil! exe "normal 5\<c-y>"
             redraw
         endif
