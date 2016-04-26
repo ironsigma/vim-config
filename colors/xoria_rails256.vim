@@ -47,6 +47,7 @@ highlight rubyStringDelimiter       ctermfg=107
 highlight xmlEndTag                 ctermfg=179
 highlight xmlTag                    ctermfg=179
 highlight xmlTagName                ctermfg=179
+highlight SignColumn                ctermbg=236
 hi link   htmlTag       xmlTag
 hi link   htmlTagName   xmlTagName
 hi link   htmlEndTag    xmlEndTag
