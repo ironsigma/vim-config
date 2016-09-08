@@ -19,7 +19,7 @@ augroup filetypedetect
     autocmd! FileType yaml      setlocal sts=4 sw=4
     autocmd! FileType php       setlocal isk-=58 foldlevel=1
     autocmd! FileType java      setlocal fdm=syntax
-    autocmd! FileType markdown  setlocal tw=80 conceallevel=2
+    autocmd! FileType markdown  setlocal tw=80
 
 augroup END
 
