@@ -11,7 +11,7 @@ augroup filetypedetect
     " extensions
     autocmd! BufRead,BufNewFile *.mkd        setfiletype markdown
     autocmd! BufRead,BufNewFile *.md         setfiletype markdown
-
+    autocmd! BufRead,BufNewFile *.json       setfiletype json
     autocmd! BufRead,BufNewFile *.twig       setfiletype twig
     autocmd! BufRead,BufNewFile *.php        setfiletype php.html.javascript
 
