@@ -116,7 +116,11 @@ nnoremap <silent> <c-f3> :call ChangeFontSize(1)<cr>
 " === CtrlP
 let g:ctrlp_by_filename = 1
 let g:ctrlp_match_window = 'order:ttb'
-let g:ctrlp_user_command = 'fd . %s -t f -c never'
+if executable('fd')
+    let g:ctrlp_user_command = 'fd . %s -t f -c never'
+else
+    let g:ctrlp_user_command = 'find %s -type f'
+endif
 
 
 " === Disable match parent hilighting
