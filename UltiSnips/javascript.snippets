@@ -1,0 +1,50 @@
+snippet rdy "Document ready block" bA
+$(document).ready(function() {
+	$0
+})
+endsnippet
+
+snippet cl "Console log" bA
+console.log($1)
+endsnippet
+
+snippet exp "Replace export" bA
+module.exports = ${1:value}
+endsnippet
+
+snippet pexp "Property export" bA
+module.exports.${1:prop} = ${2:value}
+endsnippet
+
+snippet req "Require module" bA
+const ${1:Module} = require('${1/(.*)/\L$1\E/}')
+endsnippet
+
+snippet func "Function" bA
+function ${1:func_name}(${2:args}) {
+	$0
+}
+endsnippet
+
+snippet f "Short no-name function" b
+(${1:args}) => ${2:rval}
+endsnippet
+
+snippet fn "Long no-name function" b
+(${1:args}) => {
+	$0
+}
+endsnippet
+
+snippet if
+if (${1:cond}) {
+	$0
+}
+endsnippet
+
+snippet else
+else {
+	$0
+}
+endsnippet
+

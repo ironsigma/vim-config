@@ -1,0 +1,30 @@
+snippet main "Main"
+if __name__ == '__main__':
+	$0
+endsnippet
+
+snippet class "Class"
+class ${1:MyClass}(object):
+	"""$1.
+	"""
+
+	def __init__(self):
+	"""Create a new $1.
+	"""
+		${2:pass}
+endsnippet
+
+snippet d "Function"
+def ${1:function}(${2:args}):
+	"""Function does something.
+	"""
+	${3:pass}
+endsnippet
+
+snippet def "Class method"
+def ${1:method}(self, ${2:args}):
+	"""Method Does something.
+	"""
+	${3:pass}
+endsnippet
+
