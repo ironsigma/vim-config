@@ -1,0 +1,174 @@
+*gtdmkd.txt*       Getting Things Done with Markdown v1.0.0
+*gtdmkd*
+===============================================================================
+CONTENTS                                                       *gtdmkd-contents*
+
+    1. Intro........................................|gtdmkd-intro|
+    2. Adding Tasks.................................|gtdmkd-taks|
+    3. Task operations..............................|gtdmkd-operations|
+    4. Abbreviations................................|gtdmkd-abbreviations|
+    5. Mappings.....................................|gtdmkd-mappings|
+
+
+===============================================================================
+INTRO                                                             *gtdmkd-intro*
+
+GTDMkd is just a set of mapping, abbreviations and syntax highlight to make
+it easier to manage GTD task lists.
+
+
+===============================================================================
+ADDING TASK                                                        *gtdmkd-taks*
+
+Overview:~
+
+  +project        Task project
+  @Context        Task context
+
+  key:value       Key value tag
+  (key:my value)  Key value tag with spaces
+
+  dur:            Duration
+  start:          Start date and time
+  done:           Done ate and time
+  due:            Due date and time
+
+  dval:           Data valid
+  lwlo:           Location where I left off
+
+
+                                                  *gtdmkd-project* *gtdmkd-context*
+Project and Context~
+
+Projects and context are highlighted and take the following form:
+
+    +proj  Associate with project
+    @ctx   Task context
+
+                                                                    *gtdmkd-tags*
+Task Tags~
+
+Tags in the form of `key:no_space_value` or `(key:my value)` are also
+accepted.
+
+
+                                                            *gtdmkd-special-tags*
+Special Tags~
+
+There are some special tags that are highlighted differently then the ones
+above:
+
+`dur:`
+  Task duration is the time followed by d, h, or m for day, hour, or minutes:
+
+`start:`
+  Task start date/time is the date in `YYYY-mm-dd` or `YYYY-mm-ddTHH:MM` format.
+
+`done:`
+  Task done date/time is the date in `YYYY-mm-dd` or `YYYY-mm-ddTHH:MM` format.
+
+`due:`
+  Task due date/time is the date in `YYYY-mm-dd` or `YYYY-mm-ddTHH:MM` format.
+
+
+                                                              *gtdmkd-other-tags*
+Other Tags~
+
+Other useful tags, not specially highlighted.
+
+`dval:`
+  Date valid is used to tag the date the data is known to be valid, this way
+  we can quickly glance to see if the data is good, or really stale. Use
+  `YYYY-mm-dd` format 
+
+`lwlo:`
+  Location where I left off to denote page, or point where stopped.
+
+
+===============================================================================
+TASK OPERATIONS                                              *gtdmkd-operations*
+
+Start Task~
+
+To mark a task as started use the `<leader>s` mapping, it will just add the
+start tag with the current date and time.
+
+Complete Task~
+
+To complete a task change the `-` at the begging of the task to an `x` and it
+will be highlighted as strike-through. 
+
+If you use the `<leader>x` mapping, it will replace the `-` at the beginning
+with an `x`, add the `done:` tag with date, and move the task to the bottom
+of the list.
+
+Cancel Task~
+
+To mark a task as canceled change the `-` at the beginning to a `X` (capital)
+it will be highlighted as strike-through withe a darker color.
+
+Sorting Tasks~
+
+You can sort task by using the following mappings
+
+<leader>p   By Project
+<leader>c   By context
+<leader>d   By due date
+
+To sort by task duration is a two step process using the following mappings
+
+<leader>r   By duration category days, hours, minutes
+<leader>t   by duration time (numeric value)
+
+First select all the tasks and use `<leader>r` to sort by duration category
+(days, hour, minutes). This way all task that have duration of days are
+together, same for hour and minute tasks.
+
+Then for each category select that group of tasks and use `<leader>t` to sort
+by the time. The number in the duration will be use to sort in ascending
+order.
+
+
+===============================================================================
+ABBREVIATIONS                                             *gtdmkd-abbreviations*
+
+The following abbreviations work in insert mode: 
+
+    dt  inserts the current date in YYYY-mm-dd format
+    tm  inserts the current time in HH:MM format
+
+
+===============================================================================
+MAPPINGS                                                       *gtdmkd-mappings*
+
+                                                           *'gtdmkd-<leader>s'*
+<leader>s
+    Mark as starting with current date and time
+
+                                                           *'gtdmkd-<leader>x'*
+<leader>x
+    Mark as done with current date and time
+
+                                                           *'gtdmkd-<leader>p'*
+<leader>p
+    Sort task entries by +project
+
+                                                           *'gtdmkd-<leader>c'*
+<leader>c
+    Sort task entries by @context
+
+                                                            *'gtdmkd-<leader>d'*
+<leader>d
+    Sort task entries by due date
+
+                                                            *'gtdmkd-<leader>r'*
+<leader>r
+    Sort by duration category days, hours, minutes
+
+                                                            *'gtdmkd-<leader>t'*
+<leader>t
+    Sort by duration amount
+
+
+===============================================================================
+vim:ft=help:et:ts=4:sw=4:sts=4:norl

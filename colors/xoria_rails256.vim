@@ -1,6 +1,16 @@
+set background=dark
+highlight clear
+
+if exists("syntax_on")
+  syntax reset
+endif
+
+let colors_name = "xoria_rails256"
+
 highlight Constant                  ctermfg=67
 highlight Cursor                    ctermfg=0       ctermbg=15
-highlight CursorLine                ctermbg=0
+highlight CursorLine                cterm=None      ctermbg=235
+highlight CursorLineNr              cterm=None      ctermbg=235
 highlight Define                    ctermfg=173
 highlight DiffAdd                   ctermfg=7       ctermbg=22
 highlight DiffDelete                ctermfg=238     ctermbg=16
@@ -19,9 +29,9 @@ highlight Normal                    ctermfg=254     ctermbg=233
 highlight Number                    ctermfg=107
 highlight PreCondit                 cterm=NONE      ctermfg=173
 highlight PreProc                   ctermfg=215
-highlight Pmenu                     ctermfg=168
-highlight PmenuSel                  ctermfg=168
-highlight Search                    cterm=italic    ctermbg=235
+highlight Pmenu                     ctermbg=236     ctermfg=248
+highlight PmenuSel                  ctermbg=23      ctermfg=253
+highlight Search                    ctermfg=0       ctermbg=215
 highlight Special                   ctermfg=167
 highlight SpellBad                  ctermfg=160
 highlight SpellCap                  cterm=underline ctermfg=189
