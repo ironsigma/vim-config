@@ -69,7 +69,7 @@ if has('gui_running')
 
     set lines=55
     set columns=125
-    winpos 620 20
+    winpos 2880 175
 
 else
     set t_Co=256
