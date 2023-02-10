@@ -26,6 +26,7 @@ syntax match gtdmkdProjectTag /+[a-z0-9_]\+/
 syntax match gtdmkdModeline /^vim: .*$/
 syntax match gtdmkdComplete /^x .*$/
 syntax match gtdmkdCancelled /^X .*$/
+syntax match gtdmkdUrlRef /^\[[^\]]\+\]:\s\+https\?:\/\/.*$/
 syntax region gtdmkdMetadata start=/([a-z0-9_]\+:/ end=/)/
 
 
@@ -39,6 +40,7 @@ highlight default link gtdmkdMetadata Constant
 highlight default link gtdmkdProjectTag Number
 highlight default link gtdmkdModeline Folded
 highlight default link gtdmkdComplete htmlStrike
+highlight default link gtdmkdUrlRef Comment
 highlight gtdmkdCancelled term=bold,strikethrough cterm=strikethrough ctermfg=239 gui=strikethrough guifg=#b0c0c0
 
 
