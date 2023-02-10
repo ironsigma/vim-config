@@ -1,4 +1,4 @@
-" === Vim Configuration v20210426
+" === Vim Configuration v20210820
 set nocompatible
 
 
@@ -26,6 +26,7 @@ set formatoptions+=j
 set hidden
 set history=100
 set hlsearch
+set ignorecase
 set incsearch
 set keywordprg=
 set laststatus=2
@@ -46,6 +47,7 @@ set shiftwidth=4
 set shortmess=aO
 set showcmd
 set showmatch
+set smartcase
 set smartindent
 set smarttab
 set tabstop=8
@@ -61,7 +63,8 @@ if has('gui_running')
     colorscheme OceanicNext
 
     set guicursor=a:blinkon0
-    set guifont=Fira\ Code\ weight=450\ 11
+    " set guifont=Fira\ Code\ weight=450\ 10
+    set guifont=Source\ Code\ Pro\ Medium\ 10.5
     set guioptions-=L
     set guioptions-=m
     set guioptions-=r
@@ -69,7 +72,6 @@ if has('gui_running')
 
     set lines=55
     set columns=125
-    winpos 2880 175
 
 else
     set t_Co=256
@@ -126,6 +128,7 @@ endif
 " === Disable match parent hilighting
 let g:loaded_matchparen = 1
 
+
 " === UltiSnips
 let g:UltiSnipsExpandTrigger = '<C-S-x>'
 let g:UltiSnipsListSnippets = '<C-l>'
@@ -140,24 +143,46 @@ let g:rcsbackup_dir = '~/.local/share/vim/backups/'
 filetype plugin indent on
 
 
+" === Auto-save if inside a git repo
+autocmd BufRead *
+    \ if finddir('.git', escape(expand('%:p:h'), ' ')..';') != "" |
+    \   setlocal autowriteall |
+    \   exe ":autocmd FocusLost,BufHidden" expand("%") ":update" |
+    \ endif
+
+
 " === Switch to tabs if they are in the file
 autocmd BufRead *
     \ if search('^\t', 'cnw', 0, 200) != 0 |
     \  execute "setl ts=4 noexpandtab" |
     \ endif
 
+
 " === Jump back where we left off
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   execute "normal g`\"zz" |
     \ else |
-    \   execute "normal G$zz"|
+    \   execute "normal G$zz" |
     \ endif
+
 
 " === Two space indent
 autocmd BufRead,BufNewFile
     \ *.yml,*.yaml,*.js
     \ setl tabstop=2
+
+
+" === Switch directoy on first file
+autocmd BufRead,BufNewFile *
+    \ if !exists('g:OnStartup_change_dir') |
+    \   let g:OnStartup_change_dir = 1 |
+    \   execute 'cd ' . expand('%:p:h') |
+    \ endif
+
+
+" === Hide terminals from next buffer
+autocmd TerminalWinOpen * setlocal nobuflisted
 
 
 " === File types
